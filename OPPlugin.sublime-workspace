@@ -1,0 +1,1321 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"compile",
+				"compile_error"
+			],
+			[
+				"err",
+				"error_string"
+			],
+			[
+				"run",
+				"run_file_path"
+			],
+			[
+				"stat",
+				"status_message"
+			],
+			[
+				"wa",
+				"wait_close"
+			],
+			[
+				"move",
+				"move_cursor"
+			],
+			[
+				"sel",
+				"sel_buffer"
+			],
+			[
+				"text",
+				"text_buffer"
+			],
+			[
+				"sub",
+				"substr"
+			],
+			[
+				"OPD",
+				"OPD_LANG"
+			],
+			[
+				"fo",
+				"focus_view"
+			],
+			[
+				"is",
+				"is_all_fold"
+			],
+			[
+				"rez",
+				"rez_state"
+			],
+			[
+				"che",
+				"check_number6"
+			],
+			[
+				"kn",
+				"known_ind"
+			],
+			[
+				"cnt",
+				"cnt_rand_nums"
+			],
+			[
+				"chec",
+				"check_number4"
+			],
+			[
+				"d",
+				"d_limit"
+			],
+			[
+				"n",
+				"ns	Namespace"
+			],
+			[
+				"time",
+				"time_prog_work"
+			],
+			[
+				"sec",
+				"sec_per_do"
+			],
+			[
+				"min",
+				"min_divisor"
+			],
+			[
+				"vv",
+				"vvpii"
+			],
+			[
+				"ne",
+				"neg_cycle"
+			],
+			[
+				"inf",
+				"infinitely"
+			],
+			[
+				"st",
+				"stupid_func"
+			],
+			[
+				"next",
+				"next_waypoint"
+			],
+			[
+				"first",
+				"first_matrix"
+			],
+			[
+				"ar",
+				"argv"
+			],
+			[
+				"make_",
+				"make_tuple"
+			],
+			[
+				"way",
+				"waypoints"
+			],
+			[
+				"make",
+				"make_pair"
+			],
+			[
+				"xra",
+				"xrange"
+			],
+			[
+				"ite",
+				"iterator"
+			],
+			[
+				"iter",
+				"iterate"
+			],
+			[
+				"ma",
+				"make_range_iterator"
+			],
+			[
+				"xran",
+				"xranges"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"x",
+				"xranges"
+			],
+			[
+				"range",
+				"range_iterator"
+			],
+			[
+				"se",
+				"second_iter"
+			],
+			[
+				"fir",
+				"first_iter"
+			],
+			[
+				"unor",
+				"unordered_set"
+			],
+			[
+				"re",
+				"rex_time"
+			],
+			[
+				"pass",
+				"passangers"
+			],
+			[
+				"T",
+				"T232"
+			],
+			[
+				"y",
+				"y"
+			],
+			[
+				"cost",
+				"cost_sum"
+			],
+			[
+				"YE",
+				"Yes"
+			],
+			[
+				"push",
+				"push_back"
+			],
+			[
+				"cur",
+				"cur_comp"
+			],
+			[
+				"comp",
+				"companents"
+			],
+			[
+				"m",
+				"main	main()"
+			],
+			[
+				"def",
+				"define"
+			],
+			[
+				"unordered",
+				"unordered_map"
+			],
+			[
+				"set",
+				"set_accuracy"
+			],
+			[
+				"a",
+				"a"
+			],
+			[
+				"max",
+				"max_y"
+			],
+			[
+				"do",
+				"do_sense"
+			],
+			[
+				"sense",
+				"sense_complete"
+			],
+			[
+				"max_",
+				"max_ind"
+			],
+			[
+				"hash",
+				"hashed_s"
+			],
+			[
+				"get",
+				"get_hash"
+			],
+			[
+				"hsh",
+				"hashed_keys"
+			],
+			[
+				"process",
+				"process_status"
+			],
+			[
+				"insert",
+				"insert_line"
+			],
+			[
+				"mxrect",
+				"mxrect1"
+			],
+			[
+				"dist",
+				"dist_bet_sweet"
+			],
+			[
+				"gen",
+				"gen_permutations"
+			],
+			[
+				"MU",
+				"MULTI_LINE_COMMENT_START"
+			],
+			[
+				"LINE",
+				"MULTI_LINE_COMMENT"
+			],
+			[
+				"CPP",
+				"CppDefConst"
+			],
+			[
+				"Cpp",
+				"CppDefConst"
+			],
+			[
+				"pars",
+				"parse_global"
+			],
+			[
+				"P",
+				"ProcessManager"
+			],
+			[
+				"warning",
+				"warning_marks"
+			],
+			[
+				"error",
+				"error_marks"
+			],
+			[
+				"un",
+				"unused"
+			],
+			[
+				"s",
+				"sasasasasaas"
+			],
+			[
+				"value",
+				"value2"
+			],
+			[
+				"free",
+				"free_deliv"
+			],
+			[
+				"fre",
+				"free_cost"
+			],
+			[
+				"fr",
+				"free_cost"
+			],
+			[
+				"opera",
+				"operator"
+			],
+			[
+				"pas",
+				"pas_compile"
+			],
+			[
+				"cm",
+				"cmp_data"
+			],
+			[
+				"inse",
+				"insert"
+			],
+			[
+				"net",
+				"ntest"
+			],
+			[
+				"pro",
+				"process_manager"
+			],
+			[
+				"compil",
+				"compile_cmds"
+			],
+			[
+				"com",
+				"compile_cmds"
+			],
+			[
+				"f",
+				"func	small function"
+			],
+			[
+				"p",
+				"python"
+			],
+			[
+				"su",
+				"sublime_plugin"
+			],
+			[
+				"font",
+				"font"
+			],
+			[
+				"onmouse",
+				"onmousedown"
+			],
+			[
+				"file_",
+				"file_out"
+			],
+			[
+				"end",
+				"end_i"
+			],
+			[
+				"start",
+				"start_j"
+			],
+			[
+				"len",
+				"bests_length"
+			],
+			[
+				"bests",
+				"bests_length"
+			],
+			[
+				"file",
+				"file_out"
+			],
+			[
+				"C",
+				"Cycle_Rez"
+			],
+			[
+				"sqrt",
+				"sqrt_max"
+			],
+			[
+				"b",
+				"build_heap"
+			],
+			[
+				"Clo",
+				"close_streams"
+			],
+			[
+				"H",
+				"Hash_Str"
+			],
+			[
+				"di",
+				"dijkstra"
+			],
+			[
+				"add",
+				"add_elem"
+			],
+			[
+				"verte",
+				"vertices"
+			],
+			[
+				"pr",
+				"priority-queue"
+			],
+			[
+				"pop",
+				"pop_max"
+			],
+			[
+				"hea",
+				"heapify"
+			],
+			[
+				"count",
+				"count_pick"
+			],
+			[
+				"Cyc",
+				"Cycle_Rez"
+			],
+			[
+				"cycle",
+				"cycle_end"
+			],
+			[
+				"cycel",
+				"cycle_end"
+			],
+			[
+				"sata",
+				"satana"
+			],
+			[
+				"satana_",
+				"SATANA_CODE"
+			],
+			[
+				"v",
+				"v_to_find"
+			],
+			[
+				"close",
+				"close_streams"
+			],
+			[
+				"Syste",
+				"System_Module"
+			],
+			[
+				"in",
+				"in_stream"
+			],
+			[
+				"out",
+				"out_stream"
+			],
+			[
+				"Sys",
+				"System_Module"
+			],
+			[
+				"mx",
+				"mx_index"
+			],
+			[
+				"all",
+				"all_variables"
+			],
+			[
+				"if",
+				"ifmain	if __name__ == '__main__'"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Inteli_Sense.py",
+			"settings":
+			{
+				"buffer_size": 5460,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Default (OSX).sublime-keymap",
+			"settings":
+			{
+				"buffer_size": 3410,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "OP/C++/ops.cpp:properties",
+			"settings":
+			{
+				"buffer_size": 46,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "google_autocomplete.py",
+			"settings":
+			{
+				"buffer_size": 548,
+				"line_ending": "Unix",
+				"name": "import sublime, sublime_plugin"
+			}
+		},
+		{
+			"file": "translit_autocomplete.py",
+			"settings":
+			{
+				"buffer_size": 516,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 27.0,
+		"last_filter": "sspython",
+		"selected_items":
+		[
+			[
+				"sspython",
+				"Set Syntax: Python"
+			],
+			[
+				"sspy",
+				"Set Syntax: Regular Expression"
+			],
+			[
+				"reve",
+				"File: Revert"
+			],
+			[
+				"ssc++",
+				"Set Syntax: C++"
+			],
+			[
+				"ssjson",
+				"Set Syntax: JSON"
+			],
+			[
+				"rename",
+				"Emmet: Rename Tag"
+			],
+			[
+				"ssmd",
+				"Set Syntax: Markdown"
+			],
+			[
+				"",
+				"Build With: C++ Single File - Run"
+			],
+			[
+				"OP",
+				"SublimeREPL: SBT for opened folder"
+			],
+			[
+				"pyt",
+				"Set Syntax: Python"
+			],
+			[
+				"space",
+				"Indentation: Convert to Spaces"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 147.0,
+		"history":
+		[
+			"view.sel()[0]",
+			"view.sel()",
+			"OP.Inteli_Sense",
+			"import OP",
+			"import op",
+			"OP.Inteli_Sense",
+			"view.sel()[0]",
+			"view.sel()",
+			"view.sel()[0]",
+			"v.sel()[0]",
+			"view.settings().get('syntax')",
+			"reload",
+			"view.window().get_view_index(view)",
+			"view.get_view_index()",
+			"view.window_to_text(Region(1, 2))",
+			"view.window_to_text(new Region(1, 2))",
+			"view.window_to_text(1)",
+			"view.window_to_text(1, 1)",
+			"view.window_to_text()",
+			"dir(view)",
+			"view.run_command('toggle_setting', {'setting':\"hide_minimap\"})",
+			"view.run_command('toggle_setting', {'setting':\"minimap\"})",
+			"view.run_command('toggle_minimap')",
+			"view.window().run_command('toggle_minimap')",
+			"view.window()",
+			"view.toggle_minimap()",
+			"view.run_command('toggle_minimap')",
+			"view.settings().__dict__",
+			"view.settings().__dir__()",
+			"view.settings().__dir__",
+			"dir(view.settings())",
+			"view.settings()",
+			"view.run_command('toggle_minimap', {'setting':'minimap'})",
+			"view.run_command('toggle_minimap', {})",
+			"view.run_command('toggle_minimap', {\"setting\": \"hide_minimap\"})",
+			"view.run_command('toggle_minimap', {\"setting\": \"show_minimap\"})",
+			"view.run_command('toggle_setting', {\"setting\": \"show_minimap\"})",
+			"view.run_command('toggle_setting', {\"setting\": \"minimap\"})",
+			"view.run_command('toggle_setting', {\"setting\": \"gutter\"})",
+			"view.run_command('toggle_setting', {\"setting\": \"line_numbers\"})",
+			"view.run_command({'command':'toggle_setting', 'args':{'setting':'line_numbers'}})",
+			"view.scope_name(view.sel()[0].begin())",
+			"view.scope_name(view.sel()[0])",
+			"view.scope_name(v.sel()[0])",
+			"print(view.scope_name(view.sel()[0].begin()))",
+			"print(view.scope_name(view.sel()[0]))",
+			"print(view.scope_name(v.sel()[0]))",
+			"view.settings().get('syntax')",
+			"view.erase_status('123')",
+			"view.erase_status('123', '123')",
+			"view.set_status('123', '123')",
+			"sublime.reload_plugins()",
+			"reload_plugins()",
+			"InteliSenseCommand.__doc__",
+			"InteliSense.__doc__",
+			"OP.InteliSense.__doc__",
+			"inteli_sense.__doc__",
+			"view.scope_name(view.sel()[0].begin())",
+			"view.scope_name(view.sel()[0])",
+			"view.run_command('show_panel', {'panel':'output.opd_view'})",
+			"view.run_command('show_panel', {'output':'opd_view'})",
+			"view.set_status('cmp_sense', 'close_sense')",
+			"view.erase_status('cmp_sense')",
+			"view.get_status('cmp_sense')",
+			"view.set_status('cmp_sense', '')",
+			"view.set_status('cmp_sense', 'close_sense')",
+			"view.get_status('cmp_sense')",
+			"view.scope_name(view.sel()[0].begin())",
+			"view.scope_name(view.sel()[0])",
+			"view.scope_name(v.sel()[0])",
+			"view.settings().get('scope')",
+			"sqrt(100)",
+			"from math import sqrt",
+			"window.run_command('example')",
+			"window.run_command('')",
+			"view.scope_name(view.sel()[0].begin())",
+			"view.scope_name(view.sel()[0])",
+			"view.scope_name(view, view.sel()[0])",
+			"view.scope_name(view.sel()[0])",
+			"view.settings().get('syntax')",
+			"view.command_history(-4, True)",
+			"view.command_history(-3, True)",
+			"view.command_history(-2, True)",
+			"view.command_history(-1, True)",
+			"view.command_history(0, True)",
+			"view.command_history(1, True)",
+			"view.command_history(4, True)",
+			"view.command_history(3, True)",
+			"view.command_history(2, True)",
+			"view.command_history(1, True)",
+			"view.command_history(5, True)",
+			"view.command_history(-1, True)",
+			"view.command_history(1, True)",
+			"view.command_history(0, True)",
+			"view.command_history(0, False)",
+			"view.settings().get('syntax')",
+			"window.run_command('show_panel', {'panel': 'output.opd_view'})",
+			"window",
+			"view",
+			"plugins",
+			"123"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++"
+	],
+	"file_history":
+	[
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/KeyGoogle.txt",
+		"/Users/Uhuhu/Desktop/testmypl/ONLyNater.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/ops.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Snippets/C++/MySuperSnippet.sublime-snippet",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Inteli_Sense.py",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Modules/ProcessManager.py",
+		"/Users/Uhuhu/Desktop/testmypl/ProcessManager.py",
+		"/Users/Uhuhu/Desktop/testmypl/TEstDOwn.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/cmp_sense/amin.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/cmp_sense/a.out",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/ops.cpp:properties",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/pyforops.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/olympic_funcs.py",
+		"/Users/Uhuhu/Desktop/Test.cpp",
+		"/Users/Uhuhu/Desktop/SuperCpp.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OPPlugin.sublime-project",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Docs/Docs-EN.mdown",
+		"/Users/Uhuhu/Desktop/SuperCpp.cpp -run.txt",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/Uhuhu/Desktop/SomeTest.cpp",
+		"/Users/Uhuhu/Desktop/SomeTest.cpp:tests",
+		"/Users/Uhuhu/Documents/Olympic Programing/Отбор на московскую олимпиаду/A1.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/lesson 11/testargc.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/lesson 11/Tr2catch.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/lesson 11/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/lesson 11/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/BINTest.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/G.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/G.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/F.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/Test/main.cpp",
+		"/Users/Uhuhu/Desktop/Code Car/Local Runner/local-runner-console.bat",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/Lesson 8/D.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/Lesson 8/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/Lesson 8/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/Lesson 8/A.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/HackD.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/HackB.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/D.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/A.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Educational Round 1/A.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Snippets/C++/f.sublime-snippet",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/untitled",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/Test.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/Tesssa.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/TESA.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/TestA.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/A.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Testing Round 12/HashCrasher.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Round 330/A.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Round 330/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Round 330/Test.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Round 330/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/CodeForces/Round 330/A.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO5/D.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO4/Tdst.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO3/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO4/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO4/A.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO4/B.cpp",
+		"/Users/Uhuhu/Desktop/am in.cpp",
+		"/Users/Uhuhu/Desktop/SubPackages/C++/C.tmLanguage",
+		"/Users/Uhuhu/Desktop/SubPackages/C++/C++.tmLanguage",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OPDebugger.tmLanguage",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/Theme - Spacegray/base16-ocean.dark.tmTheme",
+		"/Users/Uhuhu/Desktop/same.opd.html",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO3/Test.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/debugger.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/E.py",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO2/Contest 1/E.cpp",
+		"/Users/Uhuhu/Desktop/Password.txt",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO2/Contest 1/C.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO2/Contest 1/B.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO2/Contest 1/A.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/ConLess 5/Test/Test/main.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/a.out",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/Indexed_Heap.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/D.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/Заочный тур Открытой олимпиады по программированию 2015-2016/A.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/ConLess 5/Cheat.cpp",
+		"/Users/Uhuhu/Documents/Olympic Programing/mshp op/ConLess 5/Generator.cpp",
+		"/Users/Uhuhu/Documents/HerokuDeploy/DEVJ/DEVJ/wsgi.py",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Modules/Cpp_Parser.py",
+		"/Users/Uhuhu/Desktop/main.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/main.cpp",
+		"/Users/Uhuhu/Documents/HerokuDeploy/DEVJ/Procfile.windows",
+		"/Users/Uhuhu/Documents/HerokuDeploy/DEVJ/settings/static/editor/css/header_styles.css",
+		"/Users/Uhuhu/Documents/HerokuDeploy/DEV-J/Procfile",
+		"/Users/Uhuhu/Documents/django sites/DEVJ/manage.py",
+		"/Users/Uhuhu/Documents/HerokuDeploy/DEV-J/hello/templates/index.html",
+		"/Users/Uhuhu/Documents/HerokuDeploy/python-getting-started/app.json",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /A.cpp",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/ProcessManager.py",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/debugger.py",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /H.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /F.py",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /B.py",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /B.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /G.py",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /E.py",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /E.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /I.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /C.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /D.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/Moscow Team Olympiad /C.pas",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/Test.cpp",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/bfs_way.cpp",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/bfs.cpp",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/dijkstra_way.cpp",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/dijkstra.cpp",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/dijkstra.cpp:tests",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/Test.pas",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/B.py",
+		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/G.cpp:tests",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/G.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/D.cpp:tests",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/D.pas",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/D.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/E.py:tests",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/A.PY",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/A.cpp",
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/F.cpp"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/",
+			"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/Theme - Spacegray",
+			"/Users/Uhuhu/Library/Application Support/Sublime Text 2/Packages",
+			"Packages",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"run_file",
+			"5000",
+			"2000",
+			"500",
+			"IO_Stream",
+			"debugger",
+			"distraction",
+			"Distraction",
+			"1000",
+			"ferma",
+			"assert",
+			"rt",
+			"));\n",
+			"x",
+			"assert",
+			"waypoint_index",
+			"second",
+			"first",
+			"depression",
+			"pair",
+			"cin",
+			"const",
+			"Can",
+			"xrange*",
+			"xrange",
+			"->",
+			"infinity",
+			"unordered_set",
+			"int",
+			"pows",
+			"long long",
+			"y",
+			"infinity",
+			"int",
+			"v",
+			"int",
+			"inf",
+			"fall",
+			"cmp",
+			"ll",
+			"0",
+			"left_bracket",
+			"match_open_bracket",
+			"Parser",
+			"arg",
+			"dall",
+			"first",
+			"int",
+			"1",
+			"T_value",
+			"int",
+			"ll",
+			"interY",
+			"interX",
+			"d2.point2.y",
+			"d2.point1.y",
+			"d1.point2.y",
+			"d1.point1.y",
+			"d2.point2.x",
+			"d2.point1.x",
+			"d1.point2.x",
+			"d1.point1.x",
+			"d1.point1",
+			"y",
+			"x",
+			"i",
+			"600",
+			"max_y",
+			"1",
+			"int",
+			"tpowert",
+			"free",
+			"Distraction",
+			"scroll",
+			"if",
+			"a.size()",
+			"% MOD",
+			"power",
+			"l1",
+			"r1",
+			"h1",
+			"hash1",
+			"r1",
+			"process_run",
+			"i",
+			"c",
+			"arr",
+			"right = min(r1, r2, n - l1, n - l2)",
+			"/",
+			"level - b",
+			");\n",
+			"a",
+			"b",
+			");\n",
+			"second",
+			"int",
+			"t.first",
+			"way_weight",
+			"int",
+			"x",
+			"s",
+			"int",
+			")",
+			"e",
+			";\n",
+			"(n)",
+			"t",
+			"T",
+			"gen",
+			"generator",
+			"\" \"",
+			"cnt_twos",
+			"self, ",
+			"self",
+			"False",
+			"index",
+			">\n",
+			"\n#",
+			"):\n",
+			"Listener",
+			"gettingstarted",
+			"procs",
+			"flags",
+			"mcol",
+			"sublime",
+			"print",
+			"sqrt",
+			"first"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"Quick_kucha_govna",
+			"money",
+			"down",
+			"int",
+			"y",
+			"x",
+			"dp",
+			"i",
+			"m",
+			"n",
+			"rez",
+			"j",
+			"ans",
+			"dp",
+			"k",
+			"n",
+			"i",
+			"all_variables[5]",
+			"all_variables[4]",
+			"all_variables[3]",
+			"all_variables[2]",
+			"all_variables[1]",
+			"all_variables[0]",
+			"ropes",
+			"verevki_equals_ropes",
+			"100 + kvadSize",
+			"150 + diagZdvigX",
+			"100 + diagZdvigY",
+			"100 + diagZdvigX"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Inteli_Sense.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5460,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3432,
+								3432
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1650.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Default (OSX).sublime-keymap",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3410,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1883,
+								1892
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1431.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "OP/C++/ops.cpp:properties",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 46,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20,
+								20
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "google_autocomplete.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 548,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								354,
+								354
+							]
+						],
+						"settings":
+						{
+							"auto_name": "import sublime, sublime_plugin",
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "translit_autocomplete.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 516,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2,
+								516
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 301.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 269.0
+	},
+	"output.find_results":
+	{
+		"height": 98.0
+	},
+	"pinned_build_system": "Packages/C++/C++ Single File.sublime-build",
+	"project": "OPPlugin.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Documents/Olympic Programing/OLFast.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 269.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

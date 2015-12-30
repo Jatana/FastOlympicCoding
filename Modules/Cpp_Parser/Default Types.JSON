@@ -1,0 +1,30 @@
+{
+	"int": {
+		"name": "int",
+		"constructors": false,
+		"docs": ""
+	},
+
+	"long": {
+		"name": "long",
+		"constructors": false,
+		"docs": ""
+	},
+
+	"string": {
+		"name": "string",
+		"constructors": false,
+		"docs": ""
+	},
+
+	"bool": {
+		"name": "bool",
+		"constructors": false,
+		"docs": ""
+	},
+
+	// "template": {
+	// 	"constructors": false,
+	// 	"type_requirements": "templatabli"
+	// }
+}

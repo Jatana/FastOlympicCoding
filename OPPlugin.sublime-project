@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/",
+			"folder_exclude_patterns": ["backup"]
+		},
+		{
+			"path": "Docs",
+			"name": "Documentation",
+			"file_exclude_patterns": ["*.css"]
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4
+	}
+}

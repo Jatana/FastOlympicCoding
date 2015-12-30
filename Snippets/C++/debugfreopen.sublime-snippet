@@ -1,0 +1,18 @@
+<snippet>
+	<content><![CDATA[
+{
+	bool is_debug = false;
+	if (argc > 1 && string(argv[1]) == "-debug") {
+		is_debug = true;
+	}
+	if (!is_debug) {
+		freopen("${1:file}.in", "r", stdin);
+		freopen("${1:file}.out", "w", stdout);
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>dbgfre</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

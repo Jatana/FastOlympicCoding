@@ -1,0 +1,4 @@
+[
+	{ "keys": ["ctrl+shift+h"], "command": "dec_to_hex" },
+	{ "keys": ["tab"], "command": "olympic_funcs" }
+]

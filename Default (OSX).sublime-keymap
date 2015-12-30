@@ -1,0 +1,219 @@
+[
+	{ 
+		"keys": ["ctrl+shift+h"],
+		"command": "dec_to_hex" 
+	},
+
+	{ 
+		"keys": ["tab"], 
+		"command": "olympic_funcs",
+		"args": {
+			"action": "gen_def"
+		},
+		"context": [
+			{
+				"operand": "meta.block.c, meta.function.c",
+				"operator": "not_equal",
+				"match_all": true,
+				"key" : "selector"
+			},
+			{
+				"operand": "source.c++",
+				"operator": "equal",
+				"match_all": true,
+				"key" : "selector"
+			}
+		]
+	},
+	{ 
+		"keys": ["tab"], 
+		"command": "olympic_funcs",
+		"args": {
+			"action": "fast_gen"
+		},
+		"context": [
+			{
+				"operand": "source.c++",
+				"operator": "equal",
+				"match_all": true,
+				"key" : "selector"
+			},
+			{
+				"operand": "meta.block.c",
+				"operator": "equal",
+				"match_all": true,
+				"key" : "selector"
+			},
+			{
+				"key": "preceding_text",
+				"operator": "regex_contains",
+				"operand": "[[:word:]]+",
+				"match_all": true
+			},
+			{
+				"key": "following_text",
+				"operator": "not_regex_contains",
+				"operand": ".{1,}",
+				"match_all": true
+			},
+			// {
+			// 	"key" : "can_preproc"
+			// }
+		]
+	},
+
+	// {
+		// "keys": ["ctrl+b"]
+	// }
+
+	{
+		"keys": ["enter"],
+		"command": "debugger",
+		"args": {
+			"action": "insert_line"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["ctrl+enter"],
+		"command": "debugger",
+		"args": {
+			"action": "new_test"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["super+v"],
+		"command": "debugger",
+		"args": {
+			"action": "insert_cb"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["ctrl+alt+k"],
+		"command": "debugger",
+		"args": {
+			"action": "kill_proc"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+	{
+
+		"keys": ["escape"],
+		"command": "debugger",
+		"args": {
+			"action": "kill_proc"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["ctrl+b"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "make_opd"
+		},
+		"context": [
+			{
+				"key" :"selector",
+				"operand": "source.c++, source.python, source.pascal",
+				"operator": "equal",
+				"match_all": true
+			}
+		]
+	},
+	{
+		"keys": ["ctrl+alt+b"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "make_opd",
+			"clr_tests": true
+		},
+		"context": [
+			{
+				"key" :"selector",
+				"operand": "source.c++, source.python, source.pascal",
+				"operator": "equal",
+				"match_all": true
+			}
+		]
+	},
+	{
+		"keys": ["ctrl+shift+o"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "show_funcs"
+		},
+		"context": [
+			{
+				"operand": "source.c++",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["ctrl+shift+alt+o"],
+		"command": "inteli_sense",
+		"args": {
+			"action": "sync_sense"
+		},
+		"context": [
+			{
+				"operand": "source.c++",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["super+k", "super+right"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "sync_opdebugs"
+		}
+	}
+]
