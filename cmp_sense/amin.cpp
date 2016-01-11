@@ -1,15 +1,14 @@
 #include <iostream>
 
+
+int gain() {
+
+}
+
 using namespace std;
-
-
-
-
 
 int main() {
 	int n;
 	cin >> n;
-	cout << n * -10;
-	string s = "ahahhahahhahahahhahahhahahhahaha";
-	cout << s;
+	cout << n;
 }

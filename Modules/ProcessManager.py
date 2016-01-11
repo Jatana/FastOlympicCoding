@@ -3,17 +3,25 @@ from os.path import dirname
 import sys
 from subprocess import Popen, PIPE
 import subprocess
+from os import path
 import shlex
 
 
 class ProcessManager(object):
-	def __init__(self, file, syntax):
+	def __init__(self, file, syntax, run_options=None):
 
 		super(ProcessManager, self).__init__()
 		self.syntax = syntax
 		self.file = file
 		self.is_run = False
 		self.test_counter = 0
+
+		self.run_options = run_options
+
+		# Old compile parameters
+		# new in settings.py
+		#
+
 		python_path = '/Library/Frameworks/Python.framework/Versions/3.4/bin/python3'
 		self.compile_cmds = {
 			'source.python': None,
@@ -41,10 +49,32 @@ class ProcessManager(object):
 
 		return rez
 
+	def get_compile_cmd(self):
+		opt = self.run_options
+		file_ext = path.splitext(self.file)[1][1:]
+		for x in opt:
+			if file_ext in x['extensions']:
+				if x['compile_cmd'] is None:
+					return None
+				return x['compile_cmd'](self.file)
+		else:
+			return -1
+
+	def get_run_cmd(self):
+		opt = self.run_options
+		file_ext = path.splitext(self.file)[1][1:]
+		for x in opt:
+			if file_ext in x['extensions']:
+				if x['run_cmd'] is None:
+					return None
+				return x['run_cmd'](self.file)
+		else:
+			return -1
+
 	def compile(self, wait_close=True):
-		cmd = self.compile_cmds[self.syntax]
+		cmd = self.get_compile_cmd()
 		if cmd is not None:
-			cmd = cmd(self.file)
+			# cmd = cmd(self.file)
 			# print(cmd)
 			PIPE = subprocess.PIPE
 			#cwd=os.path.split(self.file)[0], \
@@ -60,7 +90,7 @@ class ProcessManager(object):
 	def run_file(self):
 		if self.is_run and False:
 			raise AssertionError('cant run process because is already running')
-		cmd = self.run_cmds[self.syntax](self.file)
+		cmd = self.get_run_cmd()
 		# print(cmd)
 		PIPE = subprocess.PIPE
 		self.process = subprocess.Popen(cmd, \

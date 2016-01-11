@@ -1,8 +1,4 @@
 [
-	{ 
-		"keys": ["ctrl+shift+h"],
-		"command": "dec_to_hex" 
-	},
 
 	{ 
 		"keys": ["tab"], 
@@ -114,6 +110,7 @@
 		]
 	},
 
+	// Terminate Process in OPD
 	{
 		"keys": ["ctrl+alt+k"],
 		"command": "debugger",
@@ -129,6 +126,8 @@
 			}
 		]
 	},
+
+
 	{
 
 		"keys": ["escape"],
@@ -177,6 +176,8 @@
 			}
 		]
 	},
+
+	// Show All Olympic Functions
 	{
 		"keys": ["ctrl+shift+o"],
 		"command": "olympic_funcs",

@@ -11,7 +11,7 @@ from os import path
 
 from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
 from SublimeFastOlympicCoding.Modules import basics
-from SublimeFastOlympicCoding.settings import root_dir, plugin_name
+from SublimeFastOlympicCoding.settings import root_dir, plugin_name, run_options
 
 
 class DebuggerCommand(sublime_plugin.TextCommand):
@@ -100,7 +100,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				f.close()
 				self.tests = []
 			self.ntest = 0
-			self.process_manager = ProcessManager(run_file, build_sys)
+			self.process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
 			self.cur_tests = ['']
 			cmp_data = self.process_manager.compile()
 			if cmp_data is None or cmp_data[0] == 0:

@@ -249,11 +249,11 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			if not w_sel.empty():
 				func = v.substr(w_sel)
 				if len(func.lstrip().rstrip()) != 0:
-					f = open(root_dir + 'OP/C++/' + func + '.cpp', 'r')
+					f = open(path.join(root_dir, 'OP/C++/', func + '.cpp'), 'r')
 					v.replace(edit, w_sel, f.read())
 					f.close()
 					try:
-						f_prop = open(root_dir + '/OP/C++/' + func + '.cpp:properties', 'r')
+						f_prop = open(path.join(root_dir, 'OP/C++/', func + '.cpp:properties'), 'r')
 						prop = sublime.decode_value(f_prop.read())
 						if prop.get('fold', None) is not None:
 							for x in prop['fold']:
@@ -273,12 +273,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			self.create_opd(clr_tests=clr_tests)
 		elif action == 'show_funcs':
 			wind = v.window()
-			funcs = listdir(root_dir + '/OP/C++/')
+			funcs = listdir(path.join(root_dir, 'OP/C++/'))
 			to_view_funcs = [x[:-4] for x in funcs if x[-4:] == '.cpp']
 			def on_done(ind, funcs=funcs):
 				if ind == -1:
 					return 0
-				f = open(root_dir + '/OP/C++/' + funcs[ind])
+				f = open(path.join(root_dir, 'OP/C++/', funcs[ind]))
 				self.view.run_command('olympic_funcs', {'text': f.read(), 'action': 'insert'})
 				f.close()
 

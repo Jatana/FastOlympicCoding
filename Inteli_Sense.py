@@ -15,7 +15,9 @@ from os import path
 
 from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
 from SublimeFastOlympicCoding.Modules import basics
-from SublimeFastOlympicCoding.settings import root_dir, plugin_name
+from SublimeFastOlympicCoding.settings import root_dir, plugin_name, error_region_scope, warning_region_scope
+from SublimeFastOlympicCoding.settings import run_options
+
 
 
 class InteliSenseCommand(sublime_plugin.TextCommand):
@@ -138,7 +140,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		f = open(run_file_path, 'wb')
 		f.write(s.encode())
 		f.close()
-		process = ProcessManager(path.join(root_dir, 'cmp_sense/amin.cpp'), 'source.c++')
+		process = ProcessManager(path.join(root_dir, 'cmp_sense/amin.cpp'), 'source.c++', \
+			run_options)
 		s = process.compile(wait_close=True)[1]
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
@@ -170,8 +173,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 				error_regions.append(v.word(pt))
 		
 		if self.run_status == 'do_sense':
-			self.view.add_regions('warning_marks', warn_regions, 'warning', 'dot', sublime.DRAW_NO_FILL)
-			self.view.add_regions('error_marks', error_regions, 'variable.language.c++', 'dot', sublime.DRAW_NO_FILL)
+			self.view.add_regions('warning_marks', warn_regions, warning_region_scope, 'dot', sublime.DRAW_NO_FILL)
+			self.view.add_regions('error_marks', error_regions, error_region_scope, 'dot', sublime.DRAW_NO_FILL)
 
 
 get_syntax = basics.get_syntax
