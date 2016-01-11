@@ -6,9 +6,12 @@ from subprocess import Popen, PIPE
 import subprocess
 import shlex
 from sublime import Region
+from os import path
 
-from OP.Modules.ProcessManager import ProcessManager
-from OP.Modules import basics
+
+from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
+from SublimeFastOlympicCoding.Modules import basics
+from SublimeFastOlympicCoding.settings import root_dir, plugin_name
 
 
 class DebuggerCommand(sublime_plugin.TextCommand):
@@ -82,6 +85,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		elif action == 'make_opd':
 			v.set_status('opd_info', 'opdebugger-file')
 			v.run_command('debugger', {'action': 'erase_all'})
+			if not v.settings().get('word_wrap'):
+				v.run_command('toggle_setting', {"setting": "word_wrap"})
 			if not clr_tests:
 				try:
 					f = open(run_file + ':tests')
@@ -156,6 +161,5 @@ class CloseListener(sublime_plugin.EventListener):
 		if get_syntax(view) == OPD_LANG:
 			view.run_command('debugger', {'action': 'close'})
 			print("specclose")
-			
-		print('closed')
+		# print('closed')
 

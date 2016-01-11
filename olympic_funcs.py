@@ -4,9 +4,16 @@ from os import listdir
 from os.path import dirname
 import sys
 from sublime import Region
+from os import path
 
 
-from OP.Modules.ProcessManager import ProcessManager
+# plugin_name = 'sublime-fast-olympic-coding'
+# root_dir = path.join(sublime.packages_path(), plugin_name + '/')
+# sys.path += [root_dir]
+
+
+from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
+from SublimeFastOlympicCoding.settings import root_dir, plugin_name
 
 clang = 'Packages/C++/C++.tmLanguage'
 
@@ -185,6 +192,8 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			create_new = True
 			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
 			dbg_view.run_command('toggle_setting', {"setting": "gutter"})
+			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
+
 
 		window.set_layout({
 			"cols": [0, 0.8, 1],
@@ -195,7 +204,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		window.focus_view(v)
 		window.focus_view(dbg_view)
 		# opd_view.run_command('erase_view')
-		dbg_view.set_syntax_file('Packages/OP/OPDebugger.tmLanguage')
+		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('debugger', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
@@ -240,11 +249,11 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			if not w_sel.empty():
 				func = v.substr(w_sel)
 				if len(func.lstrip().rstrip()) != 0:
-					f = open(self.ROOT + '/OP/C++/' + func + '.cpp', 'r')
+					f = open(root_dir + 'OP/C++/' + func + '.cpp', 'r')
 					v.replace(edit, w_sel, f.read())
 					f.close()
 					try:
-						f_prop = open(self.ROOT + '/OP/C++/' + func + '.cpp:properties', 'r')
+						f_prop = open(root_dir + '/OP/C++/' + func + '.cpp:properties', 'r')
 						prop = sublime.decode_value(f_prop.read())
 						if prop.get('fold', None) is not None:
 							for x in prop['fold']:
@@ -264,12 +273,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			self.create_opd(clr_tests=clr_tests)
 		elif action == 'show_funcs':
 			wind = v.window()
-			funcs = listdir(self.ROOT + '/OP/C++/')
-			to_view_funcs = [x[:-4] for x in funcs]
+			funcs = listdir(root_dir + '/OP/C++/')
+			to_view_funcs = [x[:-4] for x in funcs if x[-4:] == '.cpp']
 			def on_done(ind, funcs=funcs):
 				if ind == -1:
 					return 0
-				f = open(self.ROOT + '/OP/C++/' + funcs[ind])
+				f = open(root_dir + '/OP/C++/' + funcs[ind])
 				self.view.run_command('olympic_funcs', {'text': f.read(), 'action': 'insert'})
 				f.close()
 

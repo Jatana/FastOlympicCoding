@@ -1,1 +1,0 @@
-plugin_name = 'sublime-fast-olympic-coding'

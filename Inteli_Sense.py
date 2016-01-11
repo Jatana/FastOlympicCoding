@@ -5,8 +5,17 @@ import sys
 from subprocess import Popen, PIPE
 import subprocess
 import shlex
-from OP.Modules.ProcessManager import ProcessManager
-from OP.Modules import basics
+from os import path
+
+
+# plugin_name = 'sublime-fast-olympic-coding'
+# root_dir = path.join(sublime.packages_path(), plugin_name + '/')
+# sys.path += [root_dir]
+
+
+from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
+from SublimeFastOlympicCoding.Modules import basics
+from SublimeFastOlympicCoding.settings import root_dir, plugin_name
 
 
 class InteliSenseCommand(sublime_plugin.TextCommand):
@@ -125,11 +134,11 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	def insert_error_marks(self):
 		v = self.view
 		s = v.substr(sublime.Region(0, v.size()))
-		run_file_path = sublime.packages_path() + '/OP/cmp_sense/amin.cpp'
+		run_file_path = path.join(root_dir, 'cmp_sense/amin.cpp')
 		f = open(run_file_path, 'wb')
 		f.write(s.encode())
 		f.close()
-		process = ProcessManager(sublime.packages_path() + '/OP/cmp_sense/amin.cpp', 'source.c++')
+		process = ProcessManager(path.join(root_dir, 'cmp_sense/amin.cpp'), 'source.c++')
 		s = process.compile(wait_close=True)[1]
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
