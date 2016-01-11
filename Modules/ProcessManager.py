@@ -17,7 +17,7 @@ class ProcessManager(object):
 		python_path = '/Library/Frameworks/Python.framework/Versions/3.4/bin/python3'
 		self.compile_cmds = {
 			'source.python': None,
-			'source.c++': lambda name: 'g++ -std=gnu++14 ' +'"'+name+'"',
+			'source.c++': lambda name: 'g++ -std=gnu++11 ' +'"'+name+'"',
 			'source.pascal': lambda name: '/usr/local/bin/ppc386 ' + '"' + name + '"' 
 		}
 
