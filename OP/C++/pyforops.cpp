@@ -289,6 +289,6 @@ xrange::check_range(); xrange::iterate())
 #define in = xrange::make_range_iterator() >> 
 
 int main(int argc, char *argv[]) {
-
+	
 	rt;
 }

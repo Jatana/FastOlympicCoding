@@ -152,6 +152,54 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 
 	have_tied_dbg = False
 
+	def create_opd(self, clr_tests=False):
+		v = self.view
+		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
+		file_syntax = scope_name.split()[0]
+		# v.window().show_input_panel("Runned", "123", \
+		# 	self.DebugArea.on_done, self.DebugArea.on_change, self.DebugArea.on_cancel)
+		# v.window().show_quick_panel(["5"], \
+		# 	1, 1, 1, 1)
+		#print('windowshe4ka generat')
+		window = v.window()
+		# opd_view = window.create_output_panel("opd_view")
+		# print(opd_view.settings().get('syntax'))
+		# window.run_command('show_panel', {'panel': 'output.opd_view'})
+		
+		if self.have_tied_dbg:
+			prop = (window.get_view_index(self.tied_dbg))
+			if prop == (-1, -1):
+				need_new = True
+			else:
+				need_new = False
+		else:
+			need_new = True
+
+		if not need_new:
+			dbg_view = self.tied_dbg
+			create_new = False
+		else:
+			dbg_view = window.new_file()
+			self.tied_dbg = dbg_view
+			self.have_tied_dbg = True
+			create_new = True
+			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
+			dbg_view.run_command('toggle_setting', {"setting": "gutter"})
+
+		window.set_layout({
+			"cols": [0, 0.8, 1],
+			"rows": [0, 1],
+			"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+		})
+		window.set_view_index(dbg_view, 1, 0)
+		window.focus_view(v)
+		window.focus_view(dbg_view)
+		# opd_view.run_command('erase_view')
+		dbg_view.set_syntax_file('Packages/OP/OPDebugger.tmLanguage')
+		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
+		dbg_view.run_command('debugger', \
+			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
+			"clr_tests": clr_tests})
 			
 
 	def run(self, edit, action=None, clr_tests=False, text=None):
@@ -213,50 +261,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			else:
 				v.insert(edit, cursor.a, '\t')
 		elif action == 'make_opd':
-			# v.window().show_input_panel("Runned", "123", \
-			# 	self.DebugArea.on_done, self.DebugArea.on_change, self.DebugArea.on_cancel)
-			# v.window().show_quick_panel(["5"], \
-			# 	1, 1, 1, 1)
-			print('windowshe4ka generat')
-			window = v.window()
-			# opd_view = window.create_output_panel("opd_view")
-			# print(opd_view.settings().get('syntax'))
-			# window.run_command('show_panel', {'panel': 'output.opd_view'})
-			
-			if self.have_tied_dbg:
-				prop = (window.get_view_index(self.tied_dbg))
-				if prop == (-1, -1):
-					need_new = True
-				else:
-					need_new = False
-			else:
-				need_new = True
-
-			if not need_new:
-				dbg_view = self.tied_dbg
-				create_new = False
-			else:
-				dbg_view = window.new_file()
-				self.tied_dbg = dbg_view
-				self.have_tied_dbg = True
-				create_new = True
-				dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
-				dbg_view.run_command('toggle_setting', {"setting": "gutter"})
-
-			window.set_layout({
-				"cols": [0, 0.8, 1],
-				"rows": [0, 1],
-				"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
-			})
-			window.set_view_index(dbg_view, 1, 0)
-			window.focus_view(v)
-			window.focus_view(dbg_view)
-			# opd_view.run_command('erase_view')
-			dbg_view.set_syntax_file('Packages/OP/OPDebugger.tmLanguage')
-			dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
-			dbg_view.run_command('debugger', \
-				{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
-				"clr_tests": clr_tests})
+			self.create_opd(clr_tests=clr_tests)
 		elif action == 'show_funcs':
 			wind = v.window()
 			funcs = listdir(self.ROOT + '/OP/C++/')
@@ -272,20 +277,35 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		elif action == 'sync_opdebugs':
 			w = v.window()
 			layout = w.get_layout()
-			
-			is_all_fold = True
+
+			def slow_hide(w=w, layout=layout):
+				if layout['cols'][1] < 1:
+					layout['cols'][1] += 0.001
+					w.set_layout(layout)
+					sublime.set_timeout(slow_hide, 1)
+				else:
+					layout['cols'][1] = 1
+					w.set_layout(layout)
+					print('stopped')
+
 			if len(layout['cols']) == 3:
 				if layout['cols'][1] != 1:
+					# hide opd panel
 					layout['cols'][1] = 1
 					for x in w.views_in_group(1):
 						x.run_command('debugger', {'action': 'hide_text'})
-					# print('hidden')
+					# slow_hide()
+					w.set_layout(layout)
 				else:
-					# print('showen')
+					# show opd panel
 					layout['cols'][1] = 0.8
+					need_x = 0.8
 					for x in w.views_in_group(1):
 						x.run_command('debugger', {'action': 'show_text'})
-			w.set_layout(layout)
+					w.set_layout(layout)
+			
+
+			
 
 
 
@@ -296,12 +316,19 @@ class LayoutListener(sublime_plugin.EventListener):
 		super(LayoutListener, self).__init__()
 	
 	def move_syncer(self, view):
-		w = view.window()
-		prop = w.get_view_index(view)
-		if prop[0] == 1:
-			active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
-			print('moved to first group')
-			w.set_view_index(view, 0, active_view_index + 1)
+		try:
+			w = view.window()
+			prop = w.get_view_index(view)
+			print(view.name())
+			if view.name()[-4:] == '-run':
+				w.set_view_index(view, 1, 0)
+				print('moved to second group')
+			elif prop[0] == 1:
+				active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
+				print('moved to first group')
+				w.set_view_index(view, 0, active_view_index + 1)
+		except:
+			pass
 		
 
 	def on_load(self, view):
@@ -315,4 +342,4 @@ class LayoutListener(sublime_plugin.EventListener):
 # 	"""docstring for GenListener"""
 # 	def __init__(self):
 # 		super(GenListener, self).__init__()
-# 		
+#

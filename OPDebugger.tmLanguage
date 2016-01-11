@@ -10,7 +10,7 @@
 	<key>name</key>
 	<string>OPDebugger</string>
 	<key>patterns</key>
-	<array>		
+	<array>	
 		<dict>
 			<key>match</key>
 			<string>(\d)+</string>

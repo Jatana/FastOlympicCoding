@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"fo",
+				"forin	for … in … done"
+			],
+			[
+				"sow",
+				"slow_hide"
+			],
+			[
+				"for",
+				"forv	Vector For Loop"
+			],
+			[
+				"erase",
+				"erase_status"
+			],
+			[
+				"pro",
+				"process"
+			],
+			[
 				"compile",
 				"compile_error"
 			],
@@ -42,10 +62,6 @@
 			[
 				"OPD",
 				"OPD_LANG"
-			],
-			[
-				"fo",
-				"focus_view"
 			],
 			[
 				"is",
@@ -356,10 +372,6 @@
 				"ntest"
 			],
 			[
-				"pro",
-				"process_manager"
-			],
-			[
 				"compil",
 				"compile_cmds"
 			],
@@ -502,28 +514,16 @@
 			[
 				"Sys",
 				"System_Module"
-			],
-			[
-				"mx",
-				"mx_index"
-			],
-			[
-				"all",
-				"all_variables"
-			],
-			[
-				"if",
-				"ifmain	if __name__ == '__main__'"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "Inteli_Sense.py",
+			"file": "debugger.py",
 			"settings":
 			{
-				"buffer_size": 5460,
+				"buffer_size": 4900,
 				"line_ending": "Unix"
 			}
 		},
@@ -536,27 +536,50 @@
 			}
 		},
 		{
-			"file": "OP/C++/ops.cpp:properties",
+			"file": "main.cpp:tests",
 			"settings":
 			{
-				"buffer_size": 46,
+				"buffer_size": 43,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "google_autocomplete.py",
+			"file": "olympic_funcs.py",
 			"settings":
 			{
-				"buffer_size": 548,
-				"line_ending": "Unix",
-				"name": "import sublime, sublime_plugin"
+				"buffer_size": 9313,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "translit_autocomplete.py",
+			"file": "main.cpp",
 			"settings":
 			{
-				"buffer_size": 516,
+				"buffer_size": 396,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Memorized/DebuggerTemp.pyMem",
+			"settings":
+			{
+				"buffer_size": 10458,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "OP/C++/ops.cpp",
+			"settings":
+			{
+				"buffer_size": 3043,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "OP/C++/full_gcd.cpp",
+			"settings":
+			{
+				"buffer_size": 221,
 				"line_ending": "Unix"
 			}
 		}
@@ -568,10 +591,30 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 27.0,
-		"last_filter": "sspython",
+		"height": 400.0,
+		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"ssshe",
+				"Set Syntax: Shell Script (Bash)"
+			],
+			[
+				"ssc++",
+				"Set Syntax: C++"
+			],
+			[
+				"ssplain",
+				"Set Syntax: Plain Text"
+			],
+			[
+				"ssopd",
+				"Set Syntax: OPDebugger"
+			],
+			[
+				"conver",
+				"Indentation: Convert to Tabs"
+			],
 			[
 				"sspython",
 				"Set Syntax: Python"
@@ -583,10 +626,6 @@
 			[
 				"reve",
 				"File: Revert"
-			],
-			[
-				"ssc++",
-				"Set Syntax: C++"
 			],
 			[
 				"ssjson",
@@ -617,13 +656,31 @@
 				"Indentation: Convert to Spaces"
 			]
 		],
-		"width": 400.0
+		"width": 457.0
 	},
 	"console":
 	{
 		"height": 147.0,
 		"history":
 		[
+			"view",
+			"view.add_regions('PlusReg', [sublime.Region(500, 1000)], 'string', 'Packages/OP/icons/untracked.png')",
+			"view.add_regions('PlusReg', [sublime.Region(500, 1000)], 'string', 'Packages/OP/icons/inserted.png')",
+			"view.add_regions('PlusReg', [sublime.Region(500, 1000)], 'string', 'Packages/OP/icons/changed.png')",
+			"view.add_regions('PlusReg', [sublime.Region(500, 1000)], 'string', 'OP/icons/changed')",
+			"view.add_regions('PlusReg', [sublime.Region(500, 1000)], 'string', 'dota')",
+			"view.add_regions('PlusReg', [sublime.Region(500, 1000)], 'string', 'dot')",
+			"view.add_regions('PlusReg', [sublime.Region(0, 100)], 'string', 'dot')",
+			"view.add_regions('PlusReg', [sublime.Region(0, 100)], 'string', 'plusss')",
+			"view.add_regions('PlusReg', [sublime.Region(0, 100)], 'string', 'plus')",
+			"view.add_regions('PlusReg', [sublime.Region(0, 100)])",
+			"view.add_regions()",
+			"view.add_regions",
+			"cd",
+			"s",
+			"s = 'ã'.encode()",
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"view.get_status('opd_info')",
 			"view.sel()[0]",
 			"view.sel()",
 			"OP.Inteli_Sense",
@@ -739,22 +796,36 @@
 	"expanded_folders":
 	[
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP",
-		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++"
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Docs",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Modules",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Modules/__pycache__",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP"
 	],
 	"file_history":
 	[
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/geo_env.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OPDebugger.tmLanguage",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/smart_div.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Inteli_Sense.py",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/pyforops.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/ops.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/fast_pow.cpp",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Snippets/C++/vector.sublime-snippet",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/Oracle/Oracle.py",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Snippets/C++/debugfreopen.sublime-snippet",
+		"/Users/Uhuhu/Documents/Olympic Programing/Code Battle/Main.py",
+		"/Users/Uhuhu/Google/KeyGoogle.txt",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/google_autocomplete.py",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/translit_autocomplete.py",
+		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/ops.cpp:properties",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/KeyGoogle.txt",
 		"/Users/Uhuhu/Desktop/testmypl/ONLyNater.cpp",
-		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/ops.cpp",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Snippets/C++/MySuperSnippet.sublime-snippet",
-		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Inteli_Sense.py",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/Modules/ProcessManager.py",
 		"/Users/Uhuhu/Desktop/testmypl/ProcessManager.py",
 		"/Users/Uhuhu/Desktop/testmypl/TEstDOwn.cpp",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/cmp_sense/amin.cpp",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/cmp_sense/a.out",
-		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/ops.cpp:properties",
-		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/pyforops.cpp",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/olympic_funcs.py",
 		"/Users/Uhuhu/Desktop/Test.cpp",
 		"/Users/Uhuhu/Desktop/SuperCpp.cpp",
@@ -810,7 +881,6 @@
 		"/Users/Uhuhu/Desktop/am in.cpp",
 		"/Users/Uhuhu/Desktop/SubPackages/C++/C.tmLanguage",
 		"/Users/Uhuhu/Desktop/SubPackages/C++/C++.tmLanguage",
-		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/OP/OPDebugger.tmLanguage",
 		"/Users/Uhuhu/Library/Application Support/Sublime Text 3/Packages/Theme - Spacegray/base16-ocean.dark.tmTheme",
 		"/Users/Uhuhu/Desktop/same.opd.html",
 		"/Users/Uhuhu/Documents/Olympic Programing/ZSBO3/Test.cpp",
@@ -860,17 +930,7 @@
 		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/dijkstra.cpp",
 		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/OP/C++/dijkstra.cpp:tests",
 		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/OP/Test.pas",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/B.py",
-		"/Users/aleksandrsehovcov/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/G.cpp:tests",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/G.cpp",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/D.cpp:tests",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/D.pas",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/D.cpp",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/E.py:tests",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/A.PY",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/A.cpp",
-		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/F.cpp"
+		"/Users/aleksandrsehovcov/Documents/Olympic Programing/mshp op/Contest 7/B.py"
 	],
 	"find":
 	{
@@ -893,6 +953,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"o_shove = text",
+			"BEGIN_TEST_STRING",
+			"<<",
+			"os",
+			"open",
 			"run_file",
 			"5000",
 			"2000",
@@ -1015,12 +1080,7 @@
 			"Listener",
 			"gettingstarted",
 			"procs",
-			"flags",
-			"mcol",
-			"sublime",
-			"print",
-			"sqrt",
-			"first"
+			"flags"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1067,24 +1127,24 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Inteli_Sense.py",
+					"file": "debugger.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5460,
+						"buffer_size": 4900,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3432,
-								3432
+								4900,
+								4900
 							]
 						],
 						"settings":
@@ -1093,10 +1153,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1650.0,
+						"translation.y": 1623.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1112,8 +1172,8 @@
 						"selection":
 						[
 							[
-								1883,
-								1892
+								3345,
+								3358
 							]
 						],
 						"settings":
@@ -1122,27 +1182,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1431.0,
+						"translation.y": 2854.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "OP/C++/ops.cpp:properties",
+					"file": "main.cpp:tests",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 46,
+						"buffer_size": 43,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20,
-								20
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1153,30 +1213,58 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "google_autocomplete.py",
+					"file": "olympic_funcs.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 548,
+						"buffer_size": 9313,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								354,
-								354
+								7805,
+								7805
 							]
 						],
 						"settings":
 						{
-							"auto_name": "import sublime, sublime_plugin",
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3426.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 396,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								306,
+								306
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1186,31 +1274,90 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "translit_autocomplete.py",
+					"buffer": 5,
+					"file": "Memorized/DebuggerTemp.pyMem",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 516,
+						"buffer_size": 10458,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2,
-								516
+								5441,
+								5335
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3743.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "OP/C++/ops.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3043,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2899,
+								2899
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1673.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "OP/C++/full_gcd.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 221,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								221,
+								221
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
@@ -1249,7 +1396,7 @@
 		"cols":
 		[
 			0.0,
-			1.0,
+			0.8,
 			1.0
 		],
 		"rows":
@@ -1313,7 +1460,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 269.0,
+	"side_bar_width": 274.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

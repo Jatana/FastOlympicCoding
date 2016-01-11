@@ -46,8 +46,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		tests = self.tests
 		if n < len(tests):
 			self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': tests[n]})
-			self.process_manager.insert(tests[n])
 			self.ntest += 1
+			self.process_manager.insert(tests[n])
 
 	def insert_text(self, edit, text=None):
 		v = self.view
@@ -80,6 +80,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		elif action == 'insert_opd_out':
 			v.insert(edit, v.size(), text)
 		elif action == 'make_opd':
+			v.set_status('opd_info', 'opdebugger-file')
 			v.run_command('debugger', {'action': 'erase_all'})
 			if not clr_tests:
 				try:
@@ -133,6 +134,9 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.sel_buffer = v.sel()
 			v.run_command('debugger', {'action':'erase_all'})
 
+		elif action == 'kill_proc':
+			self.process_manager.terminate()
+
 
 	def isEnabled(view, args):
 		print(view)
@@ -155,4 +159,3 @@ class CloseListener(sublime_plugin.EventListener):
 			
 		print('closed')
 
-		

@@ -16,6 +16,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <limits>
+#include <fstream>
 #include <array>
 
 #define nl "\n"
@@ -55,6 +56,14 @@ using namespace std;
 
 // I/O Stream Manager
 namespace Smart_IO_Stream {
+
+template <class T_First, class T_Second>
+ostream& operator<<(ostream& os, pair<T_First, T_Second>& p)
+{
+    os << p.first << " " << p.second;
+    return os;
+}
+
 template <class T>
 ostream& operator<<(ostream& os, vector<T>& v)
 {
@@ -82,11 +91,12 @@ ostream& operator<<(ostream& os, vector<vector<T> >& v)
     return os;
 }
 
+
 template <class T_First, class T_Second>
-ostream& operator<<(ostream& os, pair<T_First, T_Second>& p)
+istream& operator>>(istream& is, pair<T_First, T_Second>& p)
 {
-    os << p.first << " " << p.second;
-    return os;
+    is >> p.first >> p.second;
+    return is;
 }
 
 template <class T>

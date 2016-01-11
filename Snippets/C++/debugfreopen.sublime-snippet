@@ -6,8 +6,8 @@
 		is_debug = true;
 	}
 	if (!is_debug) {
-		freopen("${1:file}.in", "r", stdin);
-		freopen("${1:file}.out", "w", stdout);
+		freopen("${1:${TM_FILENAME/(.+)\..+|.*/$1/:name}}.in", "r", stdin);
+		freopen("${1:${TM_FILENAME/(.+)\..+|.*/$1/:name}}.out", "w", stdout);
 	}
 }
 ]]></content>

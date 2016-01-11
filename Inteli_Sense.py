@@ -126,8 +126,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		v = self.view
 		s = v.substr(sublime.Region(0, v.size()))
 		run_file_path = sublime.packages_path() + '/OP/cmp_sense/amin.cpp'
-		f = open(run_file_path, 'w')
-		f.write(s)
+		f = open(run_file_path, 'wb')
+		f.write(s.encode())
 		f.close()
 		process = ProcessManager(sublime.packages_path() + '/OP/cmp_sense/amin.cpp', 'source.c++')
 		s = process.compile(wait_close=True)[1]
