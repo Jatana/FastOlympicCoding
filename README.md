@@ -1,18 +1,18 @@
 Fast Olympic Coding plugin for Sublime Text 3
-
+================
 #### Program Auto Tester
  ![Auto Tester](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/AutoTester.png)
- #### keyboard:
-   * <kbd>ctrl+b-</kbd> compile and run
-   * <kbd>ctrl+enter</kbd> new test
-   * <kbd>ctrl+alt+k</kbd> kill process
-   * <kbd>ctrl+alt+b</kbd> run and clear previos tests
-   * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
+#### Auto Tester Keybindings
+ * <kbd>ctrl+b</kbd> compile and run
+ * <kbd>ctrl+enter</kbd> new test
+ * <kbd>ctrl+alt+k</kbd> kill process
+ * <kbd>ctrl+alt+b</kbd> run and clear previous tests
+ * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
-*Languages Parameters*
-	you can see and change lang parameters in
-		`settings.py`
+#### Languages run parameters
+ * you can see and change lang parameters in
+   * `settings.py`
 
 
 *Olympic Funcs*
