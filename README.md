@@ -9,6 +9,9 @@ Fast Olympic Coding plugin for Sublime Text 3
 	 `ctrl+alt+k`
 	run and clear previos tests
 	 `ctr+alt+b`
+	close/open right panel
+	 `cmd+k, cmd+right`
+
 
 *Languages Parameters*
 	you can see and change lang parameters in
