@@ -12,8 +12,8 @@ from os import path
 # sys.path += [root_dir]
 
 
-from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
-from SublimeFastOlympicCoding.settings import root_dir, plugin_name
+from FastOlympicCoding.Modules.ProcessManager import ProcessManager
+from FastOlympicCoding.settings import root_dir, plugin_name
 
 clang = 'Packages/C++/C++.tmLanguage'
 

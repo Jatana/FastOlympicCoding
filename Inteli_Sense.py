@@ -13,10 +13,10 @@ from os import path
 # sys.path += [root_dir]
 
 
-from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
-from SublimeFastOlympicCoding.Modules import basics
-from SublimeFastOlympicCoding.settings import root_dir, plugin_name, error_region_scope, warning_region_scope
-from SublimeFastOlympicCoding.settings import run_options
+from FastOlympicCoding.Modules.ProcessManager import ProcessManager
+from FastOlympicCoding.Modules import basics
+from FastOlympicCoding.settings import root_dir, plugin_name, error_region_scope, warning_region_scope
+from FastOlympicCoding.settings import run_options
 
 
 

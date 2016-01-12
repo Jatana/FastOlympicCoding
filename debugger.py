@@ -9,9 +9,9 @@ from sublime import Region
 from os import path
 
 
-from SublimeFastOlympicCoding.Modules.ProcessManager import ProcessManager
-from SublimeFastOlympicCoding.Modules import basics
-from SublimeFastOlympicCoding.settings import root_dir, plugin_name, run_options
+from FastOlympicCoding.Modules.ProcessManager import ProcessManager
+from FastOlympicCoding.Modules import basics
+from FastOlympicCoding.settings import root_dir, plugin_name, run_options
 
 
 class DebuggerCommand(sublime_plugin.TextCommand):

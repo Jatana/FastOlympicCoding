@@ -5,7 +5,7 @@ import os
 
 
 # plugin name dont change it!
-plugin_name = 'SublimeFastOlympicCoding'
+plugin_name = 'FastOlympicCoding'
 
 
 # root_dir = path.join(sublime.packages_path(), plugin_name + '/')
