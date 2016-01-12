@@ -23,10 +23,14 @@ Fast Olympic Coding plugin for Sublime Text 3
 	show funcs
 	  `ctrl+shift+o`
 	you can write func name
-		and press `tab`
+	  and press `<tab>
 	====
 	fast for
-	  `f i n` <tab>
+	  `f iter end` <tab>
+	  `f iter begin end` <tab>
+	  `f iter begin end move` <tab>
+	reversed for
+	  `fr ...` <tab>
 
 
 *C++ Error Highlighter*
