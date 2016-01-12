@@ -1,16 +1,13 @@
 Fast Olympic Coding plugin for Sublime Text 3
 
-*Program Auto Tester*
-	run 
-	 `ctrl+b-`
-	new test
-	 `ctrl+enter`
-	kill process
-	 `ctrl+alt+k`
-	run and clear previos tests
-	 `ctr+alt+b`
-	close/open right panel
-	 `cmd+k, cmd+right`
+#### Program Auto Tester
+ ![Auto Tester](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/AutoTester.png)
+ #### keyboard:
+   * <kbd>ctrl+b-</kbd> compile and run
+   * <kbd>ctrl+enter</kbd> new test
+   * <kbd>ctrl+alt+k</kbd> kill process
+   * <kbd>ctrl+alt+b</kbd> run and clear previos tests
+   * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
 
 *Languages Parameters*
