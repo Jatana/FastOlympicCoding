@@ -115,21 +115,24 @@ class PreGenParser(object):
 class PreProc(object):
 	"""docstring for PreProc"""
 	def f(*args, indent=''):
-		left_prototype = 'f (%s, %s) {\n' + indent + '\t'
-		right_prototype = '\n' +indent + '}'
+		def get_for_str(iter, begin, end, k, indent=indent):
+			return 'for (int {0} = {1}; {0} < {2}; {0}{3}) '.format(iter, begin, end, k) + \
+				'{\n' + indent + '\t'
+		left_prototype = 'for (int {0} = {1}; {0} < {2}; {0}{3}) {\n' + indent + '\t'
+		right_prototype = '\n' + indent + '}'
 		if len(args) == 0:
-			return left_prototype % ('i', 'n'), right_prototype
+			return get_for_str('i', '0', 'n', '++'), right_prototype
 		if len(args) == 1:
-			return left_prototype % ('i', args[0]), right_prototype
+			return get_for_str('i', '0', args[0], '++'), right_prototype
 		if len(args) == 2:
-			return left_prototype % (args[0], args[1]), right_prototype
+			return get_for_str(args[0], '0', args[1], '++'), right_prototype
 
 		left_prototype = 'fk (%s, %s, %s, %s) {\n' + indent + '\t'
 		right_prototype = '\n' +indent + '}'
 		if len(args) == 3:
-			return left_prototype % (args[0], args[1], args[2], 1), right_prototype
+			return get_for_str(args[0], args[1], args[2], '++'), right_prototype
 		if len(args) == 4:
-			return left_prototype % (args[0], args[1], args[2], args[3]), right_prototype
+			return get_for_str(args[0], args[1], args[2], ' += ' + args[3]), right_prototype
 
 	def fr(*args, indent=''):
 		left_prototype = 'fr (%s, %s) {\n' + indent + '\t'
@@ -313,10 +316,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 						x.run_command('debugger', {'action': 'show_text'})
 					w.set_layout(layout)
 			
-
-			
-
-
 
 
 class LayoutListener(sublime_plugin.EventListener):

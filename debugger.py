@@ -36,7 +36,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				self.view.run_command('debugger', {'action': 'new_test'})
 			if self.cur_tests[-1]:
 				f = open(self.process_manager.file + ':tests', 'w')
-				f.write(sublime.encode_value(self.tests + self.cur_tests))
+				f.write(sublime.encode_value(self.tests + self.cur_tests, True))
 				f.close()
 				self.cur_tests.append('')
 			self.view.window().active_view().erase_status('process_status')
@@ -83,6 +83,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		elif action == 'insert_opd_out':
 			v.insert(edit, v.size(), text)
 		elif action == 'make_opd':
+			v.set_scratch(True)
 			v.set_status('opd_info', 'opdebugger-file')
 			v.run_command('debugger', {'action': 'erase_all'})
 			if not v.settings().get('word_wrap'):

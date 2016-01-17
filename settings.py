@@ -26,7 +26,7 @@ run_options = [
 		'name': 'C++',
 		'extensions': ['cpp'],
 		'compile_cmd': lambda name: ('g++ "%s" -std=gnu++11' % name),
-		'run_cmd': lambda name: './a.out'
+		'run_cmd': lambda name: './a.out -debug'
 	},
 
 	{

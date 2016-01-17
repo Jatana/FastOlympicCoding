@@ -158,7 +158,13 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 					% (x['position'][0] + 1, x['position'][1]))
 				break
 		else:
-			v.erase_status('compile_error')
+			for x in errors:
+				if x['type'] == 'warning':
+					v.set_status('compile_error', ('error:%d:%d: ' + x['error_string']) \
+						% (x['position'][0] + 1, x['position'][1]))
+					break
+			else:
+				v.erase_status('compile_error')
 
 		warn_regions = []
 		for x in errors:

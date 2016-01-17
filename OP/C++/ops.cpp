@@ -18,6 +18,8 @@
 #include <limits>
 #include <fstream>
 #include <array>
+#include <list>
+#include <functional>
 
 #define nl "\n"
 #define x first
