@@ -162,7 +162,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 
 	have_tied_dbg = False
 
-	def create_opd(self, clr_tests=False):
+	def create_opd(self, clr_tests=False, sync_out=True):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -211,10 +211,10 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('debugger', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
-			"clr_tests": clr_tests})
+			"clr_tests": clr_tests, "sync_out": sync_out})
 			
 
-	def run(self, edit, action=None, clr_tests=False, text=None):
+	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -273,7 +273,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			else:
 				v.insert(edit, cursor.a, '\t')
 		elif action == 'make_opd':
-			self.create_opd(clr_tests=clr_tests)
+			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
 		elif action == 'show_funcs':
 			wind = v.window()
 			funcs = listdir(path.join(root_dir, 'OP/C++/'))
@@ -304,16 +304,20 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				if layout['cols'][1] != 1:
 					# hide opd panel
 					layout['cols'][1] = 1
-					for x in w.views_in_group(1):
-						x.run_command('debugger', {'action': 'hide_text'})
+					# <This Region May be uncomment>
+					#for x in w.views_in_group(1):
+					#	x.run_command('debugger', {'action': 'hide_text'})
+					# < / >
 					# slow_hide()
 					w.set_layout(layout)
 				else:
 					# show opd panel
 					layout['cols'][1] = 0.8
 					need_x = 0.8
-					for x in w.views_in_group(1):
-						x.run_command('debugger', {'action': 'show_text'})
+					# < This Region May be uncomment >
+					#for x in w.views_in_group(1):
+					#	x.run_command('debugger', {'action': 'show_text'})
+					# < / >
 					w.set_layout(layout)
 			
 

@@ -105,8 +105,11 @@ class ProcessManager(object):
 	def is_stopped(self):
 		return self.process.poll()
 
-	def get_output(self):
-		return self.process.stdout.read().decode()
+	def read(self, bfsize=None):
+		if bfsize is None:
+			return self.process.stdout.read().decode()
+		else:
+			return self.process.stdout.read(bfsize).decode()
 
 	def new_test(self, input_data=None):
 		self.test_counter += 1

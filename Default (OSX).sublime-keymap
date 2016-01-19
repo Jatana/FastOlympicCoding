@@ -145,6 +145,7 @@
 		]
 	},
 
+	// Runs Interactive
 	{
 		"keys": ["ctrl+b"],
 		"command": "olympic_funcs",
@@ -160,12 +161,53 @@
 			}
 		]
 	},
+
+	// Runs in mode output only
+	{
+		"keys": ["super+ctrl+b"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "make_opd",
+			"sync_out": false
+		},
+		"context": [
+			{
+				"key" :"selector",
+				"operand": "source.c++, source.python, source.pascal",
+				"operator": "equal",
+				"match_all": true
+			}
+		]
+	},
+
+
+	// clear previous tests and run
 	{
 		"keys": ["ctrl+alt+b"],
 		"command": "olympic_funcs",
 		"args": {
 			"action": "make_opd",
 			"clr_tests": true
+		},
+		"context": [
+			{
+				"key" :"selector",
+				"operand": "source.c++, source.python, source.pascal",
+				"operator": "equal",
+				"match_all": true
+			}
+		]
+	},
+
+	// clear previous tests and run 
+	// in mode output only
+	{
+		"keys": ["super+ctrl+alt+b"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "make_opd",
+			"clr_tests": true,
+			"sync_out": false
 		},
 		"context": [
 			{
