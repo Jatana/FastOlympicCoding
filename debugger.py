@@ -23,7 +23,10 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 	REGION_POS_PROP = ['', '', sublime.HIDDEN]
 	REGION_ACCEPT_PROP = ['string', 'dot', sublime.DRAW_SOLID_UNDERLINE]
 	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.DRAW_SOLID_UNDERLINE]
-	REGION_UNDEF_PROP = ['entity.class', 'dot', sublime.DRAW_SOLID_UNDERLINE]
+	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
+
+	# Test
+	#REGION_POS_PROP = REGION_UNKNOWN_PROP
 
 
 	class Test(object):
@@ -91,6 +94,12 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.on_out = on_out
 			self.on_stop = on_stop
 			self.proc_run = False
+			self.prog_out = []
+
+		def __on_out(self, s):
+			n = self.test_iter
+			self.prog_out[n] += s
+			self.on_out(s)
 
 		def __process_listener(self):
 			'''
@@ -103,10 +112,10 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 					s = proc.read(bfsize=4096)
 				else:
 					s = proc.read()
-				self.on_out(s)
+				self.__on_out(s)
 			try:
 				s = proc.read()
-				self.on_out(s)
+				self.__on_out(s)
 			except:
 				'output already puted'
 			self.proc_run = False
@@ -136,8 +145,11 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		def next_test(self):
 			n = self.test_iter
 			tests = self.tests
+			prog_out = self.prog_out
 			if n >= len(tests):
 				tests.append(DebuggerCommand.Test(''))
+			if n >= len(prog_out):
+				prog_out.append('')
 			self.insert_test()
 			sublime.set_timeout_async(self.__process_listener)
 
@@ -192,8 +204,6 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 
 	def new_test(self, edit):
 		v = self.view
-
-		#print('kek')
 		v.insert(edit, self.view.size(), \
 				(self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
 
@@ -229,6 +239,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.view.run_command('debugger', {'action': 'new_test'})
 		else:
 			self.memorize_tests()
+		print(self.tester.prog_out)
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
