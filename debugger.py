@@ -180,15 +180,20 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		def del_test(self, nth):
 			self.test_iter -= 1
 			self.tests.pop(nth)
+			self.prog_out.pop(nth)
 
 		def del_tests(self, to_del):
 			dont_add = set(to_del)
 			tests = self.tests
+			out = self.prog_out
 			new_tests = []
+			new_out = []
 			for i in range(len(tests)):
 				if not i in dont_add:
 					new_tests.append(tests[i])
+					new_out.append(out[i])
 
+			self.prog_out = new_out
 			self.tests = new_tests
 			self.test_iter -= len(to_del)
 
@@ -298,6 +303,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.set_test_status(cur_test, accept=True, call_tester=False)
 		elif check is False:
 			self.set_test_status(cur_test, accept=False, call_tester=False)
+		else:
+			self.set_test_status(cur_test, accept=None, call_tester=False)
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
@@ -311,10 +318,12 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			prop = self.REGION_ACCEPT_PROP
 			if call_tester:
 				self.tester.accept_out(nth)
-		else:
+		elif accept is False:
 			prop = self.REGION_DECLINE_PROP
 			if call_tester:
 				self.tester.decline_out(nth)
+
+		prop = self.get_style_test_status(nth)
 		v.add_regions(beg_key, [rs], *prop)
 
 	def set_tests_status(self, accept=True):
@@ -342,9 +351,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			if self.tester.check_test(i):
 				beg = v.get_regions(self.REGION_BEGIN_KEY % i)[0].begin()
 				end = v.line(v.get_regions(self.REGION_END_KEY % i)[0].begin()).end()
-				v.fold(Region(beg + 6, end))
-				
-
+				v.fold(Region(v.word(beg + 5).end(), end))
 
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, sync_out=False):
@@ -394,6 +401,14 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		v.erase_regions(self.REGION_BEGIN_KEY % nth)
 		v.erase_regions(self.REGION_END_KEY % nth)
 
+	def get_style_test_status(self, nth):
+		check = self.tester.check_test(nth)
+		if check:
+			return self.REGION_ACCEPT_PROP
+		elif check is False:
+			return self.REGION_DECLINE_PROP
+		return self.REGION_UNKNOWN_PROP
+
 	def renumerate_tests(self, edit, max_nth_test):
 		'''
 		renumerating tests
@@ -411,8 +426,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				v.replace(edit, v.word(rs_beg.begin() + 5), str(cur_nth + 1))
 				v.erase_regions(begin_key)
 				v.add_regions(self.REGION_BEGIN_KEY % (cur_nth), [rs_beg], \
-					*self.REGION_POS_PROP)
-
+					*self.get_style_test_status(cur_nth))
 
 				end_key = self.REGION_END_KEY % i
 				rs_end = v.get_regions(end_key)
@@ -450,9 +464,9 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				if x.intersects(r):
 					to_del.append(i)
 		print('deleted', to_del)
+		self.tester.del_tests(to_del)
 		for x in to_del:
 			self.delete_nth_test(edit, x)
-		self.tester.del_tests(to_del)
 		self.renumerate_tests(edit, cur_test + 2)
 		if self.tester.proc_run:
 			self.delta_input = v.get_regions('delta_input')[0].begin()
