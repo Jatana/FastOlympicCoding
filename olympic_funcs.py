@@ -194,7 +194,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			self.have_tied_dbg = True
 			create_new = True
 			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
-			dbg_view.run_command('toggle_setting', {"setting": "gutter"})
+			# dbg_view.run_command('toggle_setting', {"setting": "gutter"})
 			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
 
 
@@ -212,7 +212,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		dbg_view.run_command('debugger', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
 			"clr_tests": clr_tests, "sync_out": sync_out})
-			
+	
+	def close_opds(self):
+		w = self.view.window()
+		for v in w.views():
+			if v.get_status('opd_info') == 'opdebugger-file':
+				v.close()
 
 	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True):
 		v = self.view
@@ -273,6 +278,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			else:
 				v.insert(edit, cursor.a, '\t')
 		elif action == 'make_opd':
+			self.close_opds()
 			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
 		elif action == 'show_funcs':
 			wind = v.window()
@@ -319,6 +325,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					#	x.run_command('debugger', {'action': 'show_text'})
 					# < / >
 					w.set_layout(layout)
+			# w.run_command('toggle_side_bar')
 			
 
 

@@ -127,6 +127,23 @@
 		]
 	},
 
+	// Delete Test
+	{
+		"keys": ["super+ctrl+shift+d"],
+		"command": "debugger",
+		"args": {
+			"action": "delete_tests"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
 
 	{
 
@@ -258,5 +275,5 @@
 		"args": {
 			"action": "sync_opdebugs"
 		}
-	}
+	},
 ]

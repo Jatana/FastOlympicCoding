@@ -12,11 +12,19 @@ from os import path
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.Modules import basics
 from FastOlympicCoding.settings import root_dir, plugin_name, run_options
+from FastOlympicCoding.Engine import SysManager
 
 
 class DebuggerCommand(sublime_plugin.TextCommand):
 	BEGIN_TEST_STRING = 'Test %d {'
 	END_TEST_STRING = '} returncode %d'
+	REGION_BEGIN_KEY = 'test_begin_%d'
+	REGION_END_KEY = 'test_end_%d'
+	REGION_POS_PROP = ['', '', sublime.HIDDEN]
+	REGION_ACCEPT_PROP = ['string', 'dot', sublime.DRAW_SOLID_UNDERLINE]
+	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.DRAW_SOLID_UNDERLINE]
+	REGION_UNDEF_PROP = ['entity.class', 'dot', sublime.DRAW_SOLID_UNDERLINE]
+
 
 	class Test(object):
 		"""
@@ -59,11 +67,12 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.end = end
 
 		def memorize(self):
-			return {
-				"test": self.test_string,
-				"correct_answers": list(self.correct_answers),
-				"uncorrect_answers": list(self.uncorrect_answers)
-			}
+			d = {'test': self.test_string}
+			if self.correct_answers:
+				d['correct_answers'] = self.correct_answers
+			if self.uncorrect_answers:
+				d['uncorrect_answer'] = self.uncorrect_answers
+			return d
 
 		def __str__(self):
 			return self.test_string
@@ -104,12 +113,14 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.test_iter += 1
 			self.on_stop(proc.is_stopped())
 
-		def insert(self, s):
+		def insert(self, s, call_on_insert=False):
 			n = self.test_iter
 			if self.proc_run:
 				# self.on_insert(s)
 				self.tests[n].append_string(s)
 				self.process_manager.insert(s)
+				if call_on_insert:
+					self.on_insert(s)
 
 		def insert_test(self):
 			n = self.test_iter
@@ -138,66 +149,60 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		def get_tests(self):
 			return self.tests
 
+		def del_test(self, nth):
+			self.test_iter -= 1
+			self.tests.pop(nth)
+
+		def del_tests(self, to_del):
+			dont_add = set(to_del)
+			tests = self.tests
+			new_tests = []
+			for i in range(len(tests)):
+				if not i in dont_add:
+					new_tests.append(tests[i])
+
+			self.tests = new_tests
+			self.test_iter -= len(to_del)
+
 		def terminate(self):
 			self.process_manager.terminate()
 
-	def on_stop(self):
-		if self.process_manager.is_stopped() is not None:
-			s = self.process_manager.get_output()
-			self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': s})
-			text = ('\n' + self.END_TEST_STRING) % self.process_manager.process.returncode
-			self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': text})
-			if self.ntest < len(self.tests):
-				self.view.run_command('debugger', {'action': 'new_test'})
-			if self.cur_tests[-1]:
-				f = open(self.process_manager.file + ':tests', 'w')
-				f.write(sublime.encode_value([x.memorize() for x in (self.tests + self.cur_tests)], True))
-				f.close()
-				self.cur_tests.append(self.Test(''))
-			self.view.window().active_view().erase_status('process_status')
-		else:
-			sublime.set_timeout(self.on_stop, 100)
-
-
-	def insert_pretests(self):
-		n = self.ntest
-		tests = self.tests
-		if n < len(tests):
-			self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': tests[n].test_string})
-			self.ntest += 1
-			self.process_manager.insert(tests[n].test_string)
 
 	def insert_text(self, edit, text=None):
 		v = self.view
 		if text is None:
 			if not self.tester.proc_run:
 				return None
-			to_shove = (v.substr(v.full_line(v.sel()[0])))
-			v.insert(edit, v.sel()[0].begin(), '\n')
+			to_shove = v.substr(Region(self.delta_input, v.size()))
+			v.insert(edit, v.size(), '\n')
+
 		else:
 			to_shove = text
 			v.insert(edit, v.size(), to_shove + '\n')
+		self.delta_input = v.size()
 		self.tester.insert(to_shove + '\n')
 
 	def insert_cb(self, edit):
 		v = self.view
-		to_shove = sublime.get_clipboard()
-		w = ''
-		for x in to_shove:
-			if x == '\n':
-				self.insert_text(edit, text=w)
-				w = ''
-			else:
-				w += x
-		v.insert(edit, v.size(), w)
+		s = sublime.get_clipboard()
+		lst = s.split('\n')
+		for i in range(len(lst) - 1):
+			self.tester.insert(lst[i] + '\n', call_on_insert=True)
+		self.tester.insert(lst[-1], call_on_insert=True)
+
 
 	def new_test(self, edit):
 		v = self.view
-		# v.add_regions("test_begin_%d" % self.ntest, [Region(v.size(), v.size() + 1)], \
-		# 	'string', 'dot', sublime.DRAW_SOLID_UNDERLINE)
+
 		#print('kek')
 		v.insert(edit, self.view.size(), \
-				('\n' + self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
+				(self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
+
+		v.add_regions("test_begin_%d" % self.tester.test_iter, \
+			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
+				*self.REGION_POS_PROP)
+
+		self.delta_input = v.size()
 		self.tester.next_test()
 		v.window().active_view().set_status('process_status', 'Process Run')
 
@@ -208,9 +213,14 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': s})
 
 	def on_stop(self, rtcode):
+		v = self.view
 		self.view.run_command('debugger', {'action': 'insert_opd_out', \
-			'text': (self.END_TEST_STRING % rtcode)})
+			'text': (('\n' + self.END_TEST_STRING + '\n') % rtcode)})
+		v.add_regions("test_end_%d" % (self.tester.test_iter - 1), \
+			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
+				*self.REGION_POS_PROP)
 		tester = self.tester
+		self.view.erase_status('process_status')
 		if tester.have_pretests():
 			self.view.run_command('debugger', {'action': 'new_test'})
 		else:
@@ -218,7 +228,9 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
 			f.close()
 
-
+	def toggle_side_bar(self):
+		self.view.window().run_command('toggle_side_bar')
+		
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, sync_out=False):
 		v = self.view
 		v.set_scratch(True)
@@ -227,6 +239,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		self.dbg_file = run_file
 		if not v.settings().get('word_wrap'):
 			v.run_command('toggle_setting', {"setting": "word_wrap"})
+		# if SysManager.is_sidebar_open(v.window()):
+			# sublime.set_timeout(self.toggle_side_bar, 500)
 		if not clr_tests:
 			try:
 				f = open(run_file + ':tests')
@@ -244,11 +258,92 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
 				self.on_insert, self.on_out, self.on_stop, tests=tests, sync_out=sync_out)
-			self.tester.next_test()
-			v.insert(edit, 0, (self.BEGIN_TEST_STRING + '\n') % 1)
-			v.window().active_view().set_status('process_status', 'Process Run')
+			v.run_command('debugger', {'action': 'new_test'})
+			v.set_status('process_status', 'Process Run')
 		else:
 			self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': cmp_data[1]})
+
+	def delete_nth_test(self, edit, nth, fixed_end=None):
+		'''
+		deletes nth test
+		and NOT reNumerating other tests ID
+		'''
+		v = self.view
+		begin = v.get_regions(self.REGION_BEGIN_KEY % nth)[0].begin()
+		if fixed_end is not None:
+			end = fixed_end
+		else:
+			end = v.line(v.get_regions(self.REGION_END_KEY % nth)[0].begin()).end() + 1
+		v.replace(edit, Region(begin, end), '')
+		v.erase_regions(self.REGION_BEGIN_KEY % nth)
+		v.erase_regions(self.REGION_END_KEY % nth)
+
+	def renumerate_tests(self, edit, max_nth_test):
+		'''
+		renumerating tests
+		sample if 
+			[test 2, test 5] -> [test 1, test 2]
+		uses after del_tests
+		'''
+		v = self.view
+		cur_nth = 0
+		for i in range(0, max_nth_test):
+			begin_key = self.REGION_BEGIN_KEY % i
+			rs_beg = v.get_regions(begin_key)
+			if rs_beg:
+				rs_beg = rs_beg[0]
+				v.replace(edit, v.word(rs_beg.begin() + 5), str(cur_nth + 1))
+				v.erase_regions(begin_key)
+				v.add_regions(self.REGION_BEGIN_KEY % (cur_nth), [rs_beg], \
+					*self.REGION_POS_PROP)
+
+
+				end_key = self.REGION_END_KEY % i
+				rs_end = v.get_regions(end_key)
+				if rs_end:
+					rs_end = rs_end[0]
+					v.erase_regions(end_key)
+					v.add_regions(self.REGION_END_KEY % (cur_nth), [rs_end], \
+						*self.REGION_POS_PROP)
+
+				cur_nth += 1
+
+
+
+
+	def delete_tests(self, edit):
+		v = self.view
+		cur_test = self.tester.test_iter
+		if self.tester.proc_run:
+			v.add_regions('delta_input', [Region(self.delta_input, self.delta_input + 1)], \
+				'', '', sublime.HIDDEN)
+
+		sels = v.sel()
+		if self.tester.proc_run:
+			end_tbegin = v.get_regions(self.REGION_BEGIN_KEY % cur_test)[0].begin()
+			for x in sels:
+				if x.end() >= end_tbegin:
+					self.tester.terminate()
+					self.delete_nth_test(edit, cur_test, fixed_end=v.size())
+					cur_test -= 1
+					break
+		to_del = []
+		for i in range(cur_test):
+			begin = v.get_regions(self.REGION_BEGIN_KEY % i)[0].begin()
+			end = v.line(v.get_regions(self.REGION_END_KEY % i)[0].begin()).end()
+			r = Region(begin, end)
+			for x in sels:
+				if x.intersects(r):
+					to_del.append(i)
+		print('deleted', to_del)
+		for x in to_del:
+			self.delete_nth_test(edit, x)
+		self.tester.del_tests(to_del)
+		self.renumerate_tests(edit, cur_test + 2)
+		if self.tester.proc_run:
+			self.delta_input = v.get_regions('delta_input')[0].begin()
+
+
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False):
@@ -262,7 +357,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.insert_cb(edit)
 
 		elif action == 'insert_opd_out':
-			v.insert(edit, v.size(), text)
+			v.insert(edit, self.delta_input, text)
+			self.delta_input += len(text)
 
 		elif action == 'make_opd':
 			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
@@ -277,6 +373,9 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 
 		elif action == 'new_test':
 			self.new_test(edit)
+		
+		elif action == 'delete_tests':
+			self.delete_tests(edit)
 
 		elif action == 'erase_all':
 			v.replace(edit, Region(0, v.size()), '')
@@ -302,7 +401,18 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 class ModifiedListener(sublime_plugin.EventListener):
 	def on_selection_modified(self, view):
 		if view.get_status('opd_info') == 'opdebugger-file':
-			view.run_command('debugger', {'action': 'sync_modified'})
+			if len(view.sel()) > 0:
+				if view.substr(view.sel()[0]) == 'Test':
+					view.sel().clear()
+					def show_test_menu():
+						view.show_popup_menu(['Delete'], lambda x: print(x))
+
+					sublime.set_timeout(show_test_menu, 100)
+			# view.run_command('debugger', {'action': 'sync_modified'})
+
+	# def on_window_command(self, window, cmd, args):
+	# 	if cmd == 'toggle_side_bar':
+	# 		print('mi togli!')
 
 
 
