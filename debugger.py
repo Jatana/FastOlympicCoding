@@ -190,7 +190,6 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.tester.insert(lst[i] + '\n', call_on_insert=True)
 		self.tester.insert(lst[-1], call_on_insert=True)
 
-
 	def new_test(self, edit):
 		v = self.view
 
@@ -205,6 +204,11 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		self.delta_input = v.size()
 		self.tester.next_test()
 		v.window().active_view().set_status('process_status', 'Process Run')
+
+	def memorize_tests(self):
+		f = open(self.dbg_file + ':tests', 'w')
+		f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
+		f.close()
 
 	def on_insert(self, s):
 		self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': s})
@@ -224,9 +228,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		if tester.have_pretests():
 			self.view.run_command('debugger', {'action': 'new_test'})
 		else:
-			f = open(self.dbg_file + ':tests', 'w')
-			f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
-			f.close()
+			self.memorize_tests()
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
@@ -342,8 +344,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		self.renumerate_tests(edit, cur_test + 2)
 		if self.tester.proc_run:
 			self.delta_input = v.get_regions('delta_input')[0].begin()
-
-
+		self.memorize_tests()
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False):
