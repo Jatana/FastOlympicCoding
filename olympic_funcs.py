@@ -208,7 +208,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		window.focus_view(dbg_view)
 		# opd_view.run_command('erase_view')
 		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
-		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
+		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -fun')
 		dbg_view.run_command('debugger', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
 			"clr_tests": clr_tests, "sync_out": sync_out})

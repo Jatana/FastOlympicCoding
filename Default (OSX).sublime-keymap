@@ -144,6 +144,39 @@
 		]
 	},
 
+	// Accept Test
+	{
+		"keys": ["super+ctrl+o"],
+		"command": "debugger",
+		"args": {
+			"action": "accept_test"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	// Decline Test
+	{
+		"keys": ["super+ctrl+p"],
+		"command": "debugger",
+		"args": {
+			"action": "decline_test"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
 
 	{
 

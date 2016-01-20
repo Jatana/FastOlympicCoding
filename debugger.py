@@ -21,8 +21,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 	REGION_BEGIN_KEY = 'test_begin_%d'
 	REGION_END_KEY = 'test_end_%d'
 	REGION_POS_PROP = ['', '', sublime.HIDDEN]
-	REGION_ACCEPT_PROP = ['string', 'dot', sublime.DRAW_SOLID_UNDERLINE]
-	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.DRAW_SOLID_UNDERLINE]
+	REGION_ACCEPT_PROP = ['string', 'dot', sublime.HIDDEN]
+	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.HIDDEN]
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
 
 	# Test
@@ -42,11 +42,12 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				self.uncorrect_answers = set()
 			else:
 				self.test_string = prop['test']
-				self.correct_answers = prop.get('correct_answers', set())
-				self.uncorrect_answers = prop.get('uncorrect_answers', set())
+				self.correct_answers = set(prop.get('correct_answers', set()))
+				self.uncorrect_answers = set(prop.get('uncorrect_answers', set()))
 
 			self.start = start
 			self.end = end
+
 
 		def add_correct_answer(self, answer):
 			self.correct_answers.add(answer.lstrip().rstrip())
@@ -54,16 +55,31 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		def add_uncorrect_answer(self, answer):
 			self.uncorrect_answers.add(answer.lstrip().rstrip())
 
+		def remove_correct_answer(self, answer):
+			'''
+			removes correct answer no except
+			'''
+			answer = answer.lstrip().rstrip()
+			if answer in self.correct_answers:
+				self.correct_answers.remove(answer)
+
+		def remove_uncorrect_answer(self, answer):
+			'''
+			removes uncorrect answer no except
+			'''
+			answer = answer.lstrip().rstrip()
+			if answer in self.uncorrect_answers:
+				self.uncorrect_answers.remove(answer)
+
 		def is_correct_answer(self, answer):
-			if answer in correct_answers:
+			if answer in self.correct_answers:
 				return True
-			if answer in uncorrect_answers:
+			if answer in self.uncorrect_answers:
 				return False
 			return None
 
 		def append_string(self, s):
 			self.test_string += s
-
 
 		def set_inner_range(self, start, end):
 			self.start = start
@@ -72,9 +88,9 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		def memorize(self):
 			d = {'test': self.test_string}
 			if self.correct_answers:
-				d['correct_answers'] = self.correct_answers
+				d['correct_answers'] = list(self.correct_answers)
 			if self.uncorrect_answers:
-				d['uncorrect_answer'] = self.uncorrect_answers
+				d['uncorrect_answers'] = list(self.uncorrect_answers)
 			return d
 
 		def __str__(self):
@@ -176,6 +192,37 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.tests = new_tests
 			self.test_iter -= len(to_del)
 
+		def accept_out(self, nth):
+			'''
+			accepts current out
+			'''
+			outs = self.prog_out
+			tests = self.tests
+			if nth >= len(outs):
+				'''
+				Program not tested on this test
+				'''
+				return None
+			tests[nth].add_correct_answer(outs[nth].rstrip().lstrip())
+			tests[nth].remove_uncorrect_answer(outs[nth].rstrip().lstrip())
+
+		def decline_out(self, nth):
+			'''
+			declines current out
+			'''
+			outs = self.prog_out
+			tests = self.tests
+			if nth >= len(outs):
+				'''
+				Program not tested on this test
+				'''
+				return None
+			tests[nth].remove_correct_answer(outs[nth].rstrip().lstrip())
+			tests[nth].add_uncorrect_answer(outs[nth].rstrip().lstrip())
+
+		def check_test(self, nth):
+			return self.tests[nth].is_correct_answer(self.prog_out[nth])
+
 		def terminate(self):
 			self.process_manager.terminate()
 
@@ -216,6 +263,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		v.window().active_view().set_status('process_status', 'Process Run')
 
 	def memorize_tests(self):
+		# print([x.memorize() for x in (self.tester.get_tests())])
 		f = open(self.dbg_file + ':tests', 'w')
 		f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
 		f.close()
@@ -239,11 +287,50 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.view.run_command('debugger', {'action': 'new_test'})
 		else:
 			self.memorize_tests()
-		print(self.tester.prog_out)
+		# print(self.tester.prog_out)
+		cur_test = self.tester.test_iter - 1
+		check = self.tester.check_test(cur_test)
+		if check:
+			self.set_test_status(cur_test, accept=True, call_tester=False)
+		elif check is False:
+			self.set_test_status(cur_test, accept=False, call_tester=False)
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
-		
+
+	def set_test_status(self, nth, accept=True, call_tester=True):
+		v = self.view
+		beg_key = self.REGION_BEGIN_KEY % nth
+		rs = v.get_regions(beg_key)[0]
+		v.erase_regions(beg_key)
+		if accept:
+			prop = self.REGION_ACCEPT_PROP
+			if call_tester:
+				self.tester.accept_out(nth)
+		else:
+			prop = self.REGION_DECLINE_PROP
+			if call_tester:
+				self.tester.decline_out(nth)
+		v.add_regions(beg_key, [rs], *prop)
+
+	def set_tests_status(self, accept=True):
+		v = self.view
+		sels = v.sel()
+		cur_test = self.tester.test_iter
+		for i in range(cur_test):
+			begin_key = self.REGION_BEGIN_KEY % i
+			rs_beg = v.get_regions(begin_key)[0]
+			beg = rs_beg.begin()
+
+			end_key = self.REGION_END_KEY % i
+			rs_end = v.get_regions(end_key)[0]
+			end = v.line(rs_end.begin()).end()
+			r = Region(beg, end)
+			for x in sels:
+				if x.intersects(r):
+					self.set_test_status(i, accept=accept)
+		self.memorize_tests()
+
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, sync_out=False):
 		v = self.view
 		v.set_scratch(True)
@@ -322,8 +409,6 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				cur_nth += 1
 
 
-
-
 	def delete_tests(self, edit):
 		v = self.view
 		cur_test = self.tester.test_iter
@@ -388,6 +473,12 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		
 		elif action == 'delete_tests':
 			self.delete_tests(edit)
+
+		elif action == 'accept_test':
+			self.set_tests_status()
+
+		elif action == 'decline_test':
+			self.set_tests_status(accept=False)
 
 		elif action == 'erase_all':
 			v.replace(edit, Region(0, v.size()), '')

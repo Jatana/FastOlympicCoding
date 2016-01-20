@@ -41,13 +41,13 @@
 #define fk(i, begin, n, k) for (int i = begin; i < n; i += k)
 #define fall(x, seq) for (auto& x : seq)
 #define u2a(seq, function) \
-    for (auto& x : seq) {  \
-        x = function(x);   \
-    }
+	for (auto& x : seq) {  \
+		x = function(x);   \
+	}
 #define ifhas(tf, x, map) \
-    \
+	\
 auto x = map.find(tf);    \
-    \
+	\
 if(x != map.end())
 #define ifnhas(tf, map) if (map.find(tf) == map.end())
 #define fe for_each
@@ -60,59 +60,59 @@ namespace Smart_IO_Stream {
 template <class T_First, class T_Second>
 ostream& operator<<(ostream& os, pair<T_First, T_Second>& p)
 {
-    os << p.first << " " << p.second;
-    return os;
+	os << p.first << " " << p.second;
+	return os;
 }
 
 template <class T>
 ostream& operator<<(ostream& os, vector<T>& v)
 {
-    f(i, v.size() - 1)
-    {
-        os << v[i] << " ";
-    }
-    if (!v.empty()) {
-        os << v[v.size() - 1];
-    }
-    return os;
+	f(i, v.size() - 1)
+	{
+		os << v[i] << " ";
+	}
+	if (!v.empty()) {
+		os << v[v.size() - 1];
+	}
+	return os;
 }
 
 template <class T>
 ostream& operator<<(ostream& os, vector<vector<T> >& v)
 {
-    f(i, v.size() - 1)
-    {
-        os << v[i];
-        os << nl;
-    }
-    if (!v.empty()) {
-        os << v[v.size() - 1];
-    }
-    return os;
+	f(i, v.size() - 1)
+	{
+		os << v[i];
+		os << nl;
+	}
+	if (!v.empty()) {
+		os << v[v.size() - 1];
+	}
+	return os;
 }
 
 
 template <class T_First, class T_Second>
 istream& operator>>(istream& is, pair<T_First, T_Second>& p)
 {
-    is >> p.first >> p.second;
-    return is;
+	is >> p.first >> p.second;
+	return is;
 }
 
 template <class T>
 istream& operator>>(istream& is, vector<T>& v)
 {
-    f(i, v.size())
-    {
-        is >> v[i];
-    }
-    return is;
+	f(i, v.size())
+	{
+		is >> v[i];
+	}
+	return is;
 }
 }// namespace Smart_IO_Stream
 
 void set_accuracy(int accure)
 {
-    cout << setprecision(accure) << fixed;
+	cout << setprecision(accure) << fixed;
 }
 
 namespace defython {
@@ -120,28 +120,28 @@ namespace defython {
 template <class T>
 long long sum(vector<T>& v)
 {
-    long long rez = 0;
-    fall(x, v)
-    {
-        rez += x;
-    }
-    return rez;
+	long long rez = 0;
+	fall(x, v)
+	{
+		rez += x;
+	}
+	return rez;
 }
 
 template <class T>
 T max(vector<T>& v)
 {
-    if (v.size() == 0) {
-        return NULL;
-    }
-    T assume_max = v[0];
-    fall(x, v)
-    {
-        if (assume_max < x) {
-            assume_max = x;
-        }
-    }
-    return assume_max;
+	if (v.size() == 0) {
+		return NULL;
+	}
+	T assume_max = v[0];
+	fall(x, v)
+	{
+		if (assume_max < x) {
+			assume_max = x;
+		}
+	}
+	return assume_max;
 }
 }// namespace defython
 
@@ -162,8 +162,12 @@ using namespace typedefs;
 
 int main(int argc, char *argv[]) {
 	string n;
-    cout << ">>>";
+	cout << ">>>";
 	cin >> n;
-	cout << n;
+	if (n == "123") {
+		cout << n;
+		rt;
+	} 
+	cout << n + "!";
 	rt;
 }
