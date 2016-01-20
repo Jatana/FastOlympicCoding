@@ -149,7 +149,7 @@ class PreProc(object):
 
 class OlympicFuncsCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
-	WIDTH_OPD_PANEL = 0.2
+	ruler_opd_panel = 0.8
 	pregen_funcs = {
 		'f': {
 			# 'cnt_args': {1, 2, 3, 4},
@@ -208,7 +208,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		window.focus_view(dbg_view)
 		# opd_view.run_command('erase_view')
 		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
-		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -fun')
+		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('debugger', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
 			"clr_tests": clr_tests, "sync_out": sync_out})
@@ -309,6 +309,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			if len(layout['cols']) == 3:
 				if layout['cols'][1] != 1:
 					# hide opd panel
+					self.ruler_opd_panel = min(layout['cols'][1], 0.93)
 					layout['cols'][1] = 1
 					# <This Region May be uncomment>
 					#for x in w.views_in_group(1):
@@ -318,8 +319,8 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					w.set_layout(layout)
 				else:
 					# show opd panel
-					layout['cols'][1] = 0.8
-					need_x = 0.8
+					layout['cols'][1] = self.ruler_opd_panel
+					need_x = self.ruler_opd_panel
 					# < This Region May be uncomment >
 					#for x in w.views_in_group(1):
 					#	x.run_command('debugger', {'action': 'show_text'})
