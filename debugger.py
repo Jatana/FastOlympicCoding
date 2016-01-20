@@ -254,13 +254,17 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		v.insert(edit, self.view.size(), \
 				(self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
 
-		v.add_regions("test_begin_%d" % self.tester.test_iter, \
+		v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
 			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
 				*self.REGION_POS_PROP)
 
 		self.delta_input = v.size()
 		self.tester.next_test()
 		v.window().active_view().set_status('process_status', 'Process Run')
+		if self.tester.test_iter > 4:
+			self.fold_accept_tests()
+
+
 
 	def memorize_tests(self):
 		# print([x.memorize() for x in (self.tester.get_tests())])
@@ -330,6 +334,18 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				if x.intersects(r):
 					self.set_test_status(i, accept=accept)
 		self.memorize_tests()
+
+	def fold_accept_tests(self):
+		v = self.view
+		cur_test = self.tester.test_iter
+		for i in range(cur_test):
+			if self.tester.check_test(i):
+				beg = v.get_regions(self.REGION_BEGIN_KEY % i)[0].begin()
+				end = v.line(v.get_regions(self.REGION_END_KEY % i)[0].begin()).end()
+				v.fold(Region(beg + 6, end))
+				
+
+
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, sync_out=False):
 		v = self.view
