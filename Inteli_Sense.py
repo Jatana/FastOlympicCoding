@@ -1,3 +1,11 @@
+'''
+Scan and show compile Errors in realtime 
+currently works supported c++
+
+'''
+
+
+
 import sublime, sublime_plugin
 import os
 from os.path import dirname
@@ -193,23 +201,23 @@ class SenseListener(sublime_plugin.EventListener):
 	# 	if get_syntax(view) == 'cpp':
 	# 		view.run_command('inteli_sense', {'action': 'run_sense'})
 	def on_load(self, view):
-		if get_syntax(view) == CLANG:
+		if basics.is_cpp_file(view):
 			view.run_command('inteli_sense', {'action': 'run_sense'})
 
 	def on_pre_close(self, view):
-		if get_syntax(view) == CLANG:
+		if basics.is_cpp_file(view):
 			view.run_command('inteli_sense', {'action': 'stop_sense'})
 
 	def on_modified(self, view):
-		if get_syntax(view) == CLANG:
+		if basics.is_cpp_file(view):
 			view.run_command('inteli_sense', {'action': 'sync_modified'})
 
 	def on_deactivated(self, view):
-		if get_syntax(view) == CLANG:
+		if basics.is_cpp_file(view):
 			view.run_command('inteli_sense', {'action': 'stop_sense'})
 
 	def on_activated(self, view):
-		if get_syntax(view) == CLANG:
+		if basics.is_cpp_file(view):
 			view.run_command('inteli_sense', {'action': 'run_sense'})
 
 	# def on_query_completions(self, view, prefix, locations):

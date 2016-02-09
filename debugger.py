@@ -72,6 +72,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				self.uncorrect_answers.remove(answer)
 
 		def is_correct_answer(self, answer):
+			answer = answer.rstrip().lstrip()
 			if answer in self.correct_answers:
 				return True
 			if answer in self.uncorrect_answers:
@@ -117,6 +118,13 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.prog_out[n] += s
 			self.on_out(s)
 
+		def __pipe_listener(self, pipe, on_out, bfsize=None):
+			'''
+			wait for PIPE out 
+			and calls on_out(`out`)
+			'''
+			return "!INDEV\n"
+
 		def __process_listener(self):
 			'''
 			wait for process out or died and 
@@ -133,7 +141,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				s = proc.read()
 				self.__on_out(s)
 			except:
-				'output already puted'
+				'output already putted'
 			self.proc_run = False
 			self.test_iter += 1
 			self.on_stop(proc.is_stopped())
@@ -322,8 +330,10 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			prop = self.REGION_DECLINE_PROP
 			if call_tester:
 				self.tester.decline_out(nth)
+		else:
+			prop = self.REGION_UNKNOWN_PROP
 
-		prop = self.get_style_test_status(nth)
+		#prop = self.get_style_test_status(nth)
 		v.add_regions(beg_key, [rs], *prop)
 
 	def set_tests_status(self, accept=True):
@@ -384,7 +394,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			v.run_command('debugger', {'action': 'new_test'})
 			v.set_status('process_status', 'Process Run')
 		else:
-			self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': cmp_data[1]})
+			v.insert(edit, 0, cmp_data[1])
+			#v.run_command('debugger', {'action': 'insert_opd_out', 'text': cmp_data[1]})
 
 	def delete_nth_test(self, edit, nth, fixed_end=None):
 		'''
@@ -463,7 +474,8 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			for x in sels:
 				if x.intersects(r):
 					to_del.append(i)
-		print('deleted', to_del)
+		# print('deleted -> ', ' '.join(map(str, to_del)))
+		sublime.status_message('deleted tests: ' + (', '.join(map(lambda x: str(x + 1), to_del))))
 		self.tester.del_tests(to_del)
 		for x in to_del:
 			self.delete_nth_test(edit, x)

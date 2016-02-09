@@ -101,6 +101,7 @@ class ProcessManager(object):
 		if self.process.poll() is None:
 			# print(s)
 			self.process.stdin.write(s.encode())
+			self.process.stdin.flush()
 
 	def is_stopped(self):
 		return self.process.poll()

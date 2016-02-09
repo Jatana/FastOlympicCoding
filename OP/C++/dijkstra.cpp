@@ -44,5 +44,6 @@ vector<int> dijkstra(vector<vector<pair<int, int>>> &vertices, int n, int v, int
 	}
 	way.push_back(v);
 	reverse(way.begin(), way.end());
+	//return way;
 	return dist;
 }

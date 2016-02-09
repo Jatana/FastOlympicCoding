@@ -163,6 +163,9 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 	have_tied_dbg = False
 
 	def create_opd(self, clr_tests=False, sync_out=True):
+		'''
+		creates opd with supported language
+		'''
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -195,6 +198,11 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			create_new = True
 			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
 			# dbg_view.run_command('toggle_setting', {"setting": "gutter"})
+			try:
+				sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
+			except:
+				# Version of sublime text < 3102
+				pass
 			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
 
 
