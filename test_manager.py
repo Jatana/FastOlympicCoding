@@ -7,17 +7,18 @@ import subprocess
 import shlex
 from sublime import Region
 from os import path
-
+from importlib import import_module
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.Modules import basics
 from FastOlympicCoding.settings import root_dir, plugin_name, run_options
 from FastOlympicCoding.Engine import SysManager
+from FastOlympicCoding.debuggers import debugger_info
 
 
-class DebuggerCommand(sublime_plugin.TextCommand):
+class TestManagerCommand(sublime_plugin.TextCommand):
 	BEGIN_TEST_STRING = 'Test %d {'
-	END_TEST_STRING = '} returncode %d'
+	END_TEST_STRING = '} returncode %s'
 	REGION_BEGIN_KEY = 'test_begin_%d'
 	REGION_END_KEY = 'test_end_%d'
 	REGION_POS_PROP = ['', '', sublime.HIDDEN]
@@ -35,7 +36,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		continues data of start, end, correct and uncorrect answers
 		"""
 		def __init__(self, prop, start=None, end=None):
-			super(DebuggerCommand.Test, self).__init__()
+			super(TestManagerCommand.Test, self).__init__()
 			if type(prop) == str:
 				self.test_string = prop
 				self.correct_answers = set()
@@ -101,8 +102,10 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		"""
 		class for manage tests
 		"""
-		def __init__(self, process_manager, on_insert, on_out, on_stop, sync_out=False, tests=[]):
-			super(DebuggerCommand.Tester, self).__init__()
+		def __init__(self, process_manager, \
+			on_insert, on_out, on_stop, on_status_change, \
+			sync_out=False, tests=[]):
+			super(TestManagerCommand.Tester, self).__init__()
 			self.process_manager = process_manager
 			self.sync_out = sync_out
 			self.tests = tests
@@ -112,6 +115,13 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.on_stop = on_stop
 			self.proc_run = False
 			self.prog_out = []
+			if type(self.process_manager) != ProcessManager:
+				self.process_manager.set_calls(self.__on_out, self.__on_stop, on_status_change)
+
+		def __on_stop(self, rtcode, crash_line=None):
+			self.proc_run = False
+			self.test_iter += 1
+			self.on_stop(rtcode, crash_line=crash_line)
 
 		def __on_out(self, s):
 			n = self.test_iter
@@ -151,7 +161,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			if self.proc_run:
 				# self.on_insert(s)
 				self.tests[n].append_string(s)
-				self.process_manager.insert(s)
+				self.process_manager.write(s)
 				if call_on_insert:
 					self.on_insert(s)
 
@@ -161,9 +171,10 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			if n == 0:
 				self.process_manager.compile()
 			if n < len(tests):
-				self.process_manager.run_file()
+				if type(self.process_manager) != ProcessManager:
+					self.process_manager.run()
 				self.proc_run = True
-				self.process_manager.insert(tests[n].test_string)
+				self.process_manager.write(tests[n].test_string)
 				self.on_insert(tests[n].test_string)
 
 		def next_test(self):
@@ -171,11 +182,12 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			tests = self.tests
 			prog_out = self.prog_out
 			if n >= len(tests):
-				tests.append(DebuggerCommand.Test(''))
+				tests.append(TestManagerCommand.Test(''))
 			if n >= len(prog_out):
 				prog_out.append('')
 			self.insert_test()
-			sublime.set_timeout_async(self.__process_listener)
+			if type(self.process_manager) == ProcessManager:
+				sublime.set_timeout_async(self.__process_listener)
 
 		def have_pretests(self):
 			n = self.test_iter
@@ -273,7 +285,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 
 		self.delta_input = v.size()
 		self.tester.next_test()
-		v.window().active_view().set_status('process_status', 'Process Run')
+		# v.window().active_view().set_status('process_status', 'Process Run')
 		if self.tester.test_iter > 4:
 			self.fold_accept_tests()
 
@@ -286,22 +298,22 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		f.close()
 
 	def on_insert(self, s):
-		self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': s})
+		self.view.run_command('test_manager', {'action': 'insert_opd_out', 'text': s})
 
 	def on_out(self, s):
-		self.view.run_command('debugger', {'action': 'insert_opd_out', 'text': s})
+		self.view.run_command('test_manager', {'action': 'insert_opd_out', 'text': s})
 
-	def on_stop(self, rtcode):
+	def on_stop(self, rtcode, crash_line=None):
 		v = self.view
-		self.view.run_command('debugger', {'action': 'insert_opd_out', \
-			'text': (('\n' + self.END_TEST_STRING + '\n') % rtcode)})
+		self.view.run_command('test_manager', {'action': 'insert_opd_out', \
+			'text': (('\n' + self.END_TEST_STRING + '\n') % str(rtcode))})
 		v.add_regions("test_end_%d" % (self.tester.test_iter - 1), \
 			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
 				*self.REGION_POS_PROP)
 		tester = self.tester
-		self.view.erase_status('process_status')
+		# self.view.erase_status('process_status')
 		if tester.have_pretests():
-			self.view.run_command('debugger', {'action': 'new_test'})
+			self.view.run_command('test_manager', {'action': 'new_test'})
 		else:
 			self.memorize_tests()
 		# print(self.tester.prog_out)
@@ -313,6 +325,13 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			self.set_test_status(cur_test, accept=False, call_tester=False)
 		else:
 			self.set_test_status(cur_test, accept=None, call_tester=False)
+
+		# add crash regions
+		if crash_line is not None:
+			for x in v.window().views():
+				if x.id() == self.code_view_id:
+					#print('setbryak ->', crash_line)
+					x.run_command('view_tester', {'action': 'show_crash_line', 'crash_line': crash_line})
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
@@ -363,13 +382,23 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 				end = v.line(v.get_regions(self.REGION_END_KEY % i)[0].begin()).end()
 				v.fold(Region(v.word(beg + 5).end(), end))
 
+	def have_debugger(self, ext):
+		dbg_modules = debugger_info.get_debug_modules()
+		for dbg in dbg_modules:
+			if dbg.is_runnable() and ext in dbg.supported_exts:
+				return dbg
 
-	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, sync_out=False):
+	def change_process_status(self, status):
+		self.view.set_status('process_status', status)
+
+	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
+		sync_out=False, code_view_id=None):
 		v = self.view
 		v.set_scratch(True)
 		v.set_status('opd_info', 'opdebugger-file')
-		v.run_command('debugger', {'action': 'erase_all'})
+		v.run_command('test_manager', {'action': 'erase_all'})
 		self.dbg_file = run_file
+		self.code_view_id = code_view_id
 		if not v.settings().get('word_wrap'):
 			v.run_command('toggle_setting', {"setting": "word_wrap"})
 		# if SysManager.is_sidebar_open(v.window()):
@@ -386,16 +415,23 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 			f.write('[]')
 			f.close()
 			tests = []
-		process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
+		file_ext = path.splitext(run_file)[1][1:]
+		DebugModule = self.have_debugger(file_ext)
+		if DebugModule is None:
+			process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
+		else:
+			print(DebugModule)
+			process_manager = DebugModule(run_file)
 		cmp_data = process_manager.compile()
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
-				self.on_insert, self.on_out, self.on_stop, tests=tests, sync_out=sync_out)
-			v.run_command('debugger', {'action': 'new_test'})
-			v.set_status('process_status', 'Process Run')
+				self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
+				tests=tests, sync_out=sync_out)
+			v.run_command('test_manager', {'action': 'new_test'})
+			# v.set_status('process_status', 'Process Run')
 		else:
 			v.insert(edit, 0, cmp_data[1])
-			#v.run_command('debugger', {'action': 'insert_opd_out', 'text': cmp_data[1]})
+			#v.run_command('test_manager', {'action': 'insert_opd_out', 'text': cmp_data[1]})
 
 	def delete_nth_test(self, edit, nth, fixed_end=None):
 		'''
@@ -485,7 +521,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		self.memorize_tests()
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False):
+			sync_out=False, code_view_id=None):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -501,14 +537,14 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 
 		elif action == 'make_opd':
 			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
-				sync_out=sync_out)
+				sync_out=sync_out, code_view_id=code_view_id)
 
 		elif action == 'close':
 			try:
 				self.process_manager.terminate()
 			except:
 				print('Error When terminating process')
-			v.run_command('debugger', {'action': 'erase_all'})
+			v.run_command('test_manager', {'action': 'erase_all'})
 
 		elif action == 'new_test':
 			self.new_test(edit)
@@ -533,7 +569,7 @@ class DebuggerCommand(sublime_plugin.TextCommand):
 		elif action == 'hide_text':
 			self.text_buffer = v.substr(Region(0, v.size()))
 			self.sel_buffer = v.sel()
-			v.run_command('debugger', {'action':'erase_all'})
+			v.run_command('test_manager', {'action':'erase_all'})
 
 		elif action == 'kill_proc':
 			self.tester.terminate()
@@ -553,7 +589,7 @@ class ModifiedListener(sublime_plugin.EventListener):
 						view.show_popup_menu(['Delete'], lambda x: print(x))
 
 					sublime.set_timeout(show_test_menu, 100)
-			# view.run_command('debugger', {'action': 'sync_modified'})
+			# view.run_command('test_manager', {'action': 'sync_modified'})
 
 	# def on_window_command(self, window, cmd, args):
 	# 	if cmd == 'toggle_side_bar':
@@ -571,7 +607,178 @@ class CloseListener(sublime_plugin.EventListener):
 
 	def on_pre_close(self, view):
 		if get_syntax(view) == OPD_LANG:
-			view.run_command('debugger', {'action': 'close'})
+			view.run_command('test_manager', {'action': 'close'})
 			print("specclose")
 		# print('closed')
 
+
+class ViewTesterCommand(sublime_plugin.TextCommand):
+	ROOT = dirname(__file__)
+	ruler_opd_panel = 0.8
+
+	have_tied_dbg = False
+
+	def have_debugger(self, ext):
+		# debuggers_dir = path.join(path.dirname(__file__), 'debuggers/')
+		# print(debuggers_dir)
+		# for file in os.listdir(debuggers_dir):
+		# 	full_file = path.join(debuggers_dir, file)
+		# 	if path.splitext(full_file)[1][1:] == 'py':
+		# 		full_file = path.splitext(path.split(full_file)[1])[0]
+		# 		print(full_file)
+		# print(debugger_info.Debugger.__subclasses__())
+		dbg_modules = debugger_info.get_debug_modules()
+		for dbg in dbg_modules:
+			if dbg.is_runnable() and ext in dbg.supported_exts:
+				return dbg
+
+
+
+
+	def create_opd(self, clr_tests=False, sync_out=True):
+		'''
+		creates opd with supported language
+		'''
+		v = self.view
+		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
+		file_syntax = scope_name.split()[0]
+		file_name = v.file_name()
+		file_ext = path.splitext(file_name)[1][1:]
+		# v.window().show_input_panel("Runned", "123", \
+		# 	self.DebugArea.on_done, self.DebugArea.on_change, self.DebugArea.on_cancel)
+		# v.window().show_quick_panel(["5"], \
+		# 	1, 1, 1, 1)
+		#print('windowshe4ka generat')
+		window = v.window()
+		v.erase_regions('crash_line')
+		# opd_view = window.create_output_panel("opd_view")
+		# print(opd_view.settings().get('syntax'))
+		# window.run_command('show_panel', {'panel': 'output.opd_view'})
+		if self.have_tied_dbg:
+			prop = (window.get_view_index(self.tied_dbg))
+			if prop == (-1, -1):
+				need_new = True
+			else:
+				need_new = False
+		else:
+			need_new = True
+
+		if not need_new:
+			dbg_view = self.tied_dbg
+			create_new = False
+		else:
+			dbg_view = window.new_file()
+			self.tied_dbg = dbg_view
+			self.have_tied_dbg = True
+			create_new = True
+			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
+			# dbg_view.run_command('toggle_setting', {"setting": "gutter"})
+			try:
+				sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
+			except:
+				# Version of sublime text < 3102
+				pass
+			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
+
+		window.set_layout({
+			"cols": [0, 0.8, 1],
+			"rows": [0, 1],
+			"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+		})
+		window.set_view_index(dbg_view, 1, 0)
+		window.focus_view(v)
+		window.focus_view(dbg_view)
+		# opd_view.run_command('erase_view')
+		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
+		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
+		dbg_view.run_command('test_manager', \
+			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
+			"clr_tests": clr_tests, "sync_out": sync_out, 'code_view_id': v.id()})
+	
+	def close_opds(self):
+		w = self.view.window()
+		for v in w.views():
+			if v.get_status('opd_info') == 'opdebugger-file':
+				v.close()
+
+	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None):
+		v = self.view
+		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
+		file_syntax = scope_name.split()[0]
+		if action == 'insert':
+			v.insert(edit, v.sel()[0].begin(), text)
+		elif action == 'make_opd':
+			self.close_opds()
+			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
+		elif action == 'show_crash_line':
+			pt = v.text_point(crash_line - 1, 0)
+			v.erase_regions('crash_line')
+			v.add_regions('crash_line', [sublime.Region(pt + 0, pt + 0)], \
+				'variable.language.python', 'bookmark', \
+				sublime.DRAW_SOLID_UNDERLINE)
+			v.show_at_center(pt)
+			# print(pt)
+		elif action == 'sync_opdebugs':
+			w = v.window()
+			layout = w.get_layout()
+
+			def slow_hide(w=w, layout=layout):
+				if layout['cols'][1] < 1:
+					layout['cols'][1] += 0.001
+					w.set_layout(layout)
+					sublime.set_timeout(slow_hide, 1)
+				else:
+					layout['cols'][1] = 1
+					w.set_layout(layout)
+					print('stopped')
+
+			if len(layout['cols']) == 3:
+				if layout['cols'][1] != 1:
+					# hide opd panel
+					self.ruler_opd_panel = min(layout['cols'][1], 0.93)
+					layout['cols'][1] = 1
+					# <This Region May be uncomment>
+					#for x in w.views_in_group(1):
+					#	x.run_command('test_manager', {'action': 'hide_text'})
+					# < / >
+					# slow_hide()
+					w.set_layout(layout)
+				else:
+					# show opd panel
+					layout['cols'][1] = self.ruler_opd_panel
+					need_x = self.ruler_opd_panel
+					# < This Region May be uncomment >
+					#for x in w.views_in_group(1):
+					#	x.run_command('test_manager', {'action': 'show_text'})
+					# < / >
+					w.set_layout(layout)
+			# w.run_command('toggle_side_bar')
+			
+
+
+class LayoutListener(sublime_plugin.EventListener):
+	"""docstring for LayoutListener"""
+	def __init__(self):
+		super(LayoutListener, self).__init__()
+	
+	def move_syncer(self, view):
+		try:
+			w = view.window()
+			prop = w.get_view_index(view)
+			print(view.name())
+			if view.name()[-4:] == '-run':
+				w.set_view_index(view, 1, 0)
+				print('moved to second group')
+			elif prop[0] == 1:
+				active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
+				print('moved to first group')
+				w.set_view_index(view, 0, active_view_index + 1)
+		except:
+			pass
+		
+
+	def on_load(self, view):
+		self.move_syncer(view)
+
+	def on_new(self, view):
+		self.move_syncer(view)

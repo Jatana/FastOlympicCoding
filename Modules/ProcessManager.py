@@ -15,7 +15,8 @@ class ProcessManager(object):
 		self.file = file
 		self.is_run = False
 		self.test_counter = 0
-
+		self.write = self.insert
+		self.run = self.run_file
 		self.run_options = run_options
 
 		# Old compile parameters

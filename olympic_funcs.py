@@ -217,7 +217,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		# opd_view.run_command('erase_view')
 		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
-		dbg_view.run_command('debugger', \
+		dbg_view.run_command('test_manager', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
 			"clr_tests": clr_tests, "sync_out": sync_out})
 	
@@ -321,7 +321,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					layout['cols'][1] = 1
 					# <This Region May be uncomment>
 					#for x in w.views_in_group(1):
-					#	x.run_command('debugger', {'action': 'hide_text'})
+					#	x.run_command('test_manager', {'action': 'hide_text'})
 					# < / >
 					# slow_hide()
 					w.set_layout(layout)
@@ -331,39 +331,39 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					need_x = self.ruler_opd_panel
 					# < This Region May be uncomment >
 					#for x in w.views_in_group(1):
-					#	x.run_command('debugger', {'action': 'show_text'})
+					#	x.run_command('test_manager', {'action': 'show_text'})
 					# < / >
 					w.set_layout(layout)
 			# w.run_command('toggle_side_bar')
 			
 
 
-class LayoutListener(sublime_plugin.EventListener):
-	"""docstring for LayoutListener"""
-	def __init__(self):
-		super(LayoutListener, self).__init__()
+# class LayoutListener(sublime_plugin.EventListener):
+# 	"""docstring for LayoutListener"""
+# 	def __init__(self):
+# 		super(LayoutListener, self).__init__()
 	
-	def move_syncer(self, view):
-		try:
-			w = view.window()
-			prop = w.get_view_index(view)
-			print(view.name())
-			if view.name()[-4:] == '-run':
-				w.set_view_index(view, 1, 0)
-				print('moved to second group')
-			elif prop[0] == 1:
-				active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
-				print('moved to first group')
-				w.set_view_index(view, 0, active_view_index + 1)
-		except:
-			pass
+# 	def move_syncer(self, view):
+# 		try:
+# 			w = view.window()
+# 			prop = w.get_view_index(view)
+# 			print(view.name())
+# 			if view.name()[-4:] == '-run':
+# 				w.set_view_index(view, 1, 0)
+# 				print('moved to second group')
+# 			elif prop[0] == 1:
+# 				active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
+# 				print('moved to first group')
+# 				w.set_view_index(view, 0, active_view_index + 1)
+# 		except:
+# 			pass
 		
 
-	def on_load(self, view):
-		self.move_syncer(view)
+# 	def on_load(self, view):
+# 		self.move_syncer(view)
 
-	def on_new(self, view):
-		self.move_syncer(view)
+# 	def on_new(self, view):
+# 		self.move_syncer(view)
 
 
 # class GenListener(sublime_plugin.EventListener):
