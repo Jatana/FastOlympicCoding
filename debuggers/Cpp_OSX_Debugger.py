@@ -23,6 +23,7 @@ class LLDBDebugger(Debugger):
 
 		STR_REGEX_CRASH_LINE = '((?:{name}:))(\d+)'
 		REGEX_RT_CODE = re.compile('(?:\(code=)([A-Za-z0-9_]+)(?:,)')
+		REGEX_STOP_REASON = re.compile('(?:stop reason = )([a-zA-Z_]+)')
 
 		def __init__(self, on_status_change):
 			super(LLDBDebugger.LLDBAnalyzer, self).__init__()
@@ -76,6 +77,11 @@ class LLDBDebugger(Debugger):
 				self.rtcode = self.REGEX_RT_CODE.search(self.data_buff)
 				if self.rtcode is None:
 					return 'NEED_MORE'
+				self.stop_reason = self.REGEX_STOP_REASON.search(self.data_buff)
+				if self.stop_reason is None:
+					return 'NEED_MORE'
+				self.stop_reason = self.stop_reason.group(1)
+				self.proc_state = 'CRASHED, stop reason = %s' % self.stop_reason
 				self.rtcode = self.rtcode.group(1)
 				self.status = 'CRASHLINE_FOUND'
 				self.data_buff = ''
@@ -93,16 +99,20 @@ class LLDBDebugger(Debugger):
 	supported_exts = ['cpp']
 
 	def __init__(self, file):
-		# super(LLDBDebugger, self).__init__()
+		# super(LLDBDebugger, self).__init__(file)
 		self.file = file
 		self.in_buff = ''
+		self.on_status_change = None
 
 	def is_runnable():
 		return sublime.platform() == 'osx'
 
 	def compile(self):
-		cmd = 'g++ -g -o main "%s"' % self.file
+		cmd = 'g++ -std=gnu++11 -g -o main "%s"' % self.file
 		PIPE = subprocess.PIPE
+		print(dir(self))
+		if self.on_status_change is not None:
+			self.on_status_change('COMPILING')
 		#cwd=os.path.split(self.file)[0], \
 		p = subprocess.Popen(cmd, \
 			shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
@@ -111,7 +121,7 @@ class LLDBDebugger(Debugger):
 		return (p.returncode, p.stdout.read().decode())
 
 
-	def run(self, args=''):
+	def run(self, args=' -debug'):
 		self.analyzer = LLDBDebugger.LLDBAnalyzer(self.on_status_change)
 		cmd = 'lldb main'
 		PIPE = subprocess.PIPE
@@ -124,6 +134,7 @@ class LLDBDebugger(Debugger):
 		out_file = path.join(path.split(self.file)[0], 'output.txt')
 		open(out_file, 'w').close()
 		cmd = 'process launch -o output.txt -- %s\n' % args
+		# cmd = 'process launch  -- %s\n' % args
 		process.stdin.write(cmd.encode('utf-8'))
 		process.stdin.flush()
 		# self.miss_cnt += len(cmd)
@@ -156,10 +167,18 @@ class LLDBDebugger(Debugger):
 				proc.stdin.flush()
 		if analyzer.status == 'CRASHLINE_FOUND':
 			self.need_out = False
-			# proc.stdin.write('exit\nY\n'.encode('utf-8'))
-			proc.terminate()
+			proc.stdin.write('process kill\n'.encode('utf-8'))
+			proc.stdin.flush()
+			proc.stdin.write('exit\n'.encode('utf-8'))
+			proc.stdin.flush()
+			proc.wait()
+			print(proc.stdout.read().decode())
 			print(analyzer.crash_line)
-			self.on_out(open(path.join(path.dirname(self.file), 'output.txt')).read())
+			file_out = open(path.join(path.dirname(self.file), 'output.txt'))
+			output = file_out.read()
+			file_out.close()
+			print('out -> ', output)
+			self.on_out(output)
 			self.on_stop(analyzer.rtcode, crash_line=analyzer.crash_line)
 		elif analyzer.status == 'STOPPED':
 			proc.terminate()
@@ -189,6 +208,7 @@ class LLDBDebugger(Debugger):
 			on_out(s, is_err=False)
 			on_stop(rtcode, crash_line=None)
 		'''
+		print('!!!!! CALLS SET')
 		self.on_out = on_out
 		self.on_stop = on_stop
 		self.on_status_change = on_status_change

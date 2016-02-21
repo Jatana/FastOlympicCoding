@@ -18,7 +18,7 @@ from FastOlympicCoding.debuggers import debugger_info
 
 class TestManagerCommand(sublime_plugin.TextCommand):
 	BEGIN_TEST_STRING = 'Test %d {'
-	END_TEST_STRING = '} returncode %s'
+	END_TEST_STRING = '} rtcode %s'
 	REGION_BEGIN_KEY = 'test_begin_%d'
 	REGION_END_KEY = 'test_end_%d'
 	REGION_POS_PROP = ['', '', sublime.HIDDEN]
@@ -171,8 +171,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			if n == 0:
 				self.process_manager.compile()
 			if n < len(tests):
-				if type(self.process_manager) != ProcessManager:
-					self.process_manager.run()
+				self.process_manager.run()
 				self.proc_run = True
 				self.process_manager.write(tests[n].test_string)
 				self.on_insert(tests[n].test_string)
@@ -312,10 +311,11 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				*self.REGION_POS_PROP)
 		tester = self.tester
 		# self.view.erase_status('process_status')
-		if tester.have_pretests():
-			self.view.run_command('test_manager', {'action': 'new_test'})
-		else:
-			self.memorize_tests()
+		if str(rtcode) == '0':
+			if tester.have_pretests():
+				self.view.run_command('test_manager', {'action': 'new_test'})
+			else:
+				self.memorize_tests()
 		# print(self.tester.prog_out)
 		cur_test = self.tester.test_iter - 1
 		check = self.tester.check_test(cur_test)
@@ -422,6 +422,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		else:
 			print(DebugModule)
 			process_manager = DebugModule(run_file)
+		sublime.set_timeout_async(lambda :self.change_process_status('COMPILING'))
 		cmp_data = process_manager.compile()
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
@@ -614,7 +615,7 @@ class CloseListener(sublime_plugin.EventListener):
 
 class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
-	ruler_opd_panel = 0.8
+	ruler_opd_panel = 0.75
 
 	have_tied_dbg = False
 
@@ -681,7 +682,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
 
 		window.set_layout({
-			"cols": [0, 0.8, 1],
+			"cols": [0, self.ruler_opd_panel, 1],
 			"rows": [0, 1],
 			"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
 		})
@@ -716,7 +717,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			v.add_regions('crash_line', [sublime.Region(pt + 0, pt + 0)], \
 				'variable.language.python', 'bookmark', \
 				sublime.DRAW_SOLID_UNDERLINE)
-			v.show_at_center(pt)
+			sublime.set_timeout_async(lambda pt=pt: v.show_at_center(pt), 39)
 			# print(pt)
 		elif action == 'sync_opdebugs':
 			w = v.window()

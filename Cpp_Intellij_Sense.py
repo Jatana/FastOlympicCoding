@@ -1,6 +1,6 @@
 '''
 Scan and show compile Errors in realtime 
-currently works supported c++
+currently works for c++
 
 '''
 
@@ -32,6 +32,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	"""
 		Make intelisense with file
 	"""
+	COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}" -cxx-isystem "{file_dir_path}"'
+	# COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}"'
 	run_status = ''
 	timer_run = False
 	def stop_sense(self):
@@ -148,9 +150,15 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		f = open(run_file_path, 'wb')
 		f.write(s.encode())
 		f.close()
-		process = ProcessManager(path.join(root_dir, 'cmp_sense/amin.cpp'), 'source.c++', \
-			run_options)
-		s = process.compile(wait_close=True)[1]
+		file_dir_path = path.split(v.file_name())[0]
+		cmd = self.COMPILE_CMD.format(file_path=run_file_path, file_dir_path=file_dir_path)
+		# print(cmd)
+		process = Popen(cmd, \
+				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
+					cwd=os.path.split(run_file_path)[0])
+		process.wait()
+		s = process.stdout.read().decode()
+		print(s)
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
 		try:
