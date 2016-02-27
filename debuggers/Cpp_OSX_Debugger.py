@@ -22,7 +22,7 @@ class LLDBDebugger(Debugger):
 		"""docstring for LLDBAnalyzer"""
 
 		STR_REGEX_CRASH_LINE = '((?:{name}:))(\d+)'
-		REGEX_RT_CODE = re.compile('(?:\(code=)([A-Za-z0-9_]+)(?:,)')
+		REGEX_RT_CODE = re.compile('(?:\(code=)([A-Za-z0-9_]+)')
 		REGEX_STOP_REASON = re.compile('(?:stop reason = )([a-zA-Z_]+)')
 
 		def __init__(self, on_status_change):
@@ -37,6 +37,15 @@ class LLDBDebugger(Debugger):
 		def add_out(self, out):
 			self.data += out
 			self.data_buff += out
+
+		def encode_save(self, str):
+			unsave = '.\\{}()[]'
+			rez = ''
+			for x in str:
+				if x in unsave:
+					rez += '\\'
+				rez += x
+			return rez
 
 		def analyze(self):
 			status = self.status
@@ -69,20 +78,24 @@ class LLDBDebugger(Debugger):
 			elif status == 'FINDING_CRASHLINE':
 				# print('finding crash_line')
 				file = path.split(self._file_crash)[1]
+				# self.regex_crash_line = re.compile('\\.cpp:(\d+)')
 				self.crash_line = self.regex_crash_line.search(self.data_buff)
 				if self.crash_line is None:
+					# print('REASON crashline NOT FOUND')
 					return 'NEED_MORE'
 				self.crash_line = int(self.crash_line.group(2))
 				print(self.crash_line)
 				self.rtcode = self.REGEX_RT_CODE.search(self.data_buff)
 				if self.rtcode is None:
-					return 'NEED_MORE'
+					self.rtcode = '-'
+				else:
+					self.rtcode = self.rtcode.group(1)
 				self.stop_reason = self.REGEX_STOP_REASON.search(self.data_buff)
 				if self.stop_reason is None:
+					# print('REASON stop reason NOT FOUND')
 					return 'NEED_MORE'
 				self.stop_reason = self.stop_reason.group(1)
 				self.proc_state = 'CRASHED, stop reason = %s' % self.stop_reason
-				self.rtcode = self.rtcode.group(1)
 				self.status = 'CRASHLINE_FOUND'
 				self.data_buff = ''
 			self.change_status(self.proc_state)
@@ -93,7 +106,9 @@ class LLDBDebugger(Debugger):
 		def find_crashline(self, file):
 			self.status = 'FINDING_CRASHLINE'
 			self._file_crash = path.split(file)[1]
-			self.regex_crash_line = re.compile(self.STR_REGEX_CRASH_LINE.format(name=self._file_crash))
+			self.regex_crash_line = re.compile( \
+				self.STR_REGEX_CRASH_LINE.format(name=self.encode_save(self._file_crash)))
+			print(self.STR_REGEX_CRASH_LINE.format(name=self.encode_save(self._file_crash)))
 
 
 	supported_exts = ['cpp']

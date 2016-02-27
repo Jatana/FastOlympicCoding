@@ -33,7 +33,8 @@ run_options = [
 		'name': 'Python',
 		'extensions': ['py'],
 		'compile_cmd': None,
-		'run_cmd': lambda name: ('/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 "%s"' % name)
+		# 'run_cmd': lambda name: ('/Library/Frameworks/Python.framework/Versions/3.4/bin/python3 "%s"' % name)
+		'run_cmd': lambda name: ('python "%s"' % name)
 	},
 
 	{

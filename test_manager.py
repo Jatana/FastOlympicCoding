@@ -18,8 +18,10 @@ from FastOlympicCoding.debuggers import debugger_info
 
 class TestManagerCommand(sublime_plugin.TextCommand):
 	BEGIN_TEST_STRING = 'Test %d {'
+	OUT_TEST_STRING = '} out {'
 	END_TEST_STRING = '} rtcode %s'
 	REGION_BEGIN_KEY = 'test_begin_%d'
+	REGION_OUT_KEY = 'test_out_%d'
 	REGION_END_KEY = 'test_end_%d'
 	REGION_POS_PROP = ['', '', sublime.HIDDEN]
 	REGION_ACCEPT_PROP = ['string', 'dot', sublime.HIDDEN]
