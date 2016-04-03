@@ -64,7 +64,7 @@
 
 	{
 		"keys": ["enter"],
-		"command": "debugger",
+		"command": "test_manager",
 		"args": {
 			"action": "insert_line"
 		},
@@ -80,7 +80,7 @@
 
 	{
 		"keys": ["ctrl+enter"],
-		"command": "debugger",
+		"command": "test_manager",
 		"args": {
 			"action": "new_test"
 		},
@@ -96,7 +96,7 @@
 
 	{
 		"keys": ["super+v"],
-		"command": "debugger",
+		"command": "test_manager",
 		"args": {
 			"action": "insert_cb"
 		},
@@ -113,7 +113,7 @@
 	// Terminate Process in OPD
 	{
 		"keys": ["ctrl+alt+k"],
-		"command": "debugger",
+		"command": "test_manager",
 		"args": {
 			"action": "kill_proc"
 		},
@@ -127,11 +127,61 @@
 		]
 	},
 
+	// Delete Test
+	{
+		"keys": ["super+ctrl+shift+d"],
+		"command": "test_manager",
+		"args": {
+			"action": "delete_tests"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	// Accept Test
+	{
+		"keys": ["super+ctrl+o"],
+		"command": "test_manager",
+		"args": {
+			"action": "accept_test"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	// Decline Test
+	{
+		"keys": ["super+ctrl+p"],
+		"command": "test_manager",
+		"args": {
+			"action": "decline_test"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
 
 	{
 
 		"keys": ["escape"],
-		"command": "debugger",
+		"command": "test_manager",
 		"args": {
 			"action": "kill_proc"
 		},
@@ -145,24 +195,46 @@
 		]
 	},
 
+	// Runs Interactive
 	{
 		"keys": ["ctrl+b"],
-		"command": "olympic_funcs",
+		"command": "view_tester",
 		"args": {
 			"action": "make_opd"
 		},
 		"context": [
 			{
 				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
 				"operator": "equal",
 				"match_all": true
 			}
 		]
 	},
+
+	// Runs in mode output only
+	{
+		"keys": ["super+ctrl+b"],
+		"command": "view_tester",
+		"args": {
+			"action": "make_opd",
+			"sync_out": false
+		},
+		"context": [
+			{
+				"key" :"selector",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
+				"operator": "equal",
+				"match_all": true
+			}
+		]
+	},
+
+
+	// clear previous tests and run
 	{
 		"keys": ["ctrl+alt+b"],
-		"command": "olympic_funcs",
+		"command": "view_tester",
 		"args": {
 			"action": "make_opd",
 			"clr_tests": true
@@ -170,7 +242,27 @@
 		"context": [
 			{
 				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
+				"operator": "equal",
+				"match_all": true
+			}
+		]
+	},
+
+	// clear previous tests and run 
+	// in mode output only
+	{
+		"keys": ["super+ctrl+alt+b"],
+		"command": "view_tester",
+		"args": {
+			"action": "make_opd",
+			"clr_tests": true,
+			"sync_out": false
+		},
+		"context": [
+			{
+				"key" :"selector",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
 				"operator": "equal",
 				"match_all": true
 			}
@@ -212,9 +304,9 @@
 
 	{
 		"keys": ["super+k", "super+right"],
-		"command": "olympic_funcs",
+		"command": "view_tester",
 		"args": {
 			"action": "sync_opdebugs"
 		}
-	}
+	},
 ]
