@@ -18,12 +18,18 @@ class LLDBDebugger(Debugger):
 	LLDBDebugger debug cpp programs with 
 	lldb
 	"""	
+
+
+	READ_LIMIT = 2 ** 19
+	
+
 	class LLDBAnalyzer(object):
 		"""docstring for LLDBAnalyzer"""
 
 		STR_REGEX_CRASH_LINE = '((?:{name}:))(\d+)'
 		REGEX_RT_CODE = re.compile('(?:\(code=)([A-Za-z0-9_]+)')
 		REGEX_STOP_REASON = re.compile('(?:stop reason = )([a-zA-Z_]+)')
+
 
 		def __init__(self, on_status_change):
 			super(LLDBDebugger.LLDBAnalyzer, self).__init__()
@@ -147,7 +153,9 @@ class LLDBDebugger(Debugger):
 		self.process = process
 		self.miss_cnt = 0
 		out_file = path.join(path.split(self.file)[0], 'output.txt')
-		open(out_file, 'w').close()
+		f = open(out_file, 'w')
+		f.write('')
+		f.close()
 		cmd = 'process launch -o output.txt -- %s\n' % args
 		# cmd = 'process launch  -- %s\n' % args
 		process.stdin.write(cmd.encode('utf-8'))
@@ -190,14 +198,21 @@ class LLDBDebugger(Debugger):
 			print(proc.stdout.read().decode())
 			print(analyzer.crash_line)
 			file_out = open(path.join(path.dirname(self.file), 'output.txt'))
-			output = file_out.read()
+			output = file_out.read(self.READ_LIMIT)
+			# print('Hello i am here the out size ->', len(output))
 			file_out.close()
-			print('out -> ', output)
+			# print('out -> ', output)
 			self.on_out(output)
 			self.on_stop(analyzer.rtcode, crash_line=analyzer.crash_line)
 		elif analyzer.status == 'STOPPED':
+
 			proc.terminate()
-			self.on_out(open(path.join(path.dirname(self.file), 'output.txt')).read())
+			proc.kill()
+			print(self.file)
+			output = open(path.join(path.dirname(self.file), 'output.txt')).read(self.READ_LIMIT)
+			if len(output) > self.READ_LIMIT:
+				output = "<to big>" + output[-self.READ_LIMIT:]
+			self.on_out(output)
 			self.on_stop(analyzer.rtcode)
 
 

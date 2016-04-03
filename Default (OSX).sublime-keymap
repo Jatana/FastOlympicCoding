@@ -205,7 +205,7 @@
 		"context": [
 			{
 				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
 				"operator": "equal",
 				"match_all": true
 			}
@@ -223,7 +223,7 @@
 		"context": [
 			{
 				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
 				"operator": "equal",
 				"match_all": true
 			}
@@ -242,7 +242,7 @@
 		"context": [
 			{
 				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
 				"operator": "equal",
 				"match_all": true
 			}
@@ -262,7 +262,7 @@
 		"context": [
 			{
 				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal",
+				"operand": "source.c++, source.python, source.pascal, source.cs",
 				"operator": "equal",
 				"match_all": true
 			}

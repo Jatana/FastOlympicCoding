@@ -18,7 +18,7 @@ from FastOlympicCoding.debuggers import debugger_info
 
 class TestManagerCommand(sublime_plugin.TextCommand):
 	BEGIN_TEST_STRING = 'Test %d {'
-	OUT_TEST_STRING = '} out {'
+	OUT_TEST_STRING = ''
 	END_TEST_STRING = '} rtcode %s'
 	REGION_BEGIN_KEY = 'test_begin_%d'
 	REGION_OUT_KEY = 'test_out_%d'
@@ -27,6 +27,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_ACCEPT_PROP = ['string', 'dot', sublime.HIDDEN]
 	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.HIDDEN]
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
+	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
 
 	# Test
 	#REGION_POS_PROP = REGION_UNKNOWN_PROP
@@ -259,6 +260,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			if not self.tester.proc_run:
 				return None
 			to_shove = v.substr(Region(self.delta_input, v.size()))
+			print('shovel -> ', to_shove)
 			v.insert(edit, v.size(), '\n')
 
 		else:
@@ -285,6 +287,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				*self.REGION_POS_PROP)
 
 		self.delta_input = v.size()
+		self.out_region_set = False
+		v.insert(edit, self.view.size(), self.OUT_TEST_STRING)
+		# v.add_regions(self.REGION_OUT_KEY % (self.tester.test_iter + 1), \
+		# 	[sublime.Region(v.size() - 2, v.size() - 2)], *self.REGION_OUT_PROP)
 		self.tester.next_test()
 		# v.window().active_view().set_status('process_status', 'Process Run')
 		if self.tester.test_iter > 4:
@@ -299,10 +305,16 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		f.close()
 
 	def on_insert(self, s):
-		self.view.run_command('test_manager', {'action': 'insert_opd_out', 'text': s})
+		self.view.run_command('test_manager', {'action': 'insert_opd_input', 'text': s})
 
 	def on_out(self, s):
+		v = self.view
+
 		self.view.run_command('test_manager', {'action': 'insert_opd_out', 'text': s})
+		if not self.out_region_set:
+			v.add_regions(self.REGION_OUT_KEY % (self.tester.test_iter + 1), \
+				[sublime.Region(v.size() - 1, v.size() - 1)], *self.REGION_OUT_PROP)
+			self.out_region_set = True
 
 	def on_stop(self, rtcode, crash_line=None):
 		v = self.view
@@ -534,9 +546,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'insert_cb':
 			self.insert_cb(edit)
 
-		elif action == 'insert_opd_out':
+		elif action == 'insert_opd_input':
 			v.insert(edit, self.delta_input, text)
 			self.delta_input += len(text)
+
+		elif action == 'insert_opd_out':
+			v.insert(edit, self.view.size(), text)
 
 		elif action == 'make_opd':
 			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
