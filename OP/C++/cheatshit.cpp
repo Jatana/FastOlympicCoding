@@ -156,70 +156,8 @@ smart_io::precall_print(); \
 cout,
 
 #define scan cin,
-#define MAX_PRIME 1000
 
-vector<bool> is_prime(MAX_PRIME, true);
-vector<int> primes;
-
-void fill_prime() {
-	is_prime[1] = false;
-	for (int i = 2; i < MAX_PRIME; i++) {
-		if (is_prime[i]) {
-			for (int j = i * i; j < MAX_PRIME; j += i) {
-				is_prime[j] = false;
-			}
-		}
-	}
-
-	for (int i = 1; i < MAX_PRIME; i++) {
-		if (is_prime[i]) {
-			primes.pb(i);
-		}
-	}
-}
-
-
-
-
-
-
-void uniq(vector<int> &v) {
-	set<int> s(v.begin(), v.end());
-	v = vector<int>(s.begin(), s.end());
-}
 
 int main(int argc, char *argv[]) {
-	int n;
-	scan n;
-	fill_prime();
-	vector<int> p1s;
-	vector<int> p2s;
-	vector<vector<int>> dp(1000, vector<int>(1000));
-	vector<vector<bool>> prime_arr(1000, vector<bool>(1000, false));
-	// print primes;
-	for (auto prime : primes) {
-		string s = to_string(prime);
-		if (prime < 10) continue;
-		for (int i = 1; i < len(s); i++) {
-			string first(s.begin(), s.begin() + i);
-			string second(s.begin() + i, s.end());
-			if (second[0] == '0') {
-				continue;
-			}
-			int p1 = stoi(first);
-			int p2 = stoi(second);
-			if (p1 <= n && p2 <= n) {
-				prime_arr[p1][p2] = true;
-			}
-		}
-	}
-	dp[0][0] = 0;
-	dp[0][1] = 0;
-	dp[1][0] = 0;
-	for (int i = 1; i < n + 1; i++) {
-		for (int j = 1; j < n + 1; j++) {
-			dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]) + prime_arr[i][j];
-		}
-	}
-	print dp[n][n] - 1;
+	
 }

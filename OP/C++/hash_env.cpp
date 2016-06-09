@@ -50,3 +50,10 @@ vector<ll> get_hash(string &s) {
 	}
 	return hash;
 }
+
+void fill_power() {
+	power[0] = 1;
+	for (int i = 1; i < power.size(); i++) {
+		power[i] = (power[i - 1] * max_p) % MOD;
+	}
+}
