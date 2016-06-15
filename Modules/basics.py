@@ -15,3 +15,11 @@ def is_cpp_file(view):
 		return path.splitext(f)[1][1:] in {'cpp'}
 	except:
 		return False
+
+
+def is_python_file(view):
+	try:
+		f = view.file_name()
+		return path.splitext(f)[1][1:] in {'py'}
+	except:
+		return False
