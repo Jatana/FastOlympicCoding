@@ -14,6 +14,10 @@ from os import path
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.settings import root_dir, plugin_name
+from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
+
+print(pregen_class("vi"))
+
 
 clang = 'Packages/C++/C++.tmLanguage'
 
@@ -227,6 +231,13 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			if v.get_status('opd_info') == 'opdebugger-file':
 				v.close()
 
+	def insert_pregen_class(self, edit):
+		view = self.view
+		w_sel = view.word(view.sel()[0])
+		word = view.substr(w_sel).lstrip().rstrip()
+		view.replace(edit, w_sel, pregen_class(word) + ' ')
+
+
 	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
@@ -263,28 +274,35 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			
 			w_sel = v.word(cursor)
 			if not w_sel.empty():
-				func = v.substr(w_sel)
+				func = v.substr(w_sel).lstrip().rstrip()
 				if len(func.lstrip().rstrip()) != 0:
-					f = open(path.join(root_dir, 'OP/C++/', func + '.cpp'), 'r')
-					v.replace(edit, w_sel, f.read())
-					f.close()
 					try:
-						f_prop = open(path.join(root_dir, 'OP/C++/', func + '.cpp:properties'), 'r')
-						prop = sublime.decode_value(f_prop.read())
-						if prop.get('fold', None) is not None:
-							for x in prop['fold']:
-								v.fold(Region(w_sel.a + x[0], w_sel.a + x[1]))
-						if prop.get('move_cursor', None) is not None:
-							v.show_at_center(w_sel.a + prop['move_cursor'])
-							v.sel().clear()
-							v.sel().add(Region(w_sel.a + prop['move_cursor'], w_sel.a + prop['move_cursor']))
+						f = open(path.join(root_dir, 'OP/C++/', func + '.cpp'), 'r')
+						v.replace(edit, w_sel, f.read())
+						f.close()
+						try:
+							f_prop = open(path.join(root_dir, 'OP/C++/', func + '.cpp:properties'), 'r')
+							prop = sublime.decode_value(f_prop.read())
+							if prop.get('fold', None) is not None:
+								for x in prop['fold']:
+									v.fold(Region(w_sel.a + x[0], w_sel.a + x[1]))
+							if prop.get('move_cursor', None) is not None:
+								v.show_at_center(w_sel.a + prop['move_cursor'])
+								v.sel().clear()
+								v.sel().add(Region(w_sel.a + prop['move_cursor'], w_sel.a + prop['move_cursor']))
+						except:
+							pass
 					except:
-						pass
+						# try do vvvii
+						self.insert_pregen_class(edit)
 
 				else:
 					v.insert(edit, cursor.a, '\t')
 			else:
 				v.insert(edit, cursor.a, '\t')
+		elif action == 'insert_pregen_class':
+			self.insert_pregen_class(edit)
+			
 		elif action == 'make_opd':
 			self.close_opds()
 			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)

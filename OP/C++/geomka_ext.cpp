@@ -35,16 +35,15 @@ public:
 	}
 
 	double length() {
-		return hypot(x, y);
-		// return sqrt(x * x + y * y);
+		return sqrt(x * x + y * y);
 	}
 
 	double angle() {
 		return atan2(y, x);
 	}
 
-	friend istream &operator>>(istream &is, point &p) {
-		is >> p.x >> p.y;
+	friend istream &operator,(istream &is, point &p) {
+		scan p.x, p.y;
 		return is;
 	}
 
@@ -95,7 +94,7 @@ public:
 		return (x * p.x + y * p.y);
 	}
 
-	double operator^(const point &p) {
+	double operator^(point &p) {
 		return (x * p.y - y * p.x);
 	}
 
@@ -108,8 +107,8 @@ public:
 		y += p.y;
 	}
 	
-	friend ostream &operator<<(ostream &os, const point &p) {
-		os << p.x << " " << p.y;
+	friend ostream &operator,(ostream &os, const point &p) {
+		os, p.x, p.y;
 		return os;
 	}
 
@@ -243,8 +242,8 @@ public:
 		return this->in_segment(p) && s.in_segment(p);
 	}
 
-	friend istream&operator>>(istream &is, segment &s) {
-		is >> s.first >> s.second;
+	friend istream&operator,(istream &is, segment &s) {
+		is, s.first, s.second;
 		return is;
 	}
 };
@@ -410,7 +409,7 @@ public:
 	}
 
 	friend istream &operator>>(istream &is, circle &c) {
-		is >> c.center >> c.radius;
+		is, c.center, c.radius;
 		return is;
 	}
 };
@@ -432,20 +431,19 @@ public:
 	polygon(vector<point> _points):points(_points) {}
 
 	bool in_side(point p) {
-		double sangle = 0;
-		for (int i = 0; i < len(points); i++) {
-			point f = points[i];
-			point s = points[(i + 1) % len(points)];
-			
-			segment sg(f, s);
-			if (sg.in_segment(p)) return true;
-			point subf = (f - p);
-			point subs = (s - p);
-			double angle = atan2(subf ^ subs, subf * subs);
-			// print to_degrees(angle);
-			sangle += angle;
+		double summary_angle = 0;
+		for (int i = 0; i < points.size(); i++) {
+			if (segment(points[i], points[(i + 1) % points.size()]).in_segment(p)) {
+				return true;
+			}
+			point p1 = points[i] - p;
+			point p2 = points[(i + 1) % points.size()] - p;
+			double sin_alpha = ((p1 ^ p2) / (p1.length() * p2.length()));
+			double factor = get_value_factor(sin_alpha);
+			summary_angle += abs(asin(sin_alpha)) * factor;
 		}
-		return abs(sangle) > (M_PI / 2);
+		// cout << summary_angle << nl;
+		return abs(summary_angle) > 1;
 	}
 
 	bool in_side_with_ray(point p) {
@@ -455,7 +453,7 @@ public:
 		int cnt = 0;
 		for (int i = 0; i < points.size(); i++) {
 			segment edge(points[i], points[(i + 1) % points.size()]);
-			if (edge.in_segment(p)) {
+			if (edge.in_segment(p) == true) {
 				return true;
 			}
 			cnt += edge.intersect(s);

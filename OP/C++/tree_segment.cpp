@@ -17,7 +17,7 @@ private:
 	}
 
 	void __update(int ind, T k) {
-		tree[ind] = magic(tree[ind], k);
+		tree[ind] = magic(tree[ind * 2 + 1], tree[ind * 2 + 2]);
 		if (ind != 0) {
 			int sub = (ind - 1) / 2;
 			__update(sub, k);
@@ -71,11 +71,11 @@ public:
 	}
 
 	void update(int ind, T k) {
-		__update(delta + ind, k);
+		tree[delta + ind] = k;
+		__update((delta + ind - 1) / 2, k);
 	}
 
 	T query(int left, int right) {
 		return __query(0, added_delta + left, added_delta + right, 0, n);
 	}
-
 };

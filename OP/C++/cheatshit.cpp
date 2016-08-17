@@ -71,8 +71,8 @@ void fast_scan(vector<T> &v) {
 void fast_print(const int &x) { printf("%d", x); }
 void fast_print(const long long &x) { printf("%lld", x); }
 void fast_print(const unsigned long long &x) { printf("%llu", x); }
-void fast_print(const double &x) { printf("%lf", x); }
-void fast_print(const long double &x) { printf("%Lf", x); }
+void fast_print(const double &x) { printf("%.15lf", x); }
+void fast_print(const long double &x) { printf("%.15Lf", x); }
 void fast_print(const char &x) { printf("%c", x); };
 void fast_print(const string &x) { printf("%s", x.c_str());}
 
@@ -109,7 +109,6 @@ using namespace std;
 
 
 namespace smart_io {
-
 	string print_start = "";
 	string sep = " ";
 	bool first_print = false;
@@ -119,12 +118,11 @@ namespace smart_io {
 		print_start = "\n";
 		first_print = true;
 	}
-}
+} //namespace smart_io
 
 
 template <class T>
 ostream &operator,(ostream &os, const T &object) {
-
 	if (!smart_io::first_print) {
 		fast_print(smart_io::sep);
 	} else {

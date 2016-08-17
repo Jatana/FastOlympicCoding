@@ -29,6 +29,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
 	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
 
+	use_debugger = True
+
 	# Test
 	#REGION_POS_PROP = REGION_UNKNOWN_PROP
 
@@ -431,7 +433,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			tests = []
 		file_ext = path.splitext(run_file)[1][1:]
 		DebugModule = self.have_debugger(file_ext)
-		if DebugModule is None:
+		# if DebugModule is None:
+		if (not self.use_debugger) or (DebugModule is None):
 			process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
 		else:
 			print(DebugModule)
@@ -592,6 +595,13 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'kill_proc':
 			self.tester.terminate()
 
+		elif action == 'toggle_using_debugger':
+			self.use_debugger ^= 1
+			if (self.use_debugger):
+				sublime.status_message('debugger enabled')
+			else:
+				sublime.status_message('debugger disabled')
+
 
 	def isEnabled(view, args):
 		print(view)
@@ -633,7 +643,6 @@ class CloseListener(sublime_plugin.EventListener):
 class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
 	ruler_opd_panel = 0.75
-
 	have_tied_dbg = False
 
 	def have_debugger(self, ext):

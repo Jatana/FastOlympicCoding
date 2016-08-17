@@ -32,7 +32,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	"""
 		Make intelisense with file
 	"""
-	COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}" -cxx-isystem "{file_dir_path}"'
+	COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}" -I "{file_dir_path}"'
 	# COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}"'
 	run_status = ''
 	timer_run = False

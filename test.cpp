@@ -145,7 +145,6 @@ namespace typedefs {
 	typedef pair<int, int> pii;
 	typedef vector<vector<pair<int, int>>> vvpii;
 	typedef vector<vector<pair<bool, int>>> vvpbi;
-	typedef pair<int, bool> pitbul;
 }
 
 using namespace typedefs;
@@ -158,9 +157,7 @@ cout,
 
 
 int main(int argc, char *argv[]) {
-	int a;
-	char c;
-	int b;
-	scan a, c, b;
-	print a * b;
+	int a, b;
+	scan a, b;
+	print "a + b", a + b;	
 }
