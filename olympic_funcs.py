@@ -399,4 +399,5 @@ class GenListener(sublime_plugin.EventListener):
 			if pregen_class(text) is None:
 				return ('insert_best_completion', {'exact': False, 'default': '\t'})
 			# print(pregen_class(text))
+		print(command_name, args)
 		

@@ -158,7 +158,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 					cwd=os.path.split(run_file_path)[0])
 		process.wait()
 		s = process.stdout.read().decode()
-		### print(s)
+		print(s)
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
 		try:

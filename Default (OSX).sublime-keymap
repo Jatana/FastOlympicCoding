@@ -1,5 +1,4 @@
 [
-
 	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
@@ -35,27 +34,7 @@
 			// }
 		]
 	},
-	{ 
-		"keys": ["tab"], 
-		"command": "olympic_funcs",
-		"args": {
-			"action": "gen_def"
-		},
-		"context": [
-			{
-				"operand": "meta.block.c, meta.function.c",
-				"operator": "not_equal",
-				"match_all": true,
-				"key" : "selector"
-			},
-			{
-				"operand": "source.c++",
-				"operator": "equal",
-				"match_all": true,
-				"key" : "selector"
-			}
-		]
-	},
+
 	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
@@ -93,6 +72,29 @@
 			// 	"operator": "equal",
 			// 	"operand": "true"
 			// }
+		]
+	},
+
+	
+	{ 
+		"keys": ["tab"], 
+		"command": "olympic_funcs",
+		"args": {
+			"action": "gen_def"
+		},
+		"context": [
+			{
+				"operand": "meta.block.c, meta.function.c",
+				"operator": "not_equal",
+				"match_all": true,
+				"key" : "selector"
+			},
+			{
+				"operand": "source.c++",
+				"operator": "equal",
+				"match_all": true,
+				"key" : "selector"
+			}
 		]
 	},
 
