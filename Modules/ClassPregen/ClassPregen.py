@@ -20,13 +20,24 @@ modify_classes()
 
 
 def create(s, i):
+	if i >= len(s):
+		return None, i
+
 	c = s[i]
+
+	if not c in classes.keys():
+		return None, i
+
 	template_size = classes[c]['template_size']
 	name = classes[c]['name']
 	childs = []
 	i += 1
 	for j in range(template_size):
 		gen, i = create(s, i)
+
+		if gen is None:
+			return None, i
+
 		childs.append(gen)
 	if template_size:
 		format_str = '<%s>'
@@ -36,4 +47,8 @@ def create(s, i):
 
 
 def pregen(s):
-	return create(s, 0)[0]
+	s = s.rstrip()
+	gen, i = create(s, 0)
+	if i != len(s):
+		return None
+	return gen

@@ -16,7 +16,7 @@
 			{
 				"key": "preceding_text",
 				"operator": "regex_contains",
-				"operand": "[[:word:]]+",
+				"operand": "([\t ]*)([a-z]+)",
 				"match_all": true
 			},
 			{
@@ -26,7 +26,12 @@
 				"match_all": true
 			},
 			// {
-			// 	"key" : "can_preproc"
+			// 	"key" : "olympic_funcs",
+			// 	"args": {
+			// 		"action": "can_pregen_classes"
+			// 	},
+			// 	"operator": "equal", 
+			// 	"operand": true
 			// }
 		]
 	},
@@ -73,7 +78,8 @@
 			{
 				"key": "preceding_text",
 				"operator": "regex_contains",
-				"operand": "[[:word:]]+",
+				// "operand": "[[:word:]]+",
+				"operand": "([\t ]+)(f )(.+)",
 				"match_all": true
 			},
 			{
@@ -83,7 +89,9 @@
 				"match_all": true
 			},
 			// {
-			// 	"key" : "can_preproc"
+			// 	"key" : "olympic_funcs",
+			// 	"operator": "equal",
+			// 	"operand": "true"
 			// }
 		]
 	},

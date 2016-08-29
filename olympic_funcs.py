@@ -242,6 +242,9 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
+		if action == 'can_pregen_classes':
+			print('SADASDASDASDNJKASNDJANSKJDNASKJNDKAJNSDKJNASKJDNKJASN')
+			return False
 		if action == 'insert':
 			v.insert(edit, v.sel()[0].begin(), text)
 		if action == 'fast_gen':
@@ -384,8 +387,16 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 # 		self.move_syncer(view)
 
 
-# class GenListener(sublime_plugin.EventListener):
-# 	"""docstring for GenListener"""
-# 	def __init__(self):
-# 		super(GenListener, self).__init__()
-#
+class GenListener(sublime_plugin.EventListener):
+	"""docstring for GenListener"""
+	def on_text_command(self, view, command_name, args):
+		if command_name == 'olympic_funcs' and args['action'] == 'insert_pregen_class':
+			sel = view.sel()[0]
+			text_sel = view.line(sel)
+			text = view.substr(text_sel)
+			text = text.rstrip().lstrip()
+			# print('kek', pregen_class(text))
+			if pregen_class(text) is None:
+				return ('insert_best_completion', {'exact': False, 'default': '\t'})
+			# print(pregen_class(text))
+		

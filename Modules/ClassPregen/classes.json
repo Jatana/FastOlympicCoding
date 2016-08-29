@@ -23,7 +23,11 @@
 		"template_size": 0
 	},
 
-	"long": {
+	"ll": {
+		"template_size": 0
+	},
+
+	"double": {
 		"template_size": 0
 	}
 }
