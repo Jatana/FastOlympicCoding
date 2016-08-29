@@ -16,7 +16,7 @@ from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.settings import root_dir, plugin_name
 from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
-print(pregen_class("vi"))
+ALGORITHMS_BASE = 'Algorithms/C++/'
 
 
 clang = 'Packages/C++/C++.tmLanguage'
@@ -280,11 +280,11 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				func = v.substr(w_sel).lstrip().rstrip()
 				if len(func.lstrip().rstrip()) != 0:
 					try:
-						f = open(path.join(root_dir, 'OP/C++/', func + '.cpp'), 'r')
+						f = open(path.join(root_dir, ALGORITHMS_BASE, func + '.cpp'), 'r')
 						v.replace(edit, w_sel, f.read())
 						f.close()
 						try:
-							f_prop = open(path.join(root_dir, 'OP/C++/', func + '.cpp:properties'), 'r')
+							f_prop = open(path.join(root_dir, ALGORITHMS_BASE, func + '.cpp:properties'), 'r')
 							prop = sublime.decode_value(f_prop.read())
 							if prop.get('fold', None) is not None:
 								for x in prop['fold']:
@@ -311,12 +311,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
 		elif action == 'show_funcs':
 			wind = v.window()
-			funcs = listdir(path.join(root_dir, 'OP/C++/'))
+			funcs = listdir(path.join(root_dir, ALGORITHMS_BASE))
 			to_view_funcs = [x[:-4] for x in funcs if x[-4:] == '.cpp']
 			def on_done(ind, funcs=funcs):
 				if ind == -1:
 					return 0
-				f = open(path.join(root_dir, 'OP/C++/', funcs[ind]))
+				f = open(path.join(root_dir, ALGORITHMS_BASE, funcs[ind]))
 				self.view.run_command('olympic_funcs', {'text': f.read(), 'action': 'insert'})
 				f.close()
 
