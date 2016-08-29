@@ -1,3 +1,2 @@
 *.out
-cmp_sense/amin.cpp
-OP/C++/*
+*.cpp
