@@ -6,8 +6,9 @@ Fast Olympic Coding plugin for Sublime Text 3
 #### Auto Tester Keybindings
  * <kbd>ctrl+b</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
- * <kbd>ctrl+alt+k</kbd> kill process
+ * <kbd>ctrl+c</kbd> kill process
  * <kbd>ctrl+alt+b</kbd> run and clear previous tests
+ * <kbd>ctrl+d</kbd> delete test
  * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
 #### Languages run parameters
