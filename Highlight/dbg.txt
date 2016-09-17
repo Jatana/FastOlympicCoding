@@ -1,0 +1,19 @@
+
+	<body style="margin: 0px; padding: 8px; background-color: #2d2d2d; color: #d3d0c8;">
+	<style>
+		.def-type {
+	color: #cc99cc;
+	display: inline;
+}
+
+.number {
+	color: #f99157;
+	display: inline;
+}
+
+.main-panel {
+	background-color: #2d2d2d;
+	margin: 0px;
+}
+	</style>
+	v&nbsp;=&nbsp;size=<div class="number">6</div>&nbsp;{<br>&nbsp;&nbsp;[<div class="number">0</div>]&nbsp;=&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;very_long_string&nbsp;=&nbsp;"<div class="number">213</div>_<div class="number">123</div>_<div class="number">123</div>_<div class="number">123</div>"<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;[<div class="number">1</div>]&nbsp;=&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;very_long_string&nbsp;=&nbsp;"<div class="number">213</div>_<div class="number">123</div>_<div class="number">123</div>_<div class="number">123</div>"<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;[<div class="number">2</div>]&nbsp;=&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;very_long_string&nbsp;=&nbsp;"<div class="number">213</div>_<div class="number">123</div>_<div class="number">123</div>_<div class="number">123</div>"<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;[<div class="number">3</div>]&nbsp;=&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;very_long_string&nbsp;=&nbsp;"<div class="number">213</div>_<div class="number">123</div>_<div class="number">123</div>_<div class="number">123</div>"<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;[<div class="number">4</div>]&nbsp;=&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;very_long_string&nbsp;=&nbsp;"<div class="number">213</div>_<div class="number">123</div>_<div class="number">123</div>_<div class="number">123</div>"<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;[<div class="number">5</div>]&nbsp;=&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;=&nbsp;<div class="number">0</div><br>&nbsp;&nbsp;&nbsp;&nbsp;very_long_string&nbsp;=&nbsp;"<div class="number">213</div>_<div class="number">123</div>_<div class="number">123</div>_<div class="number">123</div>"<br>&nbsp;&nbsp;}<br>}</body>

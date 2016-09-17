@@ -9,6 +9,7 @@ class Debugger(object):
 	# write what langs supported
 	# sample cpp, py, pas, ...
 	supported_exts = []
+	RUN_PRIOR = 0.5
 
 	def is_pro_debug(self):
 		return True
@@ -48,6 +49,12 @@ class Debugger(object):
 			on_crash(crash_line, rtcode)
 		'''
 
+	def get_var_value(self, var_name, frame_id=None):
+		'''
+		returns var value
+		if frame_id is None returns var `value at crashed frame
+		'''
+
 	def write(self, s):
 		'''
 		write string to program
@@ -60,7 +67,24 @@ class Debugger(object):
 
 
 def get_debug_modules():
-	return Debugger.__subclasses__()
+	print(Debugger.__subclasses__())
+	print(sorted(Debugger.__subclasses__(), key=(lambda c: c.RUN_PRIOR), reverse=True))
+	return sorted(Debugger.__subclasses__(), key=(lambda c: c.RUN_PRIOR), reverse=True)
+
+def get_best_debug_module(ext):
+	print('Here')
+	dbgs = []
+	for dbg in Debugger.__subclasses__():
+		if dbg.is_runnable():
+			if ext in dbg.supported_exts:
+				dbgs.append(dbg)
+	dbgs.sort(key=lambda dbg: dbg.RUN_PRIOR)
+	dbgs.reverse()
+	print(dbgs)
+	print(dbgs[0])
+	return dbgs[0]
+
 
 
 from . import Cpp_OSX_Debugger
+from . import DebugodPy3Ejector

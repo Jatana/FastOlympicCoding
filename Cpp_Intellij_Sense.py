@@ -14,6 +14,7 @@ from subprocess import Popen, PIPE
 import subprocess
 import shlex
 from os import path
+import re
 
 
 # plugin_name = 'sublime-fast-olympic-coding'
@@ -36,6 +37,9 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	# COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}"'
 	run_status = ''
 	timer_run = False
+	REGEX_ERROR_PROP = '(:)(\d+)(:)(\d+)(:)( *)([a-zA-Z ]+)(:)( *)(.*)'
+
+
 	def stop_sense(self):
 		self.run_status = 'do_disable'
 
@@ -124,10 +128,14 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 			try:
 				if lst[i][:len(run_file_path)] == run_file_path:
 					s_err = lst[i][len(run_file_path):]
-					args_err = s_err.split(':')
-					y, x = map(int, args_err[1:3])
-					type = args_err[3].rstrip().lstrip()
-					error_string = args_err[4].lstrip().rstrip()
+					sep_ind = s_err.find(':')
+					print(s_err)
+					# args_err = s_err.split(':')
+					# args_err = s_err[:sep_ind].split(':') + [s_err[sep_ind + 1:]]
+					args_err = re.match(self.REGEX_ERROR_PROP, s_err).group(2, 4, 7, 10)
+					y, x = map(int, args_err[0:2])
+					type = args_err[2].rstrip().lstrip()
+					error_string = args_err[3].lstrip().rstrip()
 					errors.append({
 						'type': self.get_preffered_type_error(type),
 						'position': (y - 1, x),
@@ -158,7 +166,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 					cwd=os.path.split(run_file_path)[0])
 		process.wait()
 		s = process.stdout.read().decode()
-		print(s)
+		### print(s)
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
 		try:

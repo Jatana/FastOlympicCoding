@@ -19,6 +19,8 @@ class LLDBDebugger(Debugger):
 	lldb
 	"""	
 
+	RUN_PRIOR = 0.5
+
 
 	READ_LIMIT = 2 ** 19
 	

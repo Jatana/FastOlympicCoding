@@ -14,6 +14,7 @@ from FastOlympicCoding.Modules import basics
 from FastOlympicCoding.settings import root_dir, plugin_name, run_options
 from FastOlympicCoding.Engine import SysManager
 from FastOlympicCoding.debuggers import debugger_info
+from FastOlympicCoding.Highlight.CppVarHighlight import highlight
 
 
 class TestManagerCommand(sublime_plugin.TextCommand):
@@ -349,6 +350,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 					#print('setbryak ->', crash_line)
 					x.run_command('view_tester', {'action': 'show_crash_line', 'crash_line': crash_line})
 
+	def redirect_var_value(self, var_name):
+		view = self.view
+		print('VarName:', var_name)
+		value = self.tester.process_manager.get_var_value(var_name)
+		print(value)
+		for x in view.window().views():
+			if x.id() == self.code_view_id:
+				x.run_command('view_tester', {'action': 'show_var_value', 'value': value})
+
+
+
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
 
@@ -398,12 +410,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				end = v.line(v.get_regions(self.REGION_END_KEY % i)[0].begin()).end()
 				v.fold(Region(v.word(beg + 5).end(), end))
 
-	def have_debugger(self, ext):
-		dbg_modules = debugger_info.get_debug_modules()
-		for dbg in dbg_modules:
-			if dbg.is_runnable() and ext in dbg.supported_exts:
-				return dbg
-
 	def change_process_status(self, status):
 		self.view.set_status('process_status', status)
 
@@ -432,7 +438,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			f.close()
 			tests = []
 		file_ext = path.splitext(run_file)[1][1:]
-		DebugModule = self.have_debugger(file_ext)
+		DebugModule = debugger_info.get_best_debug_module(file_ext) #self.have_debugger(file_ext)
 		# if DebugModule is None:
 		if (not self.use_debugger) or (DebugModule is None):
 			process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
@@ -441,6 +447,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			process_manager = DebugModule(run_file)
 		sublime.set_timeout_async(lambda :self.change_process_status('COMPILING'))
 		cmp_data = process_manager.compile()
+		print('compile: data', type(cmp_data))
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
 				self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
@@ -538,11 +545,26 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.delta_input = v.get_regions('delta_input')[0].begin()
 		self.memorize_tests()
 
+	def sync_read_only(self):
+		view = self.view
+		have_sel_no_end = False
+		for sel in view.sel():
+			# print(sel.begin(), view.size())
+			if sel.begin() != view.size():
+				have_sel_no_end = True
+				break
+
+		view.set_read_only(have_sel_no_end)
+
+
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False, code_view_id=None):
+			sync_out=False, code_view_id=None, var_name=None):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
+
+		v.set_read_only(False)
+
 		if action == 'insert_line':
 			self.insert_text(edit)
 
@@ -559,6 +581,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'make_opd':
 			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
 				sync_out=sync_out, code_view_id=code_view_id)
+
+		elif action == 'redirect_var_value':
+			self.redirect_var_value(var_name)
 
 		elif action == 'close':
 			try:
@@ -595,13 +620,16 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'kill_proc':
 			self.tester.terminate()
 
+		elif action == 'sync_read_only':
+			self.sync_read_only()
+
 		elif action == 'toggle_using_debugger':
 			self.use_debugger ^= 1
 			if (self.use_debugger):
 				sublime.status_message('debugger enabled')
 			else:
 				sublime.status_message('debugger disabled')
-
+		self.sync_read_only()
 
 	def isEnabled(view, args):
 		print(view)
@@ -617,7 +645,8 @@ class ModifiedListener(sublime_plugin.EventListener):
 						view.show_popup_menu(['Delete'], lambda x: print(x))
 
 					sublime.set_timeout(show_test_menu, 100)
-			# view.run_command('test_manager', {'action': 'sync_modified'})
+
+			view.run_command('test_manager', {'action': 'sync_read_only'})
 
 	# def on_window_command(self, window, cmd, args):
 	# 	if cmd == 'toggle_side_bar':
@@ -644,23 +673,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
 	ruler_opd_panel = 0.75
 	have_tied_dbg = False
-
-	def have_debugger(self, ext):
-		# debuggers_dir = path.join(path.dirname(__file__), 'debuggers/')
-		# print(debuggers_dir)
-		# for file in os.listdir(debuggers_dir):
-		# 	full_file = path.join(debuggers_dir, file)
-		# 	if path.splitext(full_file)[1][1:] == 'py':
-		# 		full_file = path.splitext(path.split(full_file)[1])[0]
-		# 		print(full_file)
-		# print(debugger_info.Debugger.__subclasses__())
-		dbg_modules = debugger_info.get_debug_modules()
-		for dbg in dbg_modules:
-			if dbg.is_runnable() and ext in dbg.supported_exts:
-				return dbg
-
-
-
 
 	def create_opd(self, clr_tests=False, sync_out=True):
 		'''
@@ -728,7 +740,20 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			if v.get_status('opd_info') == 'opdebugger-file':
 				v.close()
 
-	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None):
+	def get_var_value(self):
+		view = self.view
+		pt = view.sel()[0].begin()
+		var_name = view.substr(view.word(pt))
+		if self.have_tied_dbg:
+			dbg = self.tied_dbg
+			dbg.run_command('test_manager', {'action' : 'redirect_var_value', 'var_name': var_name})
+
+	def show_var_value(self, value):
+		print(value)
+		self.view.show_popup(highlight(value))
+
+
+	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None, value=None):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -745,6 +770,12 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				sublime.DRAW_SOLID_UNDERLINE)
 			sublime.set_timeout_async(lambda pt=pt: v.show_at_center(pt), 39)
 			# print(pt)
+		elif action == 'get_var_value':
+			self.get_var_value()
+
+		elif action == 'show_var_value':
+			self.show_var_value(value)
+
 		elif action == 'sync_opdebugs':
 			w = v.window()
 			layout = w.get_layout()

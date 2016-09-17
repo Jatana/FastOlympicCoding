@@ -132,7 +132,7 @@ class PreProc(object):
 			return get_for_str(args[0], '0', args[1], '++'), right_prototype
 
 		left_prototype = 'fk (%s, %s, %s, %s) {\n' + indent + '\t'
-		right_prototype = '\n' +indent + '}'
+		right_prototype = '\n' + indent + '}'
 		if len(args) == 3:
 			return get_for_str(args[0], args[1], args[2], '++'), right_prototype
 		if len(args) == 4:
@@ -399,5 +399,12 @@ class GenListener(sublime_plugin.EventListener):
 			if pregen_class(text) is None:
 				return ('insert_best_completion', {'exact': False, 'default': '\t'})
 			# print(pregen_class(text))
-		print(command_name, args)
+		# print(command_name, args)
+
+	def on_query_completions(self, view, prefix, locations):
+		print(prefix, locations)
+		if not pregen_class(prefix) is None:
+			print(pregen_class(prefix))
+			return [(pregen_class(prefix), pregen_class(prefix))]
+		return []
 		
