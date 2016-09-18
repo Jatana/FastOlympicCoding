@@ -17,7 +17,7 @@ void make_err() {
 	s += "123";
 	cout << s << endl;
 	// cout << x;
-	// v.at(20);
+	v.at(20);
 }
 
 int main() {

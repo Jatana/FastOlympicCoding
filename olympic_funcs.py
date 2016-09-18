@@ -228,7 +228,9 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 	def close_opds(self):
 		w = self.view.window()
 		for v in w.views():
-			if v.get_status('opd_info') == 'opdebugger-file':
+			# if v.get_status('opd_info') == 'opdebugger-file':
+			print(v.name()[::-1][:len('-run')][::-1])
+			if v.name()[::-1][:len('-run')][::-1] == '-run':
 				v.close()
 
 	def insert_pregen_class(self, edit):
