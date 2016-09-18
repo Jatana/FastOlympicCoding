@@ -72,7 +72,6 @@ def get_debug_modules():
 	return sorted(Debugger.__subclasses__(), key=(lambda c: c.RUN_PRIOR), reverse=True)
 
 def get_best_debug_module(ext):
-	print('Here')
 	dbgs = []
 	for dbg in Debugger.__subclasses__():
 		if dbg.is_runnable():
@@ -80,9 +79,11 @@ def get_best_debug_module(ext):
 				dbgs.append(dbg)
 	dbgs.sort(key=lambda dbg: dbg.RUN_PRIOR)
 	dbgs.reverse()
-	print(dbgs)
-	print(dbgs[0])
-	return dbgs[0]
+	# print(dbgs)
+	# print(dbgs[0])
+	if dbgs:
+		return dbgs[0]
+	return None
 
 
 

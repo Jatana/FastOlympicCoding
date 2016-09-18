@@ -6,6 +6,7 @@ css = open(path.join(path.dirname(__file__), 'cpp_styles.css')).read()
 
 DEF_TYPE = re.compile('int|float|double|char')
 NUMBER = re.compile('\d+')
+# STRING = re.compile('"\"')
 
 class Token(object):
 	"""docstring for Token"""
@@ -16,7 +17,7 @@ class Token(object):
 
 tokens = [
 	Token(NUMBER, 'number'),
-	Token(DEF_TYPE, 'def-type')
+	Token(DEF_TYPE, 'def-type'),
 ]
 
 def safety(s):
