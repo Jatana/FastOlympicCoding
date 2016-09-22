@@ -18,6 +18,7 @@ if path.split(root_dir)[1] != plugin_name:
 # please restart plugin after you changes
 
 error_region_scope = 'variable.c++'
+# error_region_scope = 'invalid.illegal'
 warning_region_scope = 'constant'
 
 # Compile Options

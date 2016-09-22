@@ -25,7 +25,7 @@ int main() {
 	string s;
 	cin >> s;
 	cout << "hello! " << s << endl;
-	cin >> s;
+	cin >> s;asd
 	cout << "Kek!" << " " << s;
 
 	// return 798;
