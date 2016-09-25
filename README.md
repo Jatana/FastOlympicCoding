@@ -9,6 +9,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>ctrl+c</kbd> kill process
  * <kbd>ctrl+alt+g</kbd> View var value selected variable
  * <kbd>ctrl+alt+b</kbd> run and clear previous tests
+ * <kbd>ctrl+shift+b</kbd> toggle using debugger
  * <kbd>ctrl+d</kbd> delete test
  * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
