@@ -30,10 +30,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
 	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
 
-	use_debugger = True
-
 	# Test
 	#REGION_POS_PROP = REGION_UNKNOWN_PROP
+
+	def __init__(self, view):
+		self.view = view
+		self.use_debugger = True
 
 
 	class Test(object):
@@ -414,7 +416,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.view.set_status('process_status', status)
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
-		sync_out=False, code_view_id=None):
+		sync_out=False, code_view_id=None, use_debugger=True):
+		self.use_debugger = use_debugger
 		v = self.view
 		v.set_scratch(True)
 		v.set_status('opd_info', 'opdebugger-file')
@@ -440,7 +443,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		file_ext = path.splitext(run_file)[1][1:]
 		DebugModule = debugger_info.get_best_debug_module(file_ext) #self.have_debugger(file_ext)
 		# if DebugModule is None:
+		print('nu davai zhe', self.use_debugger)
 		if (not self.use_debugger) or (DebugModule is None):
+			print('called here')
 			process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
 		else:
 			print(DebugModule)
@@ -558,7 +563,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False, code_view_id=None, var_name=None):
+			sync_out=False, code_view_id=None, var_name=None, use_debugger=True):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -580,7 +585,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		elif action == 'make_opd':
 			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
-				sync_out=sync_out, code_view_id=code_view_id)
+				sync_out=sync_out, code_view_id=code_view_id, use_debugger=use_debugger)
 
 		elif action == 'redirect_var_value':
 			self.redirect_var_value(var_name)
@@ -624,7 +629,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.sync_read_only()
 
 		elif action == 'toggle_using_debugger':
-			self.use_debugger ^= 1
+			self.use_debugger = not self.use_debugger
 			if (self.use_debugger):
 				sublime.status_message('debugger enabled')
 			else:
@@ -673,6 +678,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
 	ruler_opd_panel = 0.75
 	have_tied_dbg = False
+	use_debugger = True
 
 	def create_opd(self, clr_tests=False, sync_out=True):
 		'''
@@ -701,7 +707,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				need_new = False
 		else:
 			need_new = True
-
+		need_new = True
 		if not need_new:
 			dbg_view = self.tied_dbg
 			create_new = False
@@ -730,9 +736,15 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		# opd_view.run_command('erase_view')
 		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
-		dbg_view.run_command('test_manager', \
-			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
-			"clr_tests": clr_tests, "sync_out": sync_out, 'code_view_id': v.id()})
+		dbg_view.run_command('test_manager', {
+				'action': 'make_opd', 
+				'build_sys': file_syntax, 
+				'run_file': v.file_name(), 
+				"clr_tests": clr_tests, 
+				"sync_out": sync_out, 
+				'code_view_id': v.id(), \
+				'use_debugger': self.use_debugger
+			})
 	
 	def close_opds(self):
 		w = self.view.window()
@@ -754,6 +766,13 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 	def show_var_value(self, value):
 		print(value)
 		self.view.show_popup(highlight(value))
+
+	def toggle_using_debugger(self):
+		self.use_debugger ^= 1
+		if self.use_debugger:
+			sublime.status_message('debugger enabled')
+		else:
+			sublime.status_message('debugger disabled')
 
 
 	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None, value=None):
@@ -778,6 +797,9 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 
 		elif action == 'show_var_value':
 			self.show_var_value(value)
+
+		elif action == 'toggle_using_debugger':
+			self.toggle_using_debugger()
 
 		elif action == 'sync_opdebugs':
 			w = v.window()

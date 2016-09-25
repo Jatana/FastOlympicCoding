@@ -7,12 +7,7 @@ using namespace std;
 
 struct Point {
 	int x, y;
-	string very_long_string = "213_123_123_123";
-};
-
-
-void make_err() {
-	vector<Point> v(6);
+2r<Point> v(6);
 	string s = "HELLO";
 	s += "123";
 	cout << s << endl;
@@ -25,7 +20,7 @@ int main() {
 	string s;
 	cin >> s;
 	cout << "hello! " << s << endl;
-	cin >> s;asd
+	cin >> s;
 	cout << "Kek!" << " " << s;
 
 	// return 798;

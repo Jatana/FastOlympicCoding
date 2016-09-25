@@ -255,7 +255,7 @@
 	// toggle using debugger
 	{
 		"keys": ["ctrl+shift+b"],
-		"command": "test_manager",
+		"command": "view_tester",
 		"args": {
 			"action": "toggle_using_debugger"
 		},

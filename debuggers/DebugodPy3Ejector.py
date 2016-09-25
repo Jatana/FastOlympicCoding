@@ -127,7 +127,7 @@ class PyLLDBDebugger(Debugger):
 		return out
 
 	def terminate(self):
-		self.interact(_.terminate())
+		self.interact('_.terminate()')
 
 	def quit(self):
 		self.interact('quit()')
