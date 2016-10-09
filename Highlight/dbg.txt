@@ -16,4 +16,4 @@
 	margin: 0px;
 }
 	</style>
-	v&nbsp;=&nbsp;size=<div class="number">2</div>&nbsp;{<br>&nbsp;&nbsp;[<div class="number">0</div>]&nbsp;=&nbsp;size=<div class="number">2</div>&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;[<div class="number">0</div>]&nbsp;=&nbsp;'#'<br>&nbsp;&nbsp;&nbsp;&nbsp;[<div class="number">1</div>]&nbsp;=&nbsp;'#'<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;[<div class="number">1</div>]&nbsp;=&nbsp;size=<div class="number">2</div>&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;[<div class="number">0</div>]&nbsp;=&nbsp;'#'<br>&nbsp;&nbsp;&nbsp;&nbsp;[<div class="number">1</div>]&nbsp;=&nbsp;'.'<br>&nbsp;&nbsp;}<br>}</body>
+	rez&nbsp;=&nbsp;&lt;read&nbsp;memory&nbsp;from&nbsp;<div class="number">0</div>x<div class="number">7</div>fff<div class="number">53398</div>f<div class="number">90</div>&nbsp;failed&nbsp;(<div class="number">0</div>&nbsp;of&nbsp;<div class="number">8</div>&nbsp;bytes&nbsp;read)&gt;<br></body>

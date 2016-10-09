@@ -147,6 +147,17 @@ namespace typedefs {
 	typedef vector<vector<pair<bool, int>>> vvpbi;
 }
 
+namespace numbers_operation {
+	template<class T>
+	T floor_mod(T a, T b) {
+		if (a % b == 0) return 0;
+		if (a >= 0 && b >= 0) return a % b;
+		if (a <= 0 && b <= 0) return a % b;
+		return abs(b) - (abs(a) % abs(b));
+	}
+}
+
+using namespace numbers_operation;
 using namespace typedefs;
 
 #define print    \
@@ -156,6 +167,6 @@ cout,
 #define scan cin,
 
 
-int main(int argc, char *argv[]) {
+signed main(signed argc, char *argv[]) {
 	
 }

@@ -38,7 +38,7 @@
 
 using namespace std;
 
-char string_in_buffer[(int)2e6];
+char string_in_buffer[(int)260];
 
 
 void fast_scan(int &x) { scanf("%d", &x); }
@@ -147,6 +147,17 @@ namespace typedefs {
 	typedef vector<vector<pair<bool, int>>> vvpbi;
 }
 
+namespace numbers_operation {
+	template<class T>
+	T floor_mod(T a, T b) {
+		if (a % b == 0) return 0;
+		if (a >= 0 && b >= 0) return a % b;
+		if (a <= 0 && b <= 0) return a % b;
+		return abs(b) - (abs(a) % abs(b));
+	}
+}
+
+using namespace numbers_operation;
 using namespace typedefs;
 
 #define print    \
@@ -156,70 +167,6 @@ cout,
 #define scan cin,
 
 
-int main(int argc, char *argv[]) {
-	freopen("i.in", "r", stdin);
-	freopen("i.out", "w", stdout);
-	int n;
-	scan n;
-	string s;
-	scan s;
-
-	int a, b;
-	scan a, b;
-
-	vector<int> groups;
-	bool start_neg = s[0] == '-';
-	groups.pb(1);
-	for (int i = 1; i < len(s); i++) {
-		if (s[i] == s[i - 1]) {
-			groups.back()++;
-		} else {
-			groups.pb(1);
-		}
-	}
-
-	for (int i = 0; i < len(groups); i++) {
-		int x = groups[i];
-		groups[i] = min(x * a, a + b);
-	}
-
-	bool neg = start_neg;
-	// print groups;
-	int k = len(groups);
-
-	vector<vector<int>> dp(k, vector<int>(2, 0));
-
-	if (neg) {
-		dp[0][0] = 0;
-		dp[0][1] = groups[0];
-	} else {
-		dp[0][0] = groups[0];
-		dp[0][1] = 0;
-	}
-
-	neg = !neg;
-
-	// print "neg:", neg;
-
-	for (int i = 1; i < len(groups); i++) {
-		if (neg) {
-			// negative
-			dp[i][0] = dp[i - 1][0];
-			dp[i][1] = min(dp[i - 1][1] + groups[i], dp[i - 1][0] + (a + b));
-		} else {
-			// positive
-			dp[i][0] = min(dp[i - 1][0] + groups[i], dp[i - 1][1] + (b));
-			dp[i][1] = dp[i - 1][1];
-
-			// print "::", dp[i - 1][0], groups[i];
-			// print dp[i - 1][1], "::";
-			// print dp[i][0];
-		}
-		neg = !neg;
-	}
-	// print dp;
-	print dp.back().back();
-
-
-
+signed main(signed argc, char *argv[]) {
+	
 }
