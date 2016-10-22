@@ -176,8 +176,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		def insert_test(self):
 			n = self.test_iter
 			tests = self.tests
-			if n == 0:
-				self.process_manager.compile()
+			# if n == 0:
+				# self.process_manager.compile()
 			if n < len(tests):
 				self.process_manager.run()
 				self.proc_run = True
@@ -324,7 +324,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def on_stop(self, rtcode, crash_line=None):
 		v = self.view
 		self.view.run_command('test_manager', {'action': 'insert_opd_out', \
-			'text': (('\n' + self.END_TEST_STRING + '\n') % str(rtcode))})
+			'text': (('\n' + self.END_TEST_STRING + '\n') % (str(rtcode)))})
 		v.add_regions("test_end_%d" % (self.tester.test_iter - 1), \
 			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
 				*self.REGION_POS_PROP)
@@ -413,6 +413,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				v.fold(Region(v.word(beg + 5).end(), end))
 
 	def change_process_status(self, status):
+		# name = self.view.name()
+		# self.view.set_name(name[:name.index(' ')] + ' -' + status.lower())
 		self.view.set_status('process_status', status)
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
@@ -443,7 +445,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		file_ext = path.splitext(run_file)[1][1:]
 		DebugModule = debugger_info.get_best_debug_module(file_ext) #self.have_debugger(file_ext)
 		# if DebugModule is None:
-		print('nu davai zhe', self.use_debugger)
 		if (not self.use_debugger) or (DebugModule is None):
 			print('called here')
 			process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
@@ -584,8 +585,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.insert(edit, self.view.size(), text)
 
 		elif action == 'make_opd':
-			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
-				sync_out=sync_out, code_view_id=code_view_id, use_debugger=use_debugger)
+			def _cb():
+				self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
+					sync_out=sync_out, code_view_id=code_view_id, use_debugger=use_debugger)
+			sublime.set_timeout_async(_cb)
 
 		elif action == 'redirect_var_value':
 			self.redirect_var_value(var_name)

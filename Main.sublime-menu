@@ -1,0 +1,21 @@
+[
+	{
+		"id": "tools",
+		"children":
+		[{
+			"caption": "FastOlympicCoding",
+			"mnemonic": "R",
+			"id": "FastOlympicCoding",
+			"children":
+			[
+				{
+					"caption": "Open RunOptions", 
+					"command": "olympic_funcs", 
+					"args": {
+						"action": "open_runoptions"
+					}
+				},
+			]
+		}]
+	},
+]

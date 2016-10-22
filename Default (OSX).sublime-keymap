@@ -49,9 +49,9 @@
 				"key" : "selector"
 			},
 			{
-				"operand": "meta.block.c",
+				"operand": "meta.block.c, meta.block.c++",
 				"operator": "equal",
-				"match_all": true,
+				"match_all": false,
 				"key" : "selector"
 			},
 			{

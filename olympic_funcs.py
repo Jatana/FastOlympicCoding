@@ -245,7 +245,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
 		if action == 'can_pregen_classes':
-			print('SADASDASDASDNJKASNDJANSKJDNASKJNDKAJNSDKJNASKJDNKJASN')
+			# print('')
 			return False
 		if action == 'insert':
 			v.insert(edit, v.sel()[0].begin(), text)
@@ -358,6 +358,8 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					# < / >
 					w.set_layout(layout)
 			# w.run_command('toggle_side_bar')
+		elif action == 'open_runoptions':
+			self.view.window().open_file(path.join(root_dir, 'run_options.py'))
 			
 
 

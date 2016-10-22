@@ -7,8 +7,5 @@
 	},
 	{
 		"test": "SuperClass\nhello! SuperClass\nAnother\n"
-	},
-	{
-		"test": "HELLO123\ntest3\n"
 	}
 ]

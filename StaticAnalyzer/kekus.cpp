@@ -1,4 +1,4 @@
-// template<int a, int (int, int), double double mamamkus, class Typical_Class>
+// template<int a, int (int, int), double double , class Typical_Class>
 // long long l();
 
 class asd
