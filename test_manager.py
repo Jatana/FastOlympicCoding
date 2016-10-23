@@ -461,8 +461,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.run_command('test_manager', {'action': 'new_test'})
 			# v.set_status('process_status', 'Process Run')
 		else:
-			v.insert(edit, 0, cmp_data[1])
-			#v.run_command('test_manager', {'action': 'insert_opd_out', 'text': cmp_data[1]})
+			# v.insert(edit, 0, cmp_data[1])
+			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': cmp_data[1]})
 
 	def delete_nth_test(self, edit, nth, fixed_end=None):
 		'''

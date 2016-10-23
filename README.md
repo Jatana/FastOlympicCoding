@@ -11,7 +11,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>ctrl+alt+b</kbd> run and clear previous tests
  * <kbd>ctrl+shift+b</kbd> toggle using debugger
  * <kbd>ctrl+d</kbd> delete test
- * <kbd>shift+tab</kbd> vvi -> vector<vector<<int>>
+ * <kbd>shift+tab</kbd> vvi -> vector < vector < int > >
  * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
 #### Languages run parameters
