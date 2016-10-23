@@ -1,6 +1,6 @@
 [
 	{ 
-		"keys": ["alt+tab"], 
+		"keys": ["shift+tab"], 
 		"command": "olympic_funcs",
 		"args": {
 			"action": "insert_pregen_class"
@@ -88,6 +88,19 @@
 				"operator": "not_equal",
 				"match_all": true,
 				"key" : "selector"
+			},
+			{
+				"operand": "meta.block.c++, meta.function.c++",
+				"operator": "not_equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"key": "preceding_text",
+				"operator": "not_regex_contains",
+				// "operand": "[[:word:]]+",
+				"operand": "([\t ]+)(f )(.+)",
+				"match_all": true
 			},
 			{
 				"operand": "source.c++",
