@@ -582,6 +582,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.delta_input += len(text)
 
 		elif action == 'insert_opd_out':
+			self.delta_input += len(text)
 			v.insert(edit, self.view.size(), text)
 
 		elif action == 'make_opd':
