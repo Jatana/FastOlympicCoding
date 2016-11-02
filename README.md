@@ -14,9 +14,11 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>shift+tab</kbd> vvi -> vector < vector < int > >
  * <kbd>cmd+k, cmd+right</kbd> close/open right panel
 
-#### Languages run parameters
- * you can see and change lang parameters in
-   * `settings.py`
+#### RunOptions
+ * to edit runoptions
+   * press <kbd>super/ctrl+shift+p</kbd>
+   * type RunOptions
+   * or tools->FastOlympicCoding->RunOptions
 
 
 *Olympic Funcs*

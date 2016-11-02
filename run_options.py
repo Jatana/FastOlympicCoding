@@ -1,3 +1,5 @@
+# !restart sublime after change this file
+
 run_options = [
 	{
 		'name': 'C++',
