@@ -36,6 +36,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def __init__(self, view):
 		self.view = view
 		self.use_debugger = False
+		self.delta_input = 0
 
 
 	class Test(object):

@@ -165,74 +165,37 @@ smart_io::precall_print(); \
 cout,
 
 #define scan cin,
+#define int long long
+int n, m;
+vector<int> cost;
+vector<bool> visited;
+vector<pii> need;
 
-vector<vector<pii>> vertices;
-vector<vector<int>> pref_min;
-vector<vector<int>> prev2p;
-vector<pii> pref;
-vector<int> height;
+int dp(int v) {
+	// print v;
+	if (visited[v]) return cost[v];
+	visited[v] = true;
 
-void dfs_height(int v = 0, int h = 0) {
-	height[v] = h;
-	for (pii sub : vertices[v]) {
-		dfs_height(sub.first, h + 1);
+	if (need[v] == mp( -1, -1 )) {
+		return cost[v];
 	}
+	return min(cost[v], dp(need[v].first) + dp(need[v].second));
 }
-
-
-void dfs_pref_min(int v = 0) {
-	if (v == 0) {
-		for (int k = 0; k < len(pref_min[v]); k++) {
-			pref_min[v][k] = 1e7;
-		}
-	} else {
-		pref_min[v][0] = pref[v].second;
-		for (int k = 1; k < len(pref_min[v]); k++) {
-			pref_min[v][k] = min(pref_min[v][k - 1], pref_min[prev2p[v][k - 1]][k - 1]);
-		}
-	}
-}
-
-void dfs_prev2p(int v = 0, int prev = 0) {
-	prev2p[v][0] = prev;
-
-	for (int k = 1; k < len(prev2p[v]); k++) {
-		prev2p[v][k] = prev2p[prev2p[v][k - 1]][k - 1];
-	}
-
-	for (pii sub : vertices[v]) {
-		dfs_prev2p(sub.first, v);
-	}
-}
-
-int query(int v, int u) {
-
-}
-
-
-
 
 signed main(signed argc, char *argv[]) {
-	int n;
-	scan n;
-	vertices.resize(n);
-	pref_min.resize(n, vector<int>(25, 0));
+	scan n, m;
+	cost.resize(n);
+	scan cost;
+	visited.resize(n, false);
 
-	for (int i = 0; i < n - 1; i++) {
-		int x, y;
-		scan x, y;
-		pref[i] = { x - 1, y };
-		vertices[x - 1].pb({ i, y });
+	need.resize(n, {-1, -1});
+
+	for (int i = 0; i < m; i++) {
+		int j, f, s;
+		scan j, f, s;
+		j--;f--;s--;
+		need[j] = { f, s };
 	}
-
-	dfs_height();
-
-	int cnt_q;
-	scan cnt_q;
-
-
-
-	for (int i = 0; i < cnt_q; i++) {
-		
-	}
+	// print need;
+	print dp(0);
 }

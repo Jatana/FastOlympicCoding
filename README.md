@@ -1,7 +1,7 @@
 Fast Olympic Coding plugin for Sublime Text 3
 ================
 #### Program Auto Tester
- ![Auto Tester](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/AutoTester.png)
+ ![Auto Tester](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/_tmgscr2.png)
 
 #### Auto Tester Keybindings
  * <kbd>ctrl+b</kbd> compile and run
