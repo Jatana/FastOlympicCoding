@@ -16,4 +16,4 @@
 	margin: 0px;
 }
 	</style>
-	cur&nbsp;=&nbsp;&lt;read&nbsp;memory&nbsp;from&nbsp;<div class="number">0</div>x<div class="number">7</div>fff<div class="number">555</div>a<div class="number">1</div>f<div class="number">48</div>&nbsp;failed&nbsp;(<div class="number">0</div>&nbsp;of&nbsp;<div class="number">4</div>&nbsp;bytes&nbsp;read)&gt;<br></body>
+	</body>

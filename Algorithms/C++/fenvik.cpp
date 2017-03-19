@@ -48,5 +48,4 @@ public:
 			update(i, prot[i]);
 		}
 	}
-
 };

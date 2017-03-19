@@ -16,14 +16,12 @@ using namespace std;
 // }
 int main() {
 	// make_err();
-	for (int i = 0; i < n; i++) {
-		
-	}
 	string s;
 	cin >> s;
 	cout << "hello! " << s << endl;
 	cin >> s;
 	cout << "Kek!" << " " << s;
-
-	// return 798;
+	vector<int> v{1};
+	v[10000] = 1;
+	return 0;
 }

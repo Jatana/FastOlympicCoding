@@ -353,14 +353,18 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 					#print('setbryak ->', crash_line)
 					x.run_command('view_tester', {'action': 'show_crash_line', 'crash_line': crash_line})
 
-	def redirect_var_value(self, var_name):
+	def redirect_var_value(self, var_name, pos=None):
 		view = self.view
-		print('VarName:', var_name)
+		print('VarName:', var_name, pos)
 		value = self.tester.process_manager.get_var_value(var_name)
 		print(value)
 		for x in view.window().views():
 			if x.id() == self.code_view_id:
-				x.run_command('view_tester', {'action': 'show_var_value', 'value': value})
+				x.run_command('view_tester', {
+					'action': 'show_var_value',
+					'value': value,
+					'pos': pos
+				})
 
 
 
@@ -565,7 +569,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False, code_view_id=None, var_name=None, use_debugger=True):
+			sync_out=False, code_view_id=None, var_name=None, use_debugger=True, pos=None):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -593,7 +597,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			sublime.set_timeout_async(_cb)
 
 		elif action == 'redirect_var_value':
-			self.redirect_var_value(var_name)
+			self.redirect_var_value(var_name, pos=pos)
 
 		elif action == 'close':
 			try:
@@ -657,6 +661,11 @@ class ModifiedListener(sublime_plugin.EventListener):
 					sublime.set_timeout(show_test_menu, 100)
 
 			view.run_command('test_manager', {'action': 'sync_read_only'})
+
+	def on_hover(self, view, point, hover_zone):
+		if hover_zone == sublime.HOVER_TEXT:
+			view.run_command('view_tester', {'action': 'get_var_value', 'pos': point})
+			
 
 	# def on_window_command(self, window, cmd, args):
 	# 	if cmd == 'toggle_side_bar':
@@ -760,17 +769,25 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				v.close()
 
 
-	def get_var_value(self):
+	def get_var_value(self, pos=None):
 		view = self.view
-		pt = view.sel()[0].begin()
+		if pos is None:
+			pt = view.sel()[0].begin()
+		else:
+			pt = pos
 		var_name = view.substr(view.word(pt))
 		if self.have_tied_dbg:
 			dbg = self.tied_dbg
-			dbg.run_command('test_manager', {'action' : 'redirect_var_value', 'var_name': var_name})
+			dbg.run_command('test_manager', {
+				'action' : 'redirect_var_value',
+				'var_name': var_name,
+				'pos': pt
+			})
 
-	def show_var_value(self, value):
+	def show_var_value(self, value, pos=None):
 		print(value)
-		self.view.show_popup(highlight(value))
+		def nop(): pass
+		self.view.show_popup(highlight(value), sublime.HIDE_ON_MOUSE_MOVE_AWAY, pos)
 
 	def toggle_using_debugger(self):
 		self.use_debugger ^= 1
@@ -780,7 +797,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			sublime.status_message('debugger disabled')
 
 
-	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None, value=None):
+	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None, value=None, pos=None):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -798,10 +815,10 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			sublime.set_timeout_async(lambda pt=pt: v.show_at_center(pt), 39)
 			# print(pt)
 		elif action == 'get_var_value':
-			self.get_var_value()
+			self.get_var_value(pos=pos)
 
 		elif action == 'show_var_value':
-			self.show_var_value(value)
+			self.show_var_value(value, pos=pos)
 
 		elif action == 'toggle_using_debugger':
 			self.toggle_using_debugger()

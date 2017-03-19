@@ -95,15 +95,18 @@ class PyLLDBDebugger(Debugger):
 		return self.interact('_.rtcode')
 
 	def cut_var_value(self, value):
-		bal = 1
-		i = value.index('(') + 1
-		while bal > 0:
-			if value[i] == '(':
-				bal += 1
-			if value[i] == ')':
-				bal -= 1
-			i += 1
-		return value[i + 1:]
+		try:
+			bal = 1
+			i = value.index('(') + 1
+			while bal > 0:
+				if value[i] == '(':
+					bal += 1
+				if value[i] == ')':
+					bal -= 1
+				i += 1
+			return value[i + 1:]
+		except:
+			return value
 
 
 	def get_var_value(self, var_name, frame_id=None):

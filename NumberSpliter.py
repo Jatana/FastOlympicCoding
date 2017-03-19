@@ -3,8 +3,6 @@ import sublime, sublime_plugin
 from FastOlympicCoding.Modules import basics
 
 
-
-
 class NumberSplit():
 	def prefix_int(s):
 		i = 0

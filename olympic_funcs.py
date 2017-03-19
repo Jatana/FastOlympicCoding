@@ -191,7 +191,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				need_new = False
 		else:
 			need_new = True
-
+		print('Hello', need_new)
 		if not need_new:
 			dbg_view = self.tied_dbg
 			create_new = False

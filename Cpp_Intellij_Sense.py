@@ -28,17 +28,20 @@ from FastOlympicCoding.settings import root_dir, plugin_name, error_region_scope
 from FastOlympicCoding.settings import run_options
 
 
-
 class InteliSenseCommand(sublime_plugin.TextCommand):
 	"""
 		Make intelisense with file
 	"""
-	COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}" -I "{file_dir_path}"'
-	# COMPILE_CMD = 'g++ -std=gnu++11 "{file_path}"'
+	compile_cmd = None
 	run_status = ''
 	timer_run = False
 	REGEX_ERROR_PROP = '(:)(\d+)(:)(\d+)(:)( *)([a-zA-Z ]+)(:)( *)(.*)'
 
+	def __init__(self, view):
+		self.view = view
+		for option in run_options:
+			if option['name'] == 'C++':
+				self.compile_cmd = option.get('lint_compile_cmd', None)
 
 	def stop_sense(self):
 		self.run_status = 'do_disable'
@@ -53,6 +56,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 			sublime.status_message('sensa enabled')
 
 	def run_sense(self):
+		if self.compile_cmd is None: return
 		if self.timer_run:
 			self.run_status = 'do_waited_sense'
 			return 0
@@ -159,7 +163,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		f.write(s.encode())
 		f.close()
 		file_dir_path = path.split(v.file_name())[0]
-		cmd = self.COMPILE_CMD.format(file_path=run_file_path, file_dir_path=file_dir_path)
+		cmd = self.compile_cmd.format(source_file=run_file_path, source_file_dir=file_dir_path)
 		# print(cmd)
 		process = Popen(cmd, \
 				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
@@ -235,14 +239,3 @@ class SenseListener(sublime_plugin.EventListener):
 	def on_activated(self, view):
 		if basics.is_cpp_file(view):
 			view.run_command('inteli_sense', {'action': 'run_sense'})
-
-	# def on_query_completions(self, view, prefix, locations):
-		
-	# 	return [['az\t asdasd', 'azzazaza']]
-
-
-
-
-
-
-
