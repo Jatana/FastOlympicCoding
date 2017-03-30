@@ -14,14 +14,20 @@ using namespace std;
 // 	// cout << x;
 // 	v.at(20);
 // }
+vector<int> foo() {
+
+}
+
 int main() {
-	// make_err();
+	// make_err();asd
+	// suka
 	string s;
 	cin >> s;
 	cout << "hello! " << s << endl;
 	cin >> s;
 	cout << "Kek!" << " " << s;
 	vector<int> v{1};
-	v[10000] = 1;
+	// v[10000] = 1;asd;
+	// retuincrn 0;
 	return 0;
 }

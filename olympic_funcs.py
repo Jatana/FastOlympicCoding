@@ -282,7 +282,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				func = v.substr(w_sel).lstrip().rstrip()
 				if len(func.lstrip().rstrip()) != 0:
 					try:
-						f = open(path.join(root_dir, ALGORITHMS_BASE, func + '.cpp'), 'r')
+						f = open(path.join(root_dir, ALGORITHMS_BASE, func + '.cpp'), encoding='utf-8')
 						v.replace(edit, w_sel, f.read())
 						f.close()
 						try:

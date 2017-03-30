@@ -3,9 +3,7 @@ from os import path
 import os
 
 
-
 plugin_name = 'FastOlympicCoding'
-
 
 # root_dir = path.join(sublime.packages_path(), plugin_name + '/')
 root_dir = path.split(__file__)[0]

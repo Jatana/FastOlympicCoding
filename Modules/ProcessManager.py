@@ -57,7 +57,7 @@ class ProcessManager(object):
 			if file_ext in x['extensions']:
 				if x['compile_cmd'] is None:
 					return None
-				return x['compile_cmd'](self.file)
+				return x['compile_cmd'].format(source_file=self.file)
 		else:
 			return -1
 
@@ -68,7 +68,7 @@ class ProcessManager(object):
 			if file_ext in x['extensions']:
 				if x['run_cmd'] is None:
 					return None
-				return x['run_cmd'](self.file)
+				return x['run_cmd'].format(source_file=self.file)
 		else:
 			return -1
 

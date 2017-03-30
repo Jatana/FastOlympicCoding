@@ -12,7 +12,6 @@ from importlib import import_module
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.Modules import basics
 from FastOlympicCoding.settings import root_dir, plugin_name, run_options
-from FastOlympicCoding.Engine import SysManager
 from FastOlympicCoding.debuggers import debugger_info
 from FastOlympicCoding.Highlight.CppVarHighlight import highlight
 
