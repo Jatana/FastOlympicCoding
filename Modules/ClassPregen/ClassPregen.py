@@ -14,8 +14,6 @@ def modify_classes():
 		new_classes[key[0]]['name'] = key
 	classes = new_classes
 
-# print(classes)
-
 modify_classes()
 
 

@@ -22,9 +22,4 @@
 		"constructors": false,
 		"docs": ""
 	},
-
-	// "template": {
-	// 	"constructors": false,
-	// 	"type_requirements": "templatabli"
-	// }
 }

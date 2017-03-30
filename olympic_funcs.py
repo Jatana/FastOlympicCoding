@@ -16,8 +16,7 @@ from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.settings import root_dir, plugin_name
 from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
-ALGORITHMS_BASE = 'Algorithms/C++/'
-
+ALGORITHMS_BASE = '/Users/Uhuhu/Documents/Olympic Programing/Algorithms/C++/'
 
 clang = 'Packages/C++/C++.tmLanguage'
 
