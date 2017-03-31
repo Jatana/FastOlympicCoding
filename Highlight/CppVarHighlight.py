@@ -33,7 +33,7 @@ def highligh_regex(code, regex):
 
 def highlight(code):
 	rez = '''
-	<body style="margin: 0px; padding: 8px; background-color: #2d2d2d; color: #d3d0c8;">
+	<body style="margin: 0px; padding: 8px; background-color: var(--background); color: var(--foreground);">
 	<style>
 		%s
 	</style>
