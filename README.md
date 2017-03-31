@@ -1,41 +1,40 @@
 Fast Olympic Coding plugin for Sublime Text 3
 ================
-#### Program Auto Tester
- ![Auto Tester](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/_tmgscr2.png)
 
-#### Auto Tester Keybindings
- * <kbd>ctrl+b</kbd> compile and run
+### TestManager
+ ![TestManager](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/TestManager.gif)
+#### TestManager Keybindings
+ * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+shift+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
  * <kbd>ctrl+c</kbd> kill process
- * <kbd>ctrl+alt+g</kbd> View var value selected variable
- * <kbd>ctrl+alt+b</kbd> run and clear previous tests
- * <kbd>ctrl+shift+b</kbd> toggle using debugger
+ * <kbd>ctrl+shift+b (OSX)</kbd> toggle enable/disable debugger
  * <kbd>ctrl+d</kbd> delete test
- * <kbd>shift+tab</kbd> vvi -> vector < vector < int > >
- * <kbd>cmd+k, cmd+right</kbd> close/open right panel
+ * <kbd>cmd+k, cmd+right (OSX)</kbd> close/open right panel
 
-#### RunOptions
+
+### RunOptions
  * to edit runoptions
-   * press <kbd>super/ctrl+shift+p</kbd>
-   * type RunOptions
+   * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type RunOptions
    * or tools->FastOlympicCoding->RunOptions
 
 
-*Olympic Funcs*
-  *Yet only for C++*
-	show funcs
-	  `ctrl+shift+o`
-	you can write func name
-	  and press `<tab>
-	====
-	fast for
-	  `f iter end` <tab>
-	  `f iter begin end` <tab>
-	  `f iter begin end move` <tab>
-	reversed for
-	  `fr ...` <tab>
+### FastClassComplete
+ ![FastClassComplete](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/FastPregen.gif)
 
+to complete press <kbd>shift+tab</kbd>
+ 
+ 
+### FastFor
+ ![FastFor](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/FastFor.gif)
 
-*C++ Error Highlighter*
-	you can see and change parameters in 
-		`settings.py`
+to complete press <kbd>tab</kbd>
+
+### CppLint
+ ![CppLint](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/CppLint.png)
+ 
+### Debugger
+ ![Debugger](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/Debugger.png)
+
+ * currently debugger only for OSX
+ * <kbd>ctrl+shift+b</kbd> disable/enable debugger
+ * hover cursor on variable to see its value
