@@ -1,9 +1,11 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 int main() {
-	int a, b;
-	cin >> a >> b;
-	cout << a - b;
+	vector<int> array {1, 2, 3};
+	array[-133713371337] = 1337;
+
+	cout << array.size();
 }
