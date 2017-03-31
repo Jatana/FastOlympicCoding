@@ -7,7 +7,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+shift+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
  * <kbd>ctrl+c</kbd> kill process
- * <kbd>ctrl+shift+b (OSX)</kbd> toggle enable/disable debugger
+ * <kbd>ctrl+shift+b (OSX)</kbd> enable/disable debugger
  * <kbd>ctrl+d</kbd> delete test
  * <kbd>cmd+k, cmd+right (OSX)</kbd> close/open right panel
 
@@ -31,6 +31,8 @@ to complete press <kbd>tab</kbd>
 
 ### CppLint
  ![CppLint](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/CppLint.png)
+ 
+ * to edit lint open RunOptions
  
 ### Debugger
  ![Debugger](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/Debugger.png)
