@@ -67,9 +67,9 @@ def highlight(code):
 		rez += s
 
 	rez += '</body>'
-	f = open(path.join(path.dirname(__file__), 'dbg.txt'), 'w')
-	print(rez, file=f)
-	f.close()
+	# f = open(path.join(path.dirname(__file__), 'dbg.txt'), 'w')
+	# print(rez, file=f)
+	# f.close()
 	return rez
 
 
