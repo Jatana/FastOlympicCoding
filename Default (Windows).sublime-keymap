@@ -67,11 +67,6 @@
 				"operand": ".{1,}",
 				"match_all": true
 			},
-			// {
-			// 	"key" : "olympic_funcs",
-			// 	"operator": "equal",
-			// 	"operand": "true"
-			// }
 		]
 	},
 
@@ -144,7 +139,7 @@
 	},
 
 	{
-		"keys": ["super+v"],
+		"keys": ["ctrl+v"],
 		"command": "test_manager",
 		"args": {
 			"action": "insert_cb"
@@ -227,24 +222,7 @@
 		]
 	},
 
-	{
-
-		"keys": ["escape"],
-		"command": "test_manager",
-		"args": {
-			"action": "kill_proc"
-		},
-		"context": [
-			{
-				"operand": "source.OPDebugger",
-				"operator": "equal",
-				"match_all": true,
-				"key": "selector"
-			}
-		]
-	},
-
-	// Runs Interactive
+	// Run
 	{
 		"keys": ["ctrl+shift+b"],
 		"command": "view_tester",
@@ -295,7 +273,7 @@
 	},
 
 	{
-		"keys": ["super+k", "super+right"],
+		"keys": ["ctrl+k", "ctrl+right"],
 		"command": "view_tester",
 		"args": {
 			"action": "sync_opdebugs"
