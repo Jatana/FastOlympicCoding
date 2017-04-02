@@ -111,10 +111,6 @@
 		]
 	},
 
-	// {
-		// "keys": ["ctrl+b"]
-	// }
-
 	{
 		"keys": ["enter"],
 		"command": "test_manager",
@@ -250,100 +246,10 @@
 
 	// Runs Interactive
 	{
-		"keys": ["ctrl+b"],
-		"command": "view_tester",
-		"args": {
-			"action": "make_opd"
-		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
-	},
-
-	// toggle using debugger
-	{
 		"keys": ["ctrl+shift+b"],
 		"command": "view_tester",
 		"args": {
-			"action": "toggle_using_debugger"
-		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
-	},
-
-	{
-		"keys": ["ctrl+alt+g"],
-		"command": "view_tester",
-		"args": {
-			"action": "get_var_value"
-		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
-	},
-
-	// Runs in mode output only
-	{
-		"keys": ["super+ctrl+b"],
-		"command": "view_tester",
-		"args": {
-			"action": "make_opd",
-			"sync_out": false
-		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
-	},
-
-
-	// clear previous tests and run
-	{
-		"keys": ["ctrl+alt+b"],
-		"command": "view_tester",
-		"args": {
-			"action": "make_opd",
-			"clr_tests": true
-		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
-	},
-
-	// clear previous tests and run 
-	// in mode output only
-	{
-		"keys": ["super+ctrl+alt+b"],
-		"command": "view_tester",
-		"args": {
-			"action": "make_opd",
-			"clr_tests": true,
-			"sync_out": false
+			"action": "make_opd"
 		},
 		"context": [
 			{
