@@ -41,6 +41,9 @@ class PyLLDBDebugger(Debugger):
 	def is_runnable():
 		return (sublime.platform() == 'osx') and path.exists('/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Resources/Python/lldb/')
 
+	def has_var_view_api(self):
+		return True
+
 	def interact(self, action):
 		# print('interaction: ', action)
 		proc_dbg = self.proc_dbg
@@ -107,7 +110,6 @@ class PyLLDBDebugger(Debugger):
 			return value[i + 1:]
 		except:
 			return value
-
 
 	def get_var_value(self, var_name, frame_id=None):
 		return self.cut_var_value(self.interact('_.get_var_value(decode({bytes}.__str__()))'.format(bytes=encode(var_name))))

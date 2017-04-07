@@ -154,6 +154,28 @@
 		]
 	},
 
+	{
+		"keys": ["backspace"],
+		"command": "test_manager",
+		"args": {
+			"action": "miss_touch"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"key": "preceding_text",
+				"operator": "regex_contains",
+				"operand": "^$",
+				"match_all": true
+			},
+		]
+	},
+
 	// Terminate Process in OPD
 	{
 		"keys": ["ctrl+c"],

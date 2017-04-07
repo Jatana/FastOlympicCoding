@@ -1,9 +1,9 @@
-import os
 from os.path import dirname
-import sys
-from subprocess import Popen, PIPE
-import subprocess
 from os import path
+from subprocess import Popen, PIPE
+import os
+import sys
+import subprocess
 import shlex
 import signal
 import sublime

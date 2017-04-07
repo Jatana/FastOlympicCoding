@@ -225,6 +225,8 @@ cout,
 
 signed main(signed argc, char *argv[]) {
 	int x;
-	cin >> x;
-	cout << "Hello world";
+	scan x;
+	scan x;
+	scan x;
+	print "Hello";
 }

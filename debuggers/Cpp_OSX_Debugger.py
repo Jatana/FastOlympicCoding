@@ -130,6 +130,9 @@ class LLDBDebugger(Debugger):
 	def is_runnable():
 		return sublime.platform() == 'osx'
 
+	def has_var_view_api(self):
+		return True
+
 	def compile(self):
 		cmd = 'g++ -std=gnu++11 -g -o main "%s"' % self.file
 		PIPE = subprocess.PIPE

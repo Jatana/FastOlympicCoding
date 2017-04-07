@@ -13,10 +13,8 @@ from os import path
 
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
-from FastOlympicCoding.settings import root_dir, plugin_name
+from FastOlympicCoding.settings import root_dir, plugin_name, algorithms_base
 from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
-
-ALGORITHMS_BASE = '/Users/Uhuhu/Documents/Olympic Programing/Algorithms/C++/'
 
 clang = 'Packages/C++/C++.tmLanguage'
 
@@ -155,7 +153,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 	ruler_opd_panel = 0.8
 	pregen_funcs = {
 		'f': {
-			# 'cnt_args': {1, 2, 3, 4},
 			'func': PreProc.f
 		},
 		'fr': {
@@ -208,12 +205,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				pass
 			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
 
-
 		window.set_layout({
 			"cols": [0, 0.8, 1],
 			"rows": [0, 1],
 			"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
 		})
+
 		window.set_view_index(dbg_view, 1, 0)
 		window.focus_view(v)
 		window.focus_view(dbg_view)
@@ -281,11 +278,11 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				func = v.substr(w_sel).lstrip().rstrip()
 				if len(func.lstrip().rstrip()) != 0:
 					try:
-						f = open(path.join(root_dir, ALGORITHMS_BASE, func + '.cpp'), encoding='utf-8')
+						f = open(path.join(root_dir, algorithms_base, func + '.cpp'), encoding='utf-8')
 						v.replace(edit, w_sel, f.read())
 						f.close()
 						try:
-							f_prop = open(path.join(root_dir, ALGORITHMS_BASE, func + '.cpp:properties'), 'r')
+							f_prop = open(path.join(root_dir, algorithms_base, func + '.cpp:properties'), 'r')
 							prop = sublime.decode_value(f_prop.read())
 							if prop.get('fold', None) is not None:
 								for x in prop['fold']:
@@ -312,12 +309,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
 		elif action == 'show_funcs':
 			wind = v.window()
-			funcs = listdir(path.join(root_dir, ALGORITHMS_BASE))
+			funcs = listdir(path.join(root_dir, algorithms_base))
 			to_view_funcs = [x[:-4] for x in funcs if x[-4:] == '.cpp']
 			def on_done(ind, funcs=funcs):
 				if ind == -1:
 					return 0
-				f = open(path.join(root_dir, ALGORITHMS_BASE, funcs[ind]))
+				f = open(path.join(root_dir, algorithms_base, funcs[ind]))
 				self.view.run_command('olympic_funcs', {'text': f.read(), 'action': 'insert'})
 				f.close()
 
@@ -405,9 +402,9 @@ class GenListener(sublime_plugin.EventListener):
 		# print(command_name, args)
 
 	def on_query_completions(self, view, prefix, locations):
-		print(prefix, locations)
-		if not pregen_class(prefix) is None:
-			print(pregen_class(prefix))
+		if (view.scope_name(view.sel()[0].a).find('source.c') != -1) and \
+				(not pregen_class(prefix) is None):
+			# print(pregen_class(prefix))
 			return [(pregen_class(prefix), pregen_class(prefix))]
 		return []
 		

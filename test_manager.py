@@ -11,7 +11,7 @@ from importlib import import_module
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.Modules import basics
-from FastOlympicCoding.settings import root_dir, plugin_name, run_options
+from FastOlympicCoding.settings import plugin_name, run_options
 from FastOlympicCoding.debuggers import debugger_info
 from FastOlympicCoding.Highlight.CppVarHighlight import highlight
 
@@ -355,15 +355,16 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def redirect_var_value(self, var_name, pos=None):
 		view = self.view
 		print('VarName:', var_name, pos)
-		value = self.tester.process_manager.get_var_value(var_name)
-		print(value)
-		for x in view.window().views():
-			if x.id() == self.code_view_id:
-				x.run_command('view_tester', {
-					'action': 'show_var_value',
-					'value': value,
-					'pos': pos
-				})
+		if self.tester.process_manager.has_var_view_api():
+			value = self.tester.process_manager.get_var_value(var_name)
+			print(value)
+			for x in view.window().views():
+				if x.id() == self.code_view_id:
+					x.run_command('view_tester', {
+						'action': 'show_var_value',
+						'value': value,
+						'pos': pos
+					})
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
@@ -562,7 +563,14 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				have_sel_no_end = True
 				break
 
-		view.set_read_only(have_sel_no_end)
+
+		end_cursor = len(view.sel()) and \
+			(not self.tester.proc_run) and \
+			view.size() == view.sel()[0].a
+
+
+		# print('read only ====>', have_sel_no_end)
+		view.set_read_only(have_sel_no_end or end_cursor)
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \

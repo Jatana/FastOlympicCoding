@@ -38,10 +38,6 @@ class NumberSplit():
 				sublime.DRAW_STIPPLED_UNDERLINE | sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE)
 
 
-			
-
-
-
 
 get_syntax = basics.get_syntax
 CLANG = basics.CLANG
