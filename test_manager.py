@@ -365,8 +365,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 					'pos': pos
 				})
 
-
-
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
 

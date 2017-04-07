@@ -5,7 +5,8 @@ from subprocess import Popen, PIPE
 import subprocess
 from os import path
 import shlex
-
+import signal
+import sublime
 
 class ProcessManager(object):
 	def __init__(self, file, syntax, run_options=None):
@@ -19,25 +20,6 @@ class ProcessManager(object):
 		self.run = self.run_file
 		self.run_options = run_options
 
-		# Old compile parameters
-		# new in settings.py
-		#
-
-		python_path = '/Library/Frameworks/Python.framework/Versions/3.4/bin/python3'
-		self.compile_cmds = {
-			'source.python': None,
-			'source.c++': lambda name: 'g++ -std=gnu++11 ' +'"'+name+'"',
-			'source.pascal': lambda name: '/usr/local/bin/ppc386 ' + '"' + name + '"' 
-		}
-
-		self.run_cmds = {
-			'source.python': \
-				lambda name: python_path + ' ' +'"'+name+'"',
-			'source.c++': lambda name: './a.out -debug',
-			'source.pascal': lambda name: '"'+name[:-4]+'"'
-			#'./' + '"'+name[:-4]+'"'
-		}
-
 	def get_path(self, lst):
 		rez = ''
 		for x in lst:
@@ -47,8 +29,16 @@ class ProcessManager(object):
 				rez += x
 			else:
 				rez += ' "' + x + '" '
-
 		return rez
+
+	def format_command(self, cmd):
+		return cmd.format(
+			source_file=self.file,
+			source_file_dir=path.dirname(self.file)
+		)
+
+	def has_var_view_api(self):
+		return False
 
 	def get_compile_cmd(self):
 		opt = self.run_options
@@ -57,7 +47,7 @@ class ProcessManager(object):
 			if file_ext in x['extensions']:
 				if x['compile_cmd'] is None:
 					return None
-				return x['compile_cmd'].format(source_file=self.file)
+				return self.format_command(x['compile_cmd'])
 		else:
 			return -1
 
@@ -68,7 +58,7 @@ class ProcessManager(object):
 			if file_ext in x['extensions']:
 				if x['run_cmd'] is None:
 					return None
-				return x['run_cmd'].format(source_file=self.file)
+				return self.format_command(x['run_cmd'])
 		else:
 			return -1
 
@@ -86,21 +76,35 @@ class ProcessManager(object):
 				p.wait()
 			return (p.returncode, p.stdout.read().decode())
 
-
-
 	def run_file(self):
 		if self.is_run and False:
 			raise AssertionError('cant run process because is already running')
 		cmd = self.get_run_cmd()
-		# print(cmd)
+		
+		self.is_run = False
 		PIPE = subprocess.PIPE
-		self.process = subprocess.Popen(cmd, \
-			shell=True, stdin=PIPE, stdout=PIPE, \
-				stderr=subprocess.STDOUT, bufsize=0, cwd=os.path.split(self.file)[0])
+		
+		if sublime.platform() == 'windows':
+			use_shell = False
+			startupinfo = subprocess.STARTUPINFO()
+			startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+		else:
+			startupinfo = None
+			use_shell = True
+
+		self.process = subprocess.Popen(
+			cmd,
+			shell=use_shell,
+			stdin=PIPE,
+			stdout=PIPE,
+			stderr=subprocess.STDOUT,
+			bufsize=0,
+			cwd=os.path.split(self.file)[0],
+			startupinfo=startupinfo
+		)
 	
 	def insert(self, s):
 		if self.process.poll() is None:
-			# print(s)
 			self.process.stdin.write(s.encode())
 			self.process.stdin.flush()
 
@@ -115,15 +119,9 @@ class ProcessManager(object):
 
 	def new_test(self, input_data=None):
 		self.test_counter += 1
-		# self.process.terminate()
-		# self.process.kill()
 		self.run_file()
 		if input_data != None:
 			self.insert(input_data)
 
 	def terminate(self):
-		try:
-			self.process.kill()
-			self.process.terminate()
-		except:
-			pass
+		self.process.kill()
