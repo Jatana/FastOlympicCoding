@@ -36,6 +36,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.view = view
 		self.use_debugger = False
 		self.delta_input = 0
+		self.tester = None
 
 
 	class Test(object):
@@ -565,11 +566,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 
 		end_cursor = len(view.sel()) and \
-			(not self.tester.proc_run) and \
+			((self.tester is None) or (not self.tester.proc_run)) and \
 			view.size() == view.sel()[0].a
 
-
-		# print('read only ====>', have_sel_no_end)
 		view.set_read_only(have_sel_no_end or end_cursor)
 
 

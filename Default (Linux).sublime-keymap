@@ -154,9 +154,31 @@
 		]
 	},
 
+	{
+		"keys": ["backspace"],
+		"command": "test_manager",
+		"args": {
+			"action": "miss_touch"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"key": "preceding_text",
+				"operator": "regex_contains",
+				"operand": "^$",
+				"match_all": true
+			},
+		]
+	},
+
 	// Terminate Process in OPD
 	{
-		"keys": ["ctrl+c"],
+		"keys": ["ctrl+x"],
 		"command": "test_manager",
 		"args": {
 			"action": "kill_proc"
@@ -190,7 +212,7 @@
 
 	// Accept Test
 	{
-		"keys": ["super+ctrl+o"],
+		"keys": ["ctrl+shift+o"],
 		"command": "test_manager",
 		"args": {
 			"action": "accept_test"
@@ -207,7 +229,7 @@
 
 	// Decline Test
 	{
-		"keys": ["super+ctrl+p"],
+		"keys": ["ctrl+shift+p"],
 		"command": "test_manager",
 		"args": {
 			"action": "decline_test"

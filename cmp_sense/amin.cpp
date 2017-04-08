@@ -199,7 +199,6 @@ istream &operator,(istream &is, T &object) {
 namespace typedefs {
 	typedef long long ll;
 	typedef unsigned long long ull;
-	typedef vector<int> vi;
 	typedef pair<int, int> pii;
 }
 
@@ -224,9 +223,6 @@ cout,
 
 
 signed main(signed argc, char *argv[]) {
-	int x;
-	scan x;
-	scan x;
-	scan x;
-	print "Hello";
+	 
+	print "Hello World";	
 }
