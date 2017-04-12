@@ -13,7 +13,8 @@ from os import path
 
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
-from FastOlympicCoding.settings import root_dir, plugin_name, settings_file, get_settings
+from FastOlympicCoding.settings import root_dir, plugin_name, settings_file, \
+			get_settings, is_run_supported_ext
 from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
 clang = 'Packages/C++/C++.tmLanguage'
@@ -395,16 +396,27 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 class GenListener(sublime_plugin.EventListener):
 	"""docstring for GenListener"""
 	def on_text_command(self, view, command_name, args):
-		if command_name == 'olympic_funcs' and args['action'] == 'insert_pregen_class':
-			sel = view.sel()[0]
-			text_sel = view.line(sel)
-			text = view.substr(text_sel)
-			text = text.rstrip().lstrip()
-			# print('kek', pregen_class(text))
-			if pregen_class(text) is None:
-				return ('insert_best_completion', {'exact': False, 'default': '\t'})
-			# print(pregen_class(text))
-		# print(command_name, args)
+		print(command_name, args)
+		if command_name == 'olympic_funcs':
+			if args['action'] == 'insert_pregen_class':
+				sel = view.sel()[0]
+				text_sel = view.line(sel)
+				text = view.substr(text_sel)
+				text = text.rstrip().lstrip()
+				# print('kek', pregen_class(text))
+				if pregen_class(text) is None:
+					return ('insert_best_completion', {'exact': False, 'default': '\t'})
+				# print(pregen_class(text))
+
+		if command_name == 'view_tester':
+			ext = path.splitext(view.file_name())[1][1:]
+			if args['action'] == 'make_opd':
+				if not is_run_supported_ext(ext):
+					return ('olympic_funcs', { 'action': 'pass' })
+			elif args['action'] == 'toggle_using_debugger':
+				if ext != 'cpp':
+					return ('olympic_funcs', { 'action': 'pass' })
+
 
 	def on_query_completions(self, view, prefix, locations):
 		if (view.scope_name(view.sel()[0].a).find('source.c') != -1) and \
@@ -412,4 +424,5 @@ class GenListener(sublime_plugin.EventListener):
 			# print(pregen_class(prefix))
 			return [(pregen_class(prefix), pregen_class(prefix))]
 		return []
+
 		

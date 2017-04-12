@@ -251,14 +251,6 @@
 		"args": {
 			"action": "make_opd"
 		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
 	},
 
 	// toggle using debugger
@@ -268,14 +260,6 @@
 		"args": {
 			"action": "toggle_using_debugger"
 		},
-		"context": [
-			{
-				"key" :"selector",
-				"operand": "source.c++, source.python, source.pascal, source.cs",
-				"operator": "equal",
-				"match_all": true
-			}
-		]
 	},
 
 	// Show All Olympic Functions

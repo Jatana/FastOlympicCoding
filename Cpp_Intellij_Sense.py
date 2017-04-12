@@ -29,11 +29,11 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	REGEX_ERROR_PROP = '(:)(\d+)(:)(\d+)(:)( *)([a-zA-Z ]+)(:)( *)(.*)'
 
 	def get_compile_cmd(self):
-		print('proceed coninue', get_settings().get('run_settings'), get_settings())
+		# print('proceed coninue', get_settings().get('run_settings'), get_settings())
 		run_settings = get_settings().get('run_settings', None)
-		print('her2')
+		# print('her2')
 		if run_settings is None: return None
-		print('herer2')
+		# print('herer2')
 		for option in run_settings:
 			if option['name'] == 'C++':
 				return option.get('lint_compile_cmd', None)
