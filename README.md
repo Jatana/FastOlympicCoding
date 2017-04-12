@@ -12,10 +12,10 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>cmd+k, cmd+right (OSX)</kbd> close/open right panel
 
 
-### RunOptions
- * to edit runoptions
-   * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type RunOptions
-   * or tools->FastOlympicCoding->RunOptions
+### RunSettings
+ * to edit settings
+   * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `Open Settings`
+   * or tools->FastOlympicCoding->settings
 
 
 ### FastClassComplete

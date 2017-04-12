@@ -9,7 +9,7 @@ import signal
 import sublime
 
 class ProcessManager(object):
-	def __init__(self, file, syntax, run_options=None):
+	def __init__(self, file, syntax, run_settings=None):
 
 		super(ProcessManager, self).__init__()
 		self.syntax = syntax
@@ -18,7 +18,7 @@ class ProcessManager(object):
 		self.test_counter = 0
 		self.write = self.insert
 		self.run = self.run_file
-		self.run_options = run_options
+		self.run_settings = run_settings
 
 	def get_path(self, lst):
 		rez = ''
@@ -41,7 +41,7 @@ class ProcessManager(object):
 		return False
 
 	def get_compile_cmd(self):
-		opt = self.run_options
+		opt = self.run_settings
 		file_ext = path.splitext(self.file)[1][1:]
 		for x in opt:
 			if file_ext in x['extensions']:
@@ -52,7 +52,7 @@ class ProcessManager(object):
 			return -1
 
 	def get_run_cmd(self):
-		opt = self.run_options
+		opt = self.run_settings
 		file_ext = path.splitext(self.file)[1][1:]
 		for x in opt:
 			if file_ext in x['extensions']:
@@ -100,7 +100,8 @@ class ProcessManager(object):
 			stderr=subprocess.STDOUT,
 			bufsize=0,
 			cwd=os.path.split(self.file)[0],
-			startupinfo=startupinfo
+			startupinfo=startupinfo,
+			preexec_fn=os.setsid
 		)
 	
 	def insert(self, s):
@@ -124,4 +125,7 @@ class ProcessManager(object):
 			self.insert(input_data)
 
 	def terminate(self):
-		self.process.kill()
+		if sublime.platform() == 'linux':
+			os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+		else:
+			self.process.kill()

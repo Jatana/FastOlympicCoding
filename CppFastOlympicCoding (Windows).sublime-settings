@@ -1,0 +1,25 @@
+{
+	"run_settings": [
+		{
+			"name": "C++",
+			"extensions": ["cpp"],
+			"compile_cmd": "g++ '{source_file}' -std=gnu++11",
+			"run_cmd": "{source_file_dir}/a.exe -debug",
+
+			"lint_compile_cmd": "g++ -std=gnu++11 '{source_file}' -I '{source_file_dir}'"
+		},
+
+		{
+			"name": "Python",
+			"extensions": ["py"],
+			"compile_cmd": null,
+			"run_cmd": "python '{source_file}'"
+		},
+	],
+
+	// "lint_error_region_scope": "variable.c++",
+	"lint_error_region_scope": "invalid.illegal",
+	"lint_warning_region_scope": "constant",
+
+	"algorithms_base": null
+}

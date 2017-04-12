@@ -5,7 +5,6 @@ currently works for c++
 '''
 
 
-
 import sublime, sublime_plugin
 import os
 from os.path import dirname
@@ -17,31 +16,27 @@ from os import path
 import re
 
 
-# plugin_name = 'sublime-fast-olympic-coding'
-# root_dir = path.join(sublime.packages_path(), plugin_name + '/')
-# sys.path += [root_dir]
-
-
-from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.Modules import basics
-from FastOlympicCoding.settings import root_dir, plugin_name, error_region_scope, warning_region_scope
-from FastOlympicCoding.settings import run_options
-
+from FastOlympicCoding.settings import root_dir, plugin_name
+from FastOlympicCoding.settings import get_settings
 
 class InteliSenseCommand(sublime_plugin.TextCommand):
 	"""
 		Make intelisense with file
 	"""
-	compile_cmd = None
 	run_status = ''
 	timer_run = False
 	REGEX_ERROR_PROP = '(:)(\d+)(:)(\d+)(:)( *)([a-zA-Z ]+)(:)( *)(.*)'
 
-	def __init__(self, view):
-		self.view = view
-		for option in run_options:
+	def get_compile_cmd(self):
+		print('proceed coninue', get_settings().get('run_settings'), get_settings())
+		run_settings = get_settings().get('run_settings', None)
+		print('her2')
+		if run_settings is None: return None
+		print('herer2')
+		for option in run_settings:
 			if option['name'] == 'C++':
-				self.compile_cmd = option.get('lint_compile_cmd', None)
+				return option.get('lint_compile_cmd', None)
 
 	def stop_sense(self):
 		self.run_status = 'do_disable'
@@ -56,7 +51,10 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 			sublime.status_message('sensa enabled')
 
 	def run_sense(self):
-		if self.compile_cmd is None: return
+		print('her')
+		compile_cmd = self.get_compile_cmd()
+		if compile_cmd is None: return
+		print('herer')
 		if self.timer_run:
 			self.run_status = 'do_waited_sense'
 			return 0
@@ -163,7 +161,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		f.write(s.encode())
 		f.close()
 		file_dir_path = path.split(v.file_name())[0]
-		cmd = self.compile_cmd.format(source_file=run_file_path, source_file_dir=file_dir_path)
+		cmd = self.get_compile_cmd().format(source_file=run_file_path, source_file_dir=file_dir_path)
 		# print(cmd)
 		process = Popen(cmd, \
 				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
@@ -207,8 +205,20 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 				error_regions.append(v.word(pt))
 		
 		if self.run_status == 'do_sense':
-			self.view.add_regions('warning_marks', warn_regions, warning_region_scope, 'dot', sublime.DRAW_NO_FILL)
-			self.view.add_regions('error_marks', error_regions, error_region_scope, 'dot', sublime.DRAW_NO_FILL)
+			self.view.add_regions(
+				'warning_marks',
+				warn_regions,
+				get_settings().get('lint_warning_region_scope', 'text.plain'),
+				'dot',
+				sublime.DRAW_NO_FILL
+			)
+			self.view.add_regions(
+				'error_marks',
+				error_regions,
+				get_settings().get('lint_error_region_scope', 'text.plain'),
+				'dot',
+				sublime.DRAW_NO_FILL
+			)
 
 
 get_syntax = basics.get_syntax

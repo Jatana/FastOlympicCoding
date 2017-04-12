@@ -11,7 +11,7 @@ from importlib import import_module
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
 from FastOlympicCoding.Modules import basics
-from FastOlympicCoding.settings import plugin_name, run_options
+from FastOlympicCoding.settings import plugin_name, get_settings
 from FastOlympicCoding.debuggers import debugger_info
 from FastOlympicCoding.Highlight.CppVarHighlight import highlight
 
@@ -451,7 +451,11 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		# if DebugModule is None:
 		if (not self.use_debugger) or (DebugModule is None):
 			print('called here')
-			process_manager = ProcessManager(run_file, build_sys, run_options=run_options)
+			process_manager = ProcessManager(
+				run_file,
+				build_sys,
+				run_settings=get_settings().get('run_settings')
+			)
 		else:
 			print(DebugModule)
 			process_manager = DebugModule(run_file)

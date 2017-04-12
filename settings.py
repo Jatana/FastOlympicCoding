@@ -1,23 +1,26 @@
 import sublime
 from os import path
-import os
-
 
 plugin_name = 'FastOlympicCoding'
-algorithms_base = '/Users/Uhuhu/Documents/Olympic Programing/Algorithms/C++/'
-
-# root_dir = path.join(sublime.packages_path(), plugin_name + '/')
 root_dir = path.split(__file__)[0]
-if path.split(root_dir)[1] != plugin_name:
-	os.rename(root_dir, path.join(path.split(root_dir)[0], plugin_name))
 
-# Error Highlighter Settings
-# please restart plugin after you changes
+settings_file = 'CppFastOlympicCoding ({os}).sublime-settings'.format(
+	os={ 'windows': 'Windows', 'linux': 'Linux', 'osx': 'OSX' }[sublime.platform().lower()]
+)
 
-error_region_scope = 'variable.c++'
-# error_region_scope = 'invalid.illegal'
-warning_region_scope = 'constant'
+settings = {}
 
-# Compile Options
-from FastOlympicCoding.run_options import run_options as _run_options
-run_options = _run_options
+def get_settings():
+	return settings
+
+def load_settings():
+	global settings
+	_settings = sublime.load_settings(settings_file)
+	if _settings is None:
+		sublime.set_timeout_async(load_settings, 200)
+	else:
+		settings = _settings
+		sublime.status_message('CppFastOlympicCoding: settings loaded')
+
+def plugin_loaded():
+	sublime.set_timeout(load_settings, 200)

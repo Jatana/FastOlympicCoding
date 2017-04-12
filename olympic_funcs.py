@@ -13,7 +13,7 @@ from os import path
 
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
-from FastOlympicCoding.settings import root_dir, plugin_name, algorithms_base
+from FastOlympicCoding.settings import root_dir, plugin_name, settings_file, get_settings
 from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
 clang = 'Packages/C++/C++.tmLanguage'
@@ -278,11 +278,16 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				func = v.substr(w_sel).lstrip().rstrip()
 				if len(func.lstrip().rstrip()) != 0:
 					try:
-						f = open(path.join(root_dir, algorithms_base, func + '.cpp'), encoding='utf-8')
+						f = open(path.join(root_dir, get_settings().get('algorithms_base'), func + '.cpp'), encoding='utf-8')
 						v.replace(edit, w_sel, f.read())
 						f.close()
 						try:
-							f_prop = open(path.join(root_dir, algorithms_base, func + '.cpp:properties'), 'r')
+							f_prop = open(path.join(
+								root_dir,
+								get_settings().get('algorithms_base'),
+								func + '.cpp:properties'
+							), 'r')
+
 							prop = sublime.decode_value(f_prop.read())
 							if prop.get('fold', None) is not None:
 								for x in prop['fold']:
@@ -309,12 +314,12 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
 		elif action == 'show_funcs':
 			wind = v.window()
-			funcs = listdir(path.join(root_dir, algorithms_base))
+			funcs = listdir(path.join(root_dir, get_settings().get('algorithms_base')))
 			to_view_funcs = [x[:-4] for x in funcs if x[-4:] == '.cpp']
 			def on_done(ind, funcs=funcs):
 				if ind == -1:
 					return 0
-				f = open(path.join(root_dir, algorithms_base, funcs[ind]))
+				f = open(path.join(root_dir, get_settings().get('algorithms_base'), funcs[ind]))
 				self.view.run_command('olympic_funcs', {'text': f.read(), 'action': 'insert'})
 				f.close()
 
@@ -354,8 +359,8 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					# < / >
 					w.set_layout(layout)
 			# w.run_command('toggle_side_bar')
-		elif action == 'open_runoptions':
-			self.view.window().open_file(path.join(root_dir, 'run_options.py'))
+		elif action == 'open_settings':
+			self.view.window().open_file(path.join(root_dir, settings_file))
 			
 
 

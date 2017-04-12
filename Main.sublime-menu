@@ -9,10 +9,10 @@
 			"children":
 			[
 				{
-					"caption": "Open RunOptions", 
+					"caption": "settings", 
 					"command": "olympic_funcs", 
 					"args": {
-						"action": "open_runoptions"
+						"action": "open_settings"
 					}
 				},
 			]

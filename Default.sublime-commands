@@ -1,9 +1,9 @@
 [
 	{
-		"caption": "FastOlympicCoding: RunOptions",
+		"caption": "FastOlympicCoding: Open Settings",
 		"command": "olympic_funcs",
 		"args": {
-			"action": "open_runoptions"
+			"action": "open_settings"
 		}
 	}
 ]
