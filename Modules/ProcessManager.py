@@ -65,16 +65,17 @@ class ProcessManager(object):
 	def compile(self, wait_close=True):
 		cmd = self.get_compile_cmd()
 		if cmd is not None:
+			print('command:', cmd)
 			# cmd = cmd(self.file)
 			# print(cmd)
 			PIPE = subprocess.PIPE
 			#cwd=os.path.split(self.file)[0], \
 			p = subprocess.Popen(cmd, \
 				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
-					cwd=os.path.split(self.file)[0])
+					cwd=os.path.split(self.file)[0], universal_newlines=True)
 			if wait_close:
 				p.wait()
-			return (p.returncode, p.stdout.read().decode())
+			return (p.returncode, p.stdout.read())
 
 	def run_file(self):
 		if self.is_run and False:
@@ -83,14 +84,17 @@ class ProcessManager(object):
 		
 		self.is_run = False
 		PIPE = subprocess.PIPE
-		
+		preexec_fn = None
+
 		if sublime.platform() == 'windows':
 			use_shell = False
 			startupinfo = subprocess.STARTUPINFO()
 			startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+			preexec_fn = None
 		else:
 			startupinfo = None
 			use_shell = True
+			preexec_fn = os.setsid
 
 		self.process = subprocess.Popen(
 			cmd,
@@ -101,12 +105,13 @@ class ProcessManager(object):
 			bufsize=0,
 			cwd=os.path.split(self.file)[0],
 			startupinfo=startupinfo,
-			preexec_fn=os.setsid
+			preexec_fn=preexec_fn,
+			universal_newlines=True
 		)
 	
 	def insert(self, s):
 		if self.process.poll() is None:
-			self.process.stdin.write(s.encode())
+			self.process.stdin.write(s)
 			self.process.stdin.flush()
 
 	def is_stopped(self):
@@ -114,9 +119,9 @@ class ProcessManager(object):
 
 	def read(self, bfsize=None):
 		if bfsize is None:
-			return self.process.stdout.read().decode()
+			return self.process.stdout.read()
 		else:
-			return self.process.stdout.read(bfsize).decode()
+			return self.process.stdout.read(bfsize)
 
 	def new_test(self, input_data=None):
 		self.test_counter += 1
