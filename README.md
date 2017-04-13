@@ -6,10 +6,10 @@ Fast Olympic Coding plugin for Sublime Text 3
 #### TestManager Keybindings
  * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+shift+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
- * <kbd>ctrl+c</kbd> kill process
+ * <kbd>ctrl+c (OSX)</kbd>  <kbd>ctrl+x (Linux + Win)</kbd> kill process
  * <kbd>ctrl+shift+b (OSX)</kbd> enable/disable debugger
  * <kbd>ctrl+d</kbd> delete test
- * <kbd>cmd+k, cmd+right (OSX)</kbd> close/open right panel
+ * <kbd>cmd+k, cmd+right (OSX)</kbd> <kbd>ctrl+k, ctrl+right (Linux + Win)</kbd> close/open right panel
 
 
 ### RunSettings
@@ -40,3 +40,6 @@ to complete press <kbd>tab</kbd>
  * currently debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> disable/enable debugger
  * hover cursor on variable to see its value
+
+
+Theme in screenshots - [Theme - Spacegray](https://packagecontrol.io/packages/Theme%20-%20Spacegray)
