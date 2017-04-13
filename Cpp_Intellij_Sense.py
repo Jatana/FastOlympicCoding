@@ -16,9 +16,8 @@ from os import path
 import re
 
 
-from FastOlympicCoding.Modules import basics
 from FastOlympicCoding.settings import root_dir, plugin_name
-from FastOlympicCoding.settings import get_settings
+from FastOlympicCoding.settings import get_settings, get_supported_exts, is_lang_view
 
 class InteliSenseCommand(sublime_plugin.TextCommand):
 	"""
@@ -220,9 +219,6 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 				sublime.DRAW_NO_FILL
 			)
 
-
-get_syntax = basics.get_syntax
-CLANG = basics.CLANG
 class SenseListener(sublime_plugin.EventListener):
 	def __init__(self):
 		super(SenseListener, self).__init__()
@@ -230,22 +226,23 @@ class SenseListener(sublime_plugin.EventListener):
 	# def on_post_save_async(self, view):
 	# 	if get_syntax(view) == 'cpp':
 	# 		view.run_command('inteli_sense', {'action': 'run_sense'})
+
 	def on_load(self, view):
-		if basics.is_cpp_file(view):
+		if is_lang_view(view, 'C++'):
 			view.run_command('inteli_sense', {'action': 'run_sense'})
 
 	def on_pre_close(self, view):
-		if basics.is_cpp_file(view):
+		if is_lang_view(view, 'C++'):
 			view.run_command('inteli_sense', {'action': 'stop_sense'})
 
 	def on_modified(self, view):
-		if basics.is_cpp_file(view):
+		if is_lang_view(view, 'C++'):
 			view.run_command('inteli_sense', {'action': 'sync_modified'})
 
 	def on_deactivated(self, view):
-		if basics.is_cpp_file(view):
+		if is_lang_view(view, 'C++'):
 			view.run_command('inteli_sense', {'action': 'stop_sense'})
 
 	def on_activated(self, view):
-		if basics.is_cpp_file(view):
+		if is_lang_view(view, 'C++'):
 			view.run_command('inteli_sense', {'action': 'run_sense'})

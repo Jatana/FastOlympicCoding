@@ -10,7 +10,6 @@ from os import path
 from importlib import import_module
 
 from FastOlympicCoding.Modules.ProcessManager import ProcessManager
-from FastOlympicCoding.Modules import basics
 from FastOlympicCoding.settings import plugin_name, get_settings
 from FastOlympicCoding.debuggers import debugger_info
 from FastOlympicCoding.Highlight.CppVarHighlight import highlight
@@ -612,7 +611,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				self.process_manager.terminate()
 			except:
 				print('Error When terminating process')
-			v.run_command('test_manager', {'action': 'erase_all'})
+			# v.run_command('test_manager', {'action': 'erase_all'})
 
 		elif action == 'new_test':
 			self.new_test(edit)
@@ -680,20 +679,14 @@ class ModifiedListener(sublime_plugin.EventListener):
 	# 		print('mi togli!')
 
 
-
-get_syntax = basics.get_syntax
-supports_langs = {basics.CLANG, basics.PYTHON, basics.PASCAL}
-OPD_LANG = basics.OPDebugger
 class CloseListener(sublime_plugin.EventListener):
 	"""Listen to Close"""
 	def __init__(self):
 		super(CloseListener, self).__init__()
 
 	def on_pre_close(self, view):
-		if get_syntax(view) == OPD_LANG:
+		if view.get_status('opd_info') == 'opdebugger-file':
 			view.run_command('test_manager', {'action': 'close'})
-			print("specclose")
-		# print('closed')
 
 
 class ViewTesterCommand(sublime_plugin.TextCommand):

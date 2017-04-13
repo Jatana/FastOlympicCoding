@@ -1,7 +1,6 @@
 import sublime, sublime_plugin
 
-from FastOlympicCoding.Modules import basics
-
+from FastOlympicCoding.settings import is_lang_view
 
 class NumberSplit():
 	def prefix_int(s):
@@ -38,12 +37,8 @@ class NumberSplit():
 				sublime.DRAW_STIPPLED_UNDERLINE | sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE)
 
 
-
-get_syntax = basics.get_syntax
-CLANG = basics.CLANG
-
 def is_supported_lang(view):
-	return basics.is_cpp_file(view) or basics.is_python_file(view)
+	return is_lang_view(view, 'C++') or is_lang_view(view, 'Python')
 
 class ModifyListener(sublime_plugin.EventListener):
 	def __init__(self):
@@ -52,13 +47,10 @@ class ModifyListener(sublime_plugin.EventListener):
 	# def on_post_save_async(self, view):
 	# 	if get_syntax(view) == 'cpp':
 	# 		view.run_command('inteli_sense', {'action': 'run_sense'})
+	
 	def on_load(self, view):
 		if is_supported_lang(view):
 			NumberSplit.highlight(view)
-
-	# def on_pre_close(self, view):
-		# if basics.is_cpp_file(view):
-			# view.run_command('inteli_sense', {'action': 'stop_sense'})
 
 	def on_modified(self, view):
 		if is_supported_lang(view):
@@ -68,6 +60,6 @@ class ModifyListener(sublime_plugin.EventListener):
 		# if is_supported_lang(view):
 			# view.run_command('inteli_sense', {'action': 'stop_sense'})
 
-	# def on_activated(self, view):
-		# if is_supported_lang(view):
-			# view.run_command('inteli_sense', {'action': 'run_sense'})
+	def on_activated(self, view):
+		if is_supported_lang(view):
+			NumberSplit.highlight(view)
