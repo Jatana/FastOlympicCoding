@@ -8,7 +8,7 @@ from os import path
 
 
 from .Modules.ProcessManager import ProcessManager
-from .settings import root_dir, plugin_name, settings_file, \
+from .settings import root_dir, base_name, settings_file, \
 			get_settings, is_run_supported_ext
 from .Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
@@ -211,7 +211,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		window.focus_view(v)
 		window.focus_view(dbg_view)
 		# opd_view.run_command('erase_view')
-		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
+		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % base_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('test_manager', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
