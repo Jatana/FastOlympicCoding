@@ -368,6 +368,9 @@ class GenListener(sublime_plugin.EventListener):
 				text = text.rstrip().lstrip()
 				if pregen_class(text) is None:
 					return ('insert_best_completion', {'exact': False, 'default': '\t'})
+			elif args['action'] == 'gen_def':
+				if get_settings().get('algorithms_base', None) is None:
+					return ('insert_best_completion', {'exact': False, 'default': '\t'})
 
 		if command_name == 'view_tester':
 			ext = path.splitext(view.file_name())[1][1:]
