@@ -46,7 +46,7 @@ def try_load_settings():
 		sublime.set_timeout_async(load_settings, 200)
 	else:
 		init_settings(_settings)
-		sublime.status_message('CppFastOlympicCoding: settings loaded')
+		sublime.status_message('FastOlympicCoding: settings loaded')
 
 def plugin_loaded():
 	sublime.set_timeout(try_load_settings, 200)

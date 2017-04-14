@@ -9,7 +9,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * [Debugger](#debugger)
  
 ### Installation
- * Install via [Package Control](https://packagecontrol.io)
+ * Install via [Package Control](https://packagecontrol.io/packages/CppFastOlympicCoding)
  * Install manually:<br>
        [download plugin](https://github.com/Jatana/FastOlympicCoding/archive/master.zip) into packages (`preferences — browse packages`)<br>
        `Warning! rename plugin folder to FastOlympicCoding`

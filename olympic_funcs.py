@@ -261,7 +261,10 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			pt = v.sel()[0].begin()
 			cursor = v.sel()[0]
 			if v.scope_name(pt).rstrip() != 'source.c++':
-				v.insert(edit, cursor.a, '\t')
+				v.run_command('insert_best_completion', {
+					'exact': False,
+					'default': '\t'
+				})
 				return None
 			
 			w_sel = v.word(cursor)

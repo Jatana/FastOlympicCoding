@@ -609,7 +609,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			try:
 				self.process_manager.terminate()
 			except:
-				print('Error When terminating process')
+				print('[FastOlympicCoding] process terminating error')
 			# v.run_command('test_manager', {'action': 'erase_all'})
 
 		elif action == 'new_test':
