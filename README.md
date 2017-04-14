@@ -1,5 +1,18 @@
 Fast Olympic Coding plugin for Sublime Text 3
 ================
+ * [Installation](#Installation)
+ * [TestManager](#TestManager)
+ * [RunSettings](#RunSettings)
+ * [FastClassComplete](#FastClassComplete)
+ * [FastFor](#FastFor)
+ * [CppLint](#CppLint)
+ * [Debugger](#Debugger)
+ 
+### Installation
+ * Install via [Package Control](https://packagecontrol.io)
+ * Install manually:<br>
+       [download plugin](https://github.com/Jatana/FastOlympicCoding/archive/master.zip) into packages (preferences — browse packages)<br>
+       `Warning! rename plugin folder to FastOlympicCoding`
 
 ### TestManager
  ![TestManager](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/TestManager.gif)
@@ -15,7 +28,7 @@ Fast Olympic Coding plugin for Sublime Text 3
 ### RunSettings
  * to edit settings
    * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `Open Settings`
-   * or tools->FastOlympicCoding->settings
+   * or tools — FastOlympicCoding — settings
 
 
 ### FastClassComplete
