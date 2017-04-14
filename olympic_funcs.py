@@ -218,7 +218,14 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		view = self.view
 		w_sel = view.word(view.sel()[0])
 		word = view.substr(w_sel).lstrip().rstrip()
-		view.replace(edit, w_sel, pregen_class(word) + ' ')
+		pregen = pregen_class(word)
+		if pregen:
+			view.replace(edit, w_sel, pregen + ' ')
+		else:
+			view.run_command('insert_best_completion', {
+				'exact': False,
+				'default': '\t'
+			})
 
 
 	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True):
@@ -261,17 +268,23 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			if not w_sel.empty():
 				func = v.substr(w_sel).lstrip().rstrip()
 				if len(func.lstrip().rstrip()) != 0:
-					try:
+					insert_snippet = get_settings().get('algorithms_base') and \
+						path.isfile(path.join(
+							root_dir,
+							get_settings().get('algorithms_base'),
+							func + '.cpp')
+						)
+					if insert_snippet:
 						f = open(path.join(root_dir, get_settings().get('algorithms_base'), func + '.cpp'), encoding='utf-8')
 						v.replace(edit, w_sel, f.read())
 						f.close()
-						try:
-							f_prop = open(path.join(
-								root_dir,
-								get_settings().get('algorithms_base'),
-								func + '.cpp:properties'
-							), 'r')
-
+						prop_path = path.join(
+							root_dir,
+							get_settings().get('algorithms_base'),
+							func + '.cpp:properties'
+						)
+						if path.isfile(prop_path):
+							f_prop = open(prop_path, 'r')
 							prop = sublime.decode_value(f_prop.read())
 							if prop.get('fold', None) is not None:
 								for x in prop['fold']:
@@ -280,9 +293,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 								v.show_at_center(w_sel.a + prop['move_cursor'])
 								v.sel().clear()
 								v.sel().add(Region(w_sel.a + prop['move_cursor'], w_sel.a + prop['move_cursor']))
-						except:
-							pass
-					except:
+					else:
 						# try do vvvii
 						self.insert_pregen_class(edit)
 
@@ -368,9 +379,9 @@ class GenListener(sublime_plugin.EventListener):
 				text = text.rstrip().lstrip()
 				if pregen_class(text) is None:
 					return ('insert_best_completion', {'exact': False, 'default': '\t'})
-			elif args['action'] == 'gen_def':
-				if get_settings().get('algorithms_base', None) is None:
-					return ('insert_best_completion', {'exact': False, 'default': '\t'})
+			# elif args['action'] == 'gen_def':
+				# if get_settings().get('algorithms_base', None) is None:
+					# return ('insert_best_completion', {'exact': False, 'default': '\t'})
 
 		if command_name == 'view_tester':
 			ext = path.splitext(view.file_name())[1][1:]
