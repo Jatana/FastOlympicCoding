@@ -45,7 +45,7 @@ to complete press <kbd>tab</kbd>
 ### CppLint
  ![CppLint](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/CppLint.png)
  
- * to edit lint open RunOptions
+ * to edit lint open Run Settings
  
 ### Debugger
  ![Debugger](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/Debugger.png)
