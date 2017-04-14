@@ -1,12 +1,12 @@
 Fast Olympic Coding plugin for Sublime Text 3
 ================
- * [Installation](#Installation)
- * [TestManager](#TestManager)
- * [RunSettings](#RunSettings)
- * [FastClassComplete](#FastClassComplete)
- * [FastFor](#FastFor)
- * [CppLint](#CppLint)
- * [Debugger](#Debugger)
+ * [Installation](#installation)
+ * [TestManager](#testmanager)
+ * [RunSettings](#runsettings)
+ * [FastClassComplete](#fastclasscomplete)
+ * [FastFor](#fastfor)
+ * [CppLint](#cpplint)
+ * [Debugger](#debugger)
  
 ### Installation
  * Install via [Package Control](https://packagecontrol.io)
