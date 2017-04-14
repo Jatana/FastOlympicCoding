@@ -9,10 +9,10 @@ from sublime import Region
 from os import path
 from importlib import import_module
 
-from FastOlympicCoding.Modules.ProcessManager import ProcessManager
-from FastOlympicCoding.settings import plugin_name, get_settings
-from FastOlympicCoding.debuggers import debugger_info
-from FastOlympicCoding.Highlight.CppVarHighlight import highlight
+from .Modules.ProcessManager import ProcessManager
+from .settings import base_name, get_settings
+from .debuggers import debugger_info
+from .Highlight.CppVarHighlight import highlight
 
 
 class TestManagerCommand(sublime_plugin.TextCommand):
@@ -749,7 +749,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		window.focus_view(v)
 		window.focus_view(dbg_view)
 		# opd_view.run_command('erase_view')
-		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % plugin_name)
+		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % base_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('test_manager', {
 				'action': 'make_opd', 
@@ -843,20 +843,11 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 					# hide opd panel
 					self.ruler_opd_panel = min(layout['cols'][1], 0.93)
 					layout['cols'][1] = 1
-					# <This Region May be uncomment>
-					#for x in w.views_in_group(1):
-					#	x.run_command('test_manager', {'action': 'hide_text'})
-					# < / >
-					# slow_hide()
 					w.set_layout(layout)
 				else:
 					# show opd panel
 					layout['cols'][1] = self.ruler_opd_panel
 					need_x = self.ruler_opd_panel
-					# < This Region May be uncomment >
-					#for x in w.views_in_group(1):
-					#	x.run_command('test_manager', {'action': 'show_text'})
-					# < / >
 					w.set_layout(layout)
 			# w.run_command('toggle_side_bar')
 			

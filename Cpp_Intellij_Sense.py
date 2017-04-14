@@ -16,8 +16,8 @@ from os import path
 import re
 
 
-from FastOlympicCoding.settings import root_dir, plugin_name
-from FastOlympicCoding.settings import get_settings, get_supported_exts, is_lang_view
+from .settings import root_dir, plugin_name
+from .settings import get_settings, get_supported_exts, is_lang_view
 
 class InteliSenseCommand(sublime_plugin.TextCommand):
 	"""

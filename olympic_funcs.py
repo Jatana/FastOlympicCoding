@@ -7,15 +7,10 @@ from sublime import Region
 from os import path
 
 
-# plugin_name = 'sublime-fast-olympic-coding'
-# root_dir = path.join(sublime.packages_path(), plugin_name + '/')
-# sys.path += [root_dir]
-
-
-from FastOlympicCoding.Modules.ProcessManager import ProcessManager
-from FastOlympicCoding.settings import root_dir, plugin_name, settings_file, \
+from .Modules.ProcessManager import ProcessManager
+from .settings import root_dir, plugin_name, settings_file, \
 			get_settings, is_run_supported_ext
-from FastOlympicCoding.Modules.ClassPregen.ClassPregen import pregen as pregen_class
+from .Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
 clang = 'Packages/C++/C++.tmLanguage'
 

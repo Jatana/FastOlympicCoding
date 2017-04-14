@@ -1,10 +1,11 @@
 import sublime
 from os import path
 
-plugin_name = 'FastOlympicCoding'
-root_dir = path.split(__file__)[0]
 
-settings_file = 'CppFastOlympicCoding ({os}).sublime-settings'.format(
+root_dir = path.split(__file__)[0]
+base_name = path.split(root_dir)[1]
+
+settings_file = 'FastOlympicCoding ({os}).sublime-settings'.format(
 	os={ 'windows': 'Windows', 'linux': 'Linux', 'osx': 'OSX' }[sublime.platform().lower()]
 )
 
