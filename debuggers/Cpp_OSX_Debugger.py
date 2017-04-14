@@ -77,7 +77,7 @@ class LLDBDebugger(Debugger):
 					self.status = 'CRASHED'
 					self.proc_state = 'CRASHED'
 					self.rtcode = 228
-					print('FINALLY CRASHED')
+					# print('FINALLY CRASHED')
 				else:
 					self.rtcode = buff[p_ind:].split()[6]
 					self.status = 'STOPPED'
@@ -92,7 +92,7 @@ class LLDBDebugger(Debugger):
 					# print('REASON crashline NOT FOUND')
 					return 'NEED_MORE'
 				self.crash_line = int(self.crash_line.group(2))
-				print(self.crash_line)
+				# print(self.crash_line)
 				self.rtcode = self.REGEX_RT_CODE.search(self.data_buff)
 				if self.rtcode is None:
 					self.rtcode = '-'
@@ -116,7 +116,7 @@ class LLDBDebugger(Debugger):
 			self._file_crash = path.split(file)[1]
 			self.regex_crash_line = re.compile( \
 				self.STR_REGEX_CRASH_LINE.format(name=self.encode_save(self._file_crash)))
-			print(self.STR_REGEX_CRASH_LINE.format(name=self.encode_save(self._file_crash)))
+			# print(self.STR_REGEX_CRASH_LINE.format(name=self.encode_save(self._file_crash)))
 
 
 	supported_exts = ['cpp']
@@ -136,7 +136,7 @@ class LLDBDebugger(Debugger):
 	def compile(self):
 		cmd = 'g++ -std=gnu++11 -g -o main "%s"' % self.file
 		PIPE = subprocess.PIPE
-		print(dir(self))
+		# print(dir(self))
 		if self.on_status_change is not None:
 			self.on_status_change('COMPILING')
 		#cwd=os.path.split(self.file)[0], \
@@ -181,7 +181,7 @@ class LLDBDebugger(Debugger):
 		# 	return None
 		analyzer = self.analyzer
 		proc = self.process
-		print(s, end='')
+		# print(s, end='')
 		self.analyzer.add_out(s)
 		if s == '\n':
 			self.analyzer.analyze()
@@ -200,8 +200,8 @@ class LLDBDebugger(Debugger):
 			proc.stdin.write('exit\n'.encode('utf-8'))
 			proc.stdin.flush()
 			proc.wait()
-			print(proc.stdout.read().decode())
-			print(analyzer.crash_line)
+			# print(proc.stdout.read().decode())
+			# print(analyzer.crash_line)
 			file_out = open(path.join(path.dirname(self.file), 'output.txt'))
 			output = file_out.read(self.READ_LIMIT)
 			# print('Hello i am here the out size ->', len(output))
@@ -213,7 +213,7 @@ class LLDBDebugger(Debugger):
 
 			proc.terminate()
 			proc.kill()
-			print(self.file)
+			# print(self.file)
 			output = open(path.join(path.dirname(self.file), 'output.txt')).read(self.READ_LIMIT)
 			if len(output) > self.READ_LIMIT:
 				output = "<to big>" + output[-self.READ_LIMIT:]
@@ -243,7 +243,7 @@ class LLDBDebugger(Debugger):
 			on_out(s, is_err=False)
 			on_stop(rtcode, crash_line=None)
 		'''
-		print('!!!!! CALLS SET')
+		# print('!!!!! CALLS SET')
 		self.on_out = on_out
 		self.on_stop = on_stop
 		self.on_status_change = on_status_change
@@ -255,15 +255,8 @@ class LLDBDebugger(Debugger):
 			self.process.stdin.flush()
 		else:
 			self.in_buff += s
-			print(self.in_buff)
+			# print(self.in_buff)
 
 	def terminate(self):
 		proc = self.process
 		proc.send_signal(2)
-
-
-if __name__ == '__main__':
-	debugger = LLDBDebugger('/Users/Uhuhu/tmp/tmp2/super.cpp')
-	print(debugger.compile())
-	print(debugger.run(' -debug'))
-	# print(debugger.analyzer.status)

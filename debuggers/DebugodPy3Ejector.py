@@ -3,12 +3,11 @@ from os import path
 import sublime
 
 BASE_DIR = path.dirname(path.abspath(__file__))
-print(BASE_DIR)
 from .debugger_info import Debugger
 
 
 def decode(data):
-	print('data:(', data)
+	# print('data:(', data)
 	s = ''
 	# print("data:", data)
 	if not data:
@@ -36,7 +35,7 @@ class PyLLDBDebugger(Debugger):
 		self.proc_dbg = subprocess.Popen('python debugod.py "{name}"'.format(name=file), \
 			shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, \
 				cwd=BASE_DIR)
-		print(dir(self.proc_dbg.stdout))
+		# print(dir(self.proc_dbg.stdout))
 
 	def is_runnable():
 		return (sublime.platform() == 'osx') and path.exists('/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Resources/Python/lldb/')
@@ -79,7 +78,7 @@ class PyLLDBDebugger(Debugger):
 		self.cb_on_status_change = on_status_change
 
 	def is_running(self):
-		print(self.interact('_.state'))
+		# print(self.interact('_.state'))
 		return self.interact('_.state') == 'RUNNING'
 
 	def is_exited(self):
@@ -123,12 +122,12 @@ class PyLLDBDebugger(Debugger):
 		self.__status_change_listener()
 
 	def write(self, s):
-		print('_.put_stdin(decode({bytes}.__str__()))'.format(bytes=encode(s)))
+		# print('_.put_stdin(decode({bytes}.__str__()))'.format(bytes=encode(s)))
 		return self.interact('_.put_stdin(decode({bytes}.__str__()))'.format(bytes=encode(s)))
 
 	def read(self):
 		out = self.interact('_.get_output()')
-		print(out)
+		# print(out)
 		return out
 
 	def terminate(self):

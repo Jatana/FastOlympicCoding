@@ -28,7 +28,7 @@ def safety(s):
 
 def highligh_regex(code, regex):
 	code = regex.split(code)
-	print(code)
+	# print(code)
 
 
 def highlight(code):
@@ -44,7 +44,7 @@ def highlight(code):
 	nums = NUMBER.findall(code)
 	spl3 = []
 
-	print(splited)
+	# print(splited)
 	for spl in splited:
 		spl2 = DEF_TYPE.split(spl)
 		nums2 = DEF_TYPE.findall(spl)
@@ -59,7 +59,7 @@ def highlight(code):
 	splited = spl3
 
 	nums = [('<div class="number">%s</div>' % num) for num in nums]
-	print(splited)
+	# print(splited)
 	for i in range(len(splited)):
 		s = (splited[i])
 		if i < len(nums):
@@ -84,9 +84,3 @@ def get_regions(code, pattern):
 		code = code[end:]
 		match = pattern.search(code)
 	return regs
-
-
-
-# highlight('''<> int x = 123;''')
-
-

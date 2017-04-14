@@ -265,7 +265,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			if not self.tester.proc_run:
 				return None
 			to_shove = v.substr(Region(self.delta_input, v.size()))
-			print('shovel -> ', to_shove)
+			# print('shovel -> ', to_shove)
 			v.insert(edit, v.size(), '\n')
 
 		else:
@@ -349,15 +349,14 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		if crash_line is not None:
 			for x in v.window().views():
 				if x.id() == self.code_view_id:
-					#print('setbryak ->', crash_line)
 					x.run_command('view_tester', {'action': 'show_crash_line', 'crash_line': crash_line})
 
 	def redirect_var_value(self, var_name, pos=None):
 		view = self.view
-		print('VarName:', var_name, pos)
+		# print('VarName:', var_name, pos)
 		if self.tester.process_manager.has_var_view_api():
 			value = self.tester.process_manager.get_var_value(var_name)
-			print(value)
+			# print(value)
 			for x in view.window().views():
 				if x.id() == self.code_view_id:
 					x.run_command('view_tester', {
@@ -449,18 +448,18 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		DebugModule = debugger_info.get_best_debug_module(file_ext) #self.have_debugger(file_ext)
 		# if DebugModule is None:
 		if (not self.use_debugger) or (DebugModule is None):
-			print('called here')
+			# print('called here')
 			process_manager = ProcessManager(
 				run_file,
 				build_sys,
 				run_settings=get_settings().get('run_settings')
 			)
 		else:
-			print(DebugModule)
+			# print(DebugModule)
 			process_manager = DebugModule(run_file)
 		sublime.set_timeout_async(lambda :self.change_process_status('COMPILING'))
 		cmp_data = process_manager.compile()
-		print('compile: data', type(cmp_data))
+		# print('compile: data', type(cmp_data))
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
 				self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
@@ -653,30 +652,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.sync_read_only()
 
 	def isEnabled(view, args):
-		print(view)
+		pass
 
 
 class ModifiedListener(sublime_plugin.EventListener):
 	def on_selection_modified(self, view):
 		if view.get_status('opd_info') == 'opdebugger-file':
-			if len(view.sel()) > 0:
-				if view.substr(view.sel()[0]) == 'Test':
-					view.sel().clear()
-					def show_test_menu():
-						view.show_popup_menu(['Delete'], lambda x: print(x))
-
-					sublime.set_timeout(show_test_menu, 100)
-
-			view.run_command('test_manager', {'action': 'sync_read_only'})
+			view.run_command('test_manager', { 'action': 'sync_read_only' })
 
 	def on_hover(self, view, point, hover_zone):
 		if hover_zone == sublime.HOVER_TEXT:
-			view.run_command('view_tester', {'action': 'get_var_value', 'pos': point})
-			
-
-	# def on_window_command(self, window, cmd, args):
-	# 	if cmd == 'toggle_side_bar':
-	# 		print('mi togli!')
+			view.run_command('view_tester', { 'action': 'get_var_value', 'pos': point })
 
 
 class CloseListener(sublime_plugin.EventListener):
@@ -765,7 +751,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		w = self.view.window()
 		for v in w.views():
 			# if v.get_status('opd_info') == 'opdebugger-file':
-			print(v.name()[::-1][:len('-run')][::-1])
+			# print(v.name()[::-1][:len('-run')][::-1])
 			if v.name()[::-1][:len('-run')][::-1] == '-run':
 				v.close()
 
@@ -786,7 +772,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			})
 
 	def show_var_value(self, value, pos=None):
-		print(value)
+		# print(value)
 		def nop(): pass
 		self.view.show_popup(highlight(value), sublime.HIDE_ON_MOUSE_MOVE_AWAY, pos)
 
@@ -828,15 +814,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			w = v.window()
 			layout = w.get_layout()
 
-			def slow_hide(w=w, layout=layout):
-				if layout['cols'][1] < 1:
-					layout['cols'][1] += 0.001
-					w.set_layout(layout)
-					sublime.set_timeout(slow_hide, 1)
-				else:
-					layout['cols'][1] = 1
-					w.set_layout(layout)
-					print('stopped')
 
 			if len(layout['cols']) == 3:
 				if layout['cols'][1] != 1:
@@ -862,13 +839,13 @@ class LayoutListener(sublime_plugin.EventListener):
 		try:
 			w = view.window()
 			prop = w.get_view_index(view)
-			print(view.name())
+			# print(view.name())
 			if view.name()[-4:] == '-run':
 				w.set_view_index(view, 1, 0)
-				print('moved to second group')
+				# print('moved to second group')
 			elif prop[0] == 1:
 				active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
-				print('moved to first group')
+				# print('moved to first group')
 				w.set_view_index(view, 0, active_view_index + 1)
 		except:
 			pass

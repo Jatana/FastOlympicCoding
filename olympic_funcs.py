@@ -12,14 +12,6 @@ from .settings import root_dir, base_name, settings_file, \
 			get_settings, is_run_supported_ext
 from .Modules.ClassPregen.ClassPregen import pregen as pregen_class
 
-clang = 'Packages/C++/C++.tmLanguage'
-
-def get_syntax(view):
-	print(view.settings().get('syntax'))
-	if view.settings().get('syntax') == clang:
-		return 'cpp'
-	return None
-
 
 class PreGenParser(object):
 	"""docstring for PreGenParser"""
@@ -39,7 +31,6 @@ class PreGenParser(object):
 		return ord('0') <= ord(c) <= ord('9')
 
 	def left_bracket(self, ind, full_result=False):
-		print(ind)
 		s = self.s
 		bracket = s[ind]
 		if bracket in {')', '}', ']'}:
@@ -169,7 +160,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		# 	self.DebugArea.on_done, self.DebugArea.on_change, self.DebugArea.on_cancel)
 		# v.window().show_quick_panel(["5"], \
 		# 	1, 1, 1, 1)
-		#print('windowshe4ka generat')
 		window = v.window()
 		# opd_view = window.create_output_panel("opd_view")
 		# print(opd_view.settings().get('syntax'))
@@ -183,7 +173,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				need_new = False
 		else:
 			need_new = True
-		print('Hello', need_new)
 		if not need_new:
 			dbg_view = self.tied_dbg
 			create_new = False
@@ -221,7 +210,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		w = self.view.window()
 		for v in w.views():
 			# if v.get_status('opd_info') == 'opdebugger-file':
-			print(v.name()[::-1][:len('-run')][::-1])
+			# print(v.name()[::-1][:len('-run')][::-1])
 			if v.name()[::-1][:len('-run')][::-1] == '-run':
 				v.close()
 
@@ -237,7 +226,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
 		if action == 'can_pregen_classes':
-			# print('')
 			return False
 		if action == 'insert':
 			v.insert(edit, v.sel()[0].begin(), text)
@@ -324,35 +312,16 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			w = v.window()
 			layout = w.get_layout()
 
-			def slow_hide(w=w, layout=layout):
-				if layout['cols'][1] < 1:
-					layout['cols'][1] += 0.001
-					w.set_layout(layout)
-					sublime.set_timeout(slow_hide, 1)
-				else:
-					layout['cols'][1] = 1
-					w.set_layout(layout)
-					print('stopped')
-
 			if len(layout['cols']) == 3:
 				if layout['cols'][1] != 1:
 					# hide opd panel
 					self.ruler_opd_panel = min(layout['cols'][1], 0.93)
 					layout['cols'][1] = 1
-					# <This Region May be uncomment>
-					#for x in w.views_in_group(1):
-					#	x.run_command('test_manager', {'action': 'hide_text'})
-					# < / >
-					# slow_hide()
 					w.set_layout(layout)
 				else:
 					# show opd panel
 					layout['cols'][1] = self.ruler_opd_panel
 					need_x = self.ruler_opd_panel
-					# < This Region May be uncomment >
-					#for x in w.views_in_group(1):
-					#	x.run_command('test_manager', {'action': 'show_text'})
-					# < / >
 					w.set_layout(layout)
 			# w.run_command('toggle_side_bar')
 		elif action == 'open_settings':
@@ -391,17 +360,14 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 class GenListener(sublime_plugin.EventListener):
 	"""docstring for GenListener"""
 	def on_text_command(self, view, command_name, args):
-		print(command_name, args)
 		if command_name == 'olympic_funcs':
 			if args['action'] == 'insert_pregen_class':
 				sel = view.sel()[0]
 				text_sel = view.line(sel)
 				text = view.substr(text_sel)
 				text = text.rstrip().lstrip()
-				# print('kek', pregen_class(text))
 				if pregen_class(text) is None:
 					return ('insert_best_completion', {'exact': False, 'default': '\t'})
-				# print(pregen_class(text))
 
 		if command_name == 'view_tester':
 			ext = path.splitext(view.file_name())[1][1:]

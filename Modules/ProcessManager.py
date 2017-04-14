@@ -65,7 +65,7 @@ class ProcessManager(object):
 	def compile(self, wait_close=True):
 		cmd = self.get_compile_cmd()
 		if cmd is not None:
-			print('command:', cmd)
+			# print('command:', cmd)
 			# cmd = cmd(self.file)
 			# print(cmd)
 			PIPE = subprocess.PIPE

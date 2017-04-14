@@ -28,11 +28,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	REGEX_ERROR_PROP = '(:)(\d+)(:)(\d+)(:)( *)([a-zA-Z ]+)(:)( *)(.*)'
 
 	def get_compile_cmd(self):
-		# print('proceed coninue', get_settings().get('run_settings'), get_settings())
 		run_settings = get_settings().get('run_settings', None)
-		# print('her2')
 		if run_settings is None: return None
-		# print('herer2')
 		for option in run_settings:
 			if option['name'] == 'C++':
 				return option.get('lint_compile_cmd', None)
@@ -50,10 +47,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 			sublime.status_message('sensa enabled')
 
 	def run_sense(self):
-		print('her')
 		compile_cmd = self.get_compile_cmd()
 		if compile_cmd is None: return
-		print('herer')
 		if self.timer_run:
 			self.run_status = 'do_waited_sense'
 			return 0
@@ -130,7 +125,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 				if lst[i][:len(run_file_path)] == run_file_path:
 					s_err = lst[i][len(run_file_path):]
 					sep_ind = s_err.find(':')
-					print(s_err)
+					# print(s_err)
 					# args_err = s_err.split(':')
 					# args_err = s_err[:sep_ind].split(':') + [s_err[sep_ind + 1:]]
 					args_err = re.match(self.REGEX_ERROR_PROP, s_err).group(2, 4, 7, 10)
@@ -161,13 +156,11 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		f.close()
 		file_dir_path = path.split(v.file_name())[0]
 		cmd = self.get_compile_cmd().format(source_file=run_file_path, source_file_dir=file_dir_path)
-		# print(cmd)
 		process = Popen(cmd, \
 				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
 					cwd=os.path.split(run_file_path)[0])
 		process.wait()
 		s = process.stdout.read().decode()
-		### print(s)
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
 		try:
