@@ -17,12 +17,12 @@ Fast Olympic Coding plugin for Sublime Text 3
 ### TestManager
  ![TestManager](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/TestManager.gif)
 #### TestManager Keybindings
- * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+shift+b (Linux + Win)</kbd> compile and run
+ * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+alt+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
  * <kbd>ctrl+c (OSX)</kbd>  <kbd>ctrl+x (Linux + Win)</kbd> kill process
  * <kbd>ctrl+shift+b (OSX)</kbd> enable/disable debugger
  * <kbd>ctrl+d</kbd> delete test
- * <kbd>cmd+k, cmd+right (OSX)</kbd> <kbd>ctrl+k, ctrl+right (Linux + Win)</kbd> close/open right panel
+ * <kbd>cmd+k, cmd+p (OSX)</kbd> <kbd>ctrl+k, ctrl+p (Linux + Win)</kbd> close/open right panel
 
 
 ### RunSettings

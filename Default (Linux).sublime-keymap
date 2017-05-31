@@ -246,7 +246,7 @@
 
 	// Run
 	{
-		"keys": ["ctrl+shift+b"],
+		"keys": ["ctrl+alt+b"],
 		"command": "view_tester",
 		"args": {
 			"action": "make_opd"
@@ -287,7 +287,7 @@
 	},
 
 	{
-		"keys": ["ctrl+k", "ctrl+right"],
+		"keys": ["ctrl+k", "ctrl+p"],
 		"command": "view_tester",
 		"args": {
 			"action": "sync_opdebugs"

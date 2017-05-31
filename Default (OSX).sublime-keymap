@@ -296,7 +296,7 @@
 	},
 
 	{
-		"keys": ["super+k", "super+right"],
+		"keys": ["super+k", "super+p"],
 		"command": "view_tester",
 		"args": {
 			"action": "sync_opdebugs"
