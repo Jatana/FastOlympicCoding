@@ -15,7 +15,7 @@ Fast Olympic Coding plugin for Sublime Text 3
        `Warning! rename plugin folder to FastOlympicCoding`
 
 ### TestManager
- ![TestManager](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/TestManager.gif)
+ ![TestManager](ScreenShots/TestManager.gif)
 #### TestManager Keybindings
  * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+alt+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
@@ -32,23 +32,23 @@ Fast Olympic Coding plugin for Sublime Text 3
 
 
 ### FastClassComplete
- ![FastClassComplete](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/FastPregen.gif)
+ ![FastClassComplete](ScreenShots/FastPregen.gif)
 
 to complete press <kbd>shift+tab</kbd>
  
  
 ### FastFor
- ![FastFor](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/FastFor.gif)
+ ![FastFor](ScreenShots/FastFor.gif)
 
 to complete press <kbd>tab</kbd>
 
 ### CppLint
- ![CppLint](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/CppLint.png)
+ ![CppLint](ScreenShots/CppLint.png)
  
  * to edit lint open Run Settings
  
 ### Debugger
- ![Debugger](https://github.com/Jatana/FastOlympicCoding/blob/master/ScreenShots/Debugger.png)
+ ![Debugger](ScreenShots/Debugger.png)
 
  * currently debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> disable/enable debugger
