@@ -36,6 +36,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.use_debugger = False
 		self.delta_input = 0
 		self.tester = None
+		self.session = None
 
 
 	class Test(object):
@@ -420,14 +421,34 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.view.set_status('process_status', status)
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
-		sync_out=False, code_view_id=None, use_debugger=True):
+		sync_out=False, code_view_id=None, use_debugger=True, load_session=False):
 		self.use_debugger = use_debugger
 		v = self.view
 		v.set_scratch(True)
 		v.set_status('opd_info', 'opdebugger-file')
 		v.run_command('test_manager', {'action': 'erase_all'})
-		self.dbg_file = run_file
-		self.code_view_id = code_view_id
+		if load_session:
+			if self.session is None:
+				v.run_command('test_manager', {'action': 'insert_opd_out', 'text': 'Can\'t restore session'})
+			else:
+				run_file = self.session['run_file']
+				build_sys = self.session['build_sys']
+				clr_tests = self.session['clr_tests']
+				sync_out = self.session['sync_out']
+				code_view_id = self.session['code_view_id']
+				use_debugger = self.session['use_debugger']
+		else:
+			self.session = {
+				'run_file': run_file,
+				'build_sys': build_sys,
+				'clr_tests': clr_tests,
+				'sync_out': sync_out,
+				'code_view_id': code_view_id,
+				'use_debugger': use_debugger
+			}
+			self.dbg_file = run_file
+			self.code_view_id = code_view_id
+
 		if not v.settings().get('word_wrap'):
 			v.run_command('toggle_setting', {"setting": "word_wrap"})
 		# if SysManager.is_sidebar_open(v.window()):
@@ -575,7 +596,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False, code_view_id=None, var_name=None, use_debugger=True, pos=None):
+			sync_out=False, code_view_id=None, var_name=None, use_debugger=True, pos=None, load_session=False):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -597,10 +618,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.insert(edit, self.view.size(), text)
 
 		elif action == 'make_opd':
-			def _cb():
-				self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
-					sync_out=sync_out, code_view_id=code_view_id, use_debugger=use_debugger)
-			sublime.set_timeout_async(_cb)
+			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
+				sync_out=sync_out, code_view_id=code_view_id, use_debugger=use_debugger, load_session=load_session)
 
 		elif action == 'redirect_var_value':
 			self.redirect_var_value(var_name, pos=pos)

@@ -251,6 +251,31 @@
 		"args": {
 			"action": "make_opd"
 		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "not_equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["ctrl+b"],
+		"command": "test_manager",
+		"args": {
+			"action": "make_opd",
+			"load_session": true
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
 	},
 
 	// toggle using debugger
