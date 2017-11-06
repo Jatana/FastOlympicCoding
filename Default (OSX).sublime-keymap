@@ -35,6 +35,14 @@
 		]
 	},
 
+	{
+		"keys": ["super+e"],
+		"command": "olympic_funcs",
+		"args": {
+			"action": "test"
+		}
+	},
+
 	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
@@ -58,7 +66,7 @@
 				"key": "preceding_text",
 				"operator": "regex_contains",
 				// "operand": "[[:word:]]+",
-				"operand": "([\t ]+)(f )(.+)",
+				"operand": "([\t ]+)(f|fr )(.+)",
 				"match_all": true
 			},
 			{

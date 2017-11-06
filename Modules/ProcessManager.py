@@ -19,6 +19,7 @@ class ProcessManager(object):
 		self.write = self.insert
 		self.run = self.run_file
 		self.run_settings = run_settings
+		self.file_name = path.splitext(path.split(file)[1])[0]
 
 	def get_path(self, lst):
 		rez = ''
@@ -34,7 +35,8 @@ class ProcessManager(object):
 	def format_command(self, cmd):
 		return cmd.format(
 			source_file=self.file,
-			source_file_dir=path.dirname(self.file)
+			source_file_dir=path.dirname(self.file),
+			file_name=self.file_name
 		)
 
 	def has_var_view_api(self):

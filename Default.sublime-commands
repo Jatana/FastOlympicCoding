@@ -5,5 +5,19 @@
 		"args": {
 			"action": "open_settings"
 		}
+	},
+	{
+		"caption": "FastOlympicCoding: Make Stress",
+		"command": "stress_manager",
+		"args": {
+			"action": "make_stress"
+		}
+	},
+	{
+		"caption": "FastOlympicCoding: Stop Stress",
+		"command": "stress_manager",
+		"args": {
+			"action": "stop_stress"
+		}
 	}
 ]

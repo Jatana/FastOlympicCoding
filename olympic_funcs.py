@@ -123,15 +123,24 @@ class PreProc(object):
 			return get_for_str(args[0], args[1], args[2], ' += ' + args[3]), right_prototype
 
 	def fr(*args, indent=''):
-		left_prototype = 'fr (%s, %s) {\n' + indent + '\t'
-		right_prototype = '\n' +indent + '}'
+		def get_for_str(iter, begin, end, k, indent=indent):
+			return 'for (int {0} = {1}; {0} > {2}; {0}{3}) '.format(iter, begin, end, k) + \
+				'{\n' + indent + '\t'
+		left_prototype = 'for (int {0} = {1}; {0} > {2}; {0}{3}) {\n' + indent + '\t'
+		right_prototype = '\n' + indent + '}'
 		if len(args) == 0:
-			return left_prototype % ('i', 'n'), right_prototype
+			return get_for_str('i', '-1', 'n', '--'), right_prototype
 		if len(args) == 1:
-			return left_prototype % ('i', args[0]), right_prototype
+			return get_for_str('i', '-1', args[0], '--'), right_prototype
 		if len(args) == 2:
-			return left_prototype % (args[0], args[1]), right_prototype
+			return get_for_str(args[0], args[1], '-1', '--'), right_prototype
 
+		left_prototype = 'fk (%s, %s, %s, %s) {\n' + indent + '\t'
+		right_prototype = '\n' + indent + '}'
+		if len(args) == 3:
+			return get_for_str(args[0], args[1], args[2], '--'), right_prototype
+		if len(args) == 4:
+			return get_for_str(args[0], args[1], args[2], ' -= ' + args[3]), right_prototype
 
 
 
@@ -340,7 +349,10 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			# w.run_command('toggle_side_bar')
 		elif action == 'open_settings':
 			self.view.window().open_file(path.join(root_dir, settings_file))
-			
+		
+		elif action == 'test':
+			v.erase_phantoms('test')
+			v.add_phantom('test', v.sel()[0], '<li> Присвоить <img align="middle" src="http://codeforces.com/predownloaded/7b/ce/7bce6fbca9ffb50d39e17dd4b681613792dfd56c.png" style="max-width: 100.0%;max-height: 100.0%;">; </li>', sublime.LAYOUT_BLOCK)
 
 
 # class LayoutListener(sublime_plugin.EventListener):

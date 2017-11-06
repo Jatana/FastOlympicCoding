@@ -29,7 +29,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
 
 	# Test
-	#REGION_POS_PROP = REGION_UNKNOWN_PROP
+	# REGION_POS_PROP = REGION_UNKNOWN_PROP
 
 	def __init__(self, view):
 		self.view = view
@@ -421,7 +421,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.view.set_status('process_status', status)
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
-		sync_out=False, code_view_id=None, use_debugger=True, load_session=False):
+		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
 		self.use_debugger = use_debugger
 		v = self.view
 		v.set_scratch(True)
@@ -596,7 +596,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False, code_view_id=None, var_name=None, use_debugger=True, pos=None, load_session=False):
+			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, load_session=False):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -698,7 +698,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
 	ruler_opd_panel = 0.75
 	have_tied_dbg = False
-	use_debugger = True
+	use_debugger = False
 
 	def create_opd(self, clr_tests=False, sync_out=True):
 		'''
