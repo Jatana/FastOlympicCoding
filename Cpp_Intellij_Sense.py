@@ -165,8 +165,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		v.erase_regions('warning_marks')
 		v.erase_regions('error_marks')
 		try:
-			# errors = (self.parse_cpp_errors_smart(s, run_file_path))
-			errors = (self.parse_cpp_errors_smart(s, v.file_name()))
+			errors = (self.parse_cpp_errors_smart(s, run_file_path))
+			# errors = (self.parse_cpp_errors_smart(s, v.file_name()))
 
 			
 			# errors = self.parse_cpp_errors(s)
