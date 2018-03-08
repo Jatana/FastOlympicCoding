@@ -275,7 +275,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 					'default': '\t'
 				})
 				return None
-			
 			w_sel = v.word(cursor)
 			if not w_sel.empty():
 				func = v.substr(w_sel).lstrip().rstrip()

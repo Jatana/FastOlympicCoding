@@ -35,14 +35,6 @@
 		]
 	},
 
-	{
-		"keys": ["super+e"],
-		"command": "olympic_funcs",
-		"args": {
-			"action": "test"
-		}
-	},
-
 	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
