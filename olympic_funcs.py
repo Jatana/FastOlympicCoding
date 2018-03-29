@@ -23,7 +23,7 @@ class PreGenParser(object):
 	def __init__(self, s):
 		super(PreGenParser, self).__init__()
 		self.s = s
-	
+
 	def is_word(self, c):
 		return c == '_' or ord('a') <= ord(c) <= ord('z') or ord('A') <= ord(c) <= ord('Z')
 
@@ -173,7 +173,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		# opd_view = window.create_output_panel("opd_view")
 		# print(opd_view.settings().get('syntax'))
 		# window.run_command('show_panel', {'panel': 'output.opd_view'})
-		
+
 		if self.have_tied_dbg:
 			prop = (window.get_view_index(self.tied_dbg))
 			if prop == (-1, -1):
@@ -214,7 +214,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		dbg_view.run_command('test_manager', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
 			"clr_tests": clr_tests, "sync_out": sync_out})
-	
+
 	def close_opds(self):
 		w = self.view.window()
 		for v in w.views():
@@ -263,9 +263,11 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			v.replace(edit, proc_pt, first_unit + second_unit)
 			v.sel().clear()
 			x = proc_pt.begin() + len(first_unit)
+			if self.view.settings().get('translate_tabs_to_spaces'):
+				x=x-1+self.view.settings().get('tab_size')
 			v.sel().add(sublime.Region(x, x))
 
-			
+
 		elif action == 'gen_def':
 			pt = v.sel()[0].begin()
 			cursor = v.sel()[0]
@@ -314,7 +316,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 				v.insert(edit, cursor.a, '\t')
 		elif action == 'insert_pregen_class':
 			self.insert_pregen_class(edit)
-			
+
 		elif action == 'make_opd':
 			self.close_opds()
 			self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
@@ -348,7 +350,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			# w.run_command('toggle_side_bar')
 		elif action == 'open_settings':
 			self.view.window().open_file(path.join(root_dir, settings_file))
-		
+
 		elif action == 'test':
 			v.erase_phantoms('test')
 			v.add_phantom('test', v.sel()[0], '<li> Присвоить <img align="middle" src="http://codeforces.com/predownloaded/7b/ce/7bce6fbca9ffb50d39e17dd4b681613792dfd56c.png" style="max-width: 100.0%;max-height: 100.0%;">; </li>', sublime.LAYOUT_BLOCK)
@@ -358,7 +360,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 # 	"""docstring for LayoutListener"""
 # 	def __init__(self):
 # 		super(LayoutListener, self).__init__()
-	
+
 # 	def move_syncer(self, view):
 # 		try:
 # 			w = view.window()
@@ -373,7 +375,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 # 				w.set_view_index(view, 0, active_view_index + 1)
 # 		except:
 # 			pass
-		
+
 
 # 	def on_load(self, view):
 # 		self.move_syncer(view)
@@ -414,4 +416,4 @@ class GenListener(sublime_plugin.EventListener):
 			return [(pregen_class(prefix), pregen_class(prefix))]
 		return []
 
-		
+
