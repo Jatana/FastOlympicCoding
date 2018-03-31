@@ -263,6 +263,8 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			v.replace(edit, proc_pt, first_unit + second_unit)
 			v.sel().clear()
 			x = proc_pt.begin() + len(first_unit)
+			if v.settings().get('translate_tabs_to_spaces'):
+				x = x - 1 + v.settings().get('tab_size')
 			v.sel().add(sublime.Region(x, x))
 
 			
