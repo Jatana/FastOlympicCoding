@@ -237,7 +237,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			})
 
 
-	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True):
+	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, func_name=None):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -267,6 +267,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 
 			
 		elif action == 'gen_def':
+			func = func_name
 			pt = v.sel()[0].begin()
 			cursor = v.sel()[0]
 			if v.scope_name(pt).rstrip() != 'source.c++':
@@ -278,6 +279,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			w_sel = v.word(cursor)
 			if not w_sel.empty():
 				func = v.substr(w_sel).lstrip().rstrip()
+			if func:
 				if len(func.lstrip().rstrip()) != 0:
 					insert_snippet = get_settings().get('algorithms_base') and \
 						path.isfile(path.join(
@@ -349,11 +351,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		elif action == 'open_settings':
 			self.view.window().open_file(path.join(root_dir, settings_file))
 		
-		elif action == 'test':
-			v.erase_phantoms('test')
-			v.add_phantom('test', v.sel()[0], '<li> Присвоить <img align="middle" src="http://codeforces.com/predownloaded/7b/ce/7bce6fbca9ffb50d39e17dd4b681613792dfd56c.png" style="max-width: 100.0%;max-height: 100.0%;">; </li>', sublime.LAYOUT_BLOCK)
-
-
 # class LayoutListener(sublime_plugin.EventListener):
 # 	"""docstring for LayoutListener"""
 # 	def __init__(self):
