@@ -5,7 +5,7 @@ import sys
 from subprocess import Popen, PIPE
 import subprocess
 import shlex
-from sublime import Region
+from sublime import Region, Phantom, PhantomSet
 from os import path
 from importlib import import_module
 
@@ -27,6 +27,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.HIDDEN]
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
 	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
+	REGION_BEGIN_PROP = ['string', 'Packages/FastOlympicCoding/icons/arrow_right.png', sublime.HIDDEN]
+	REGION_END_PROP = ['variable.c++', 'Packages/FastOlympicCoding/icons/arrow_left.png', sublime.HIDDEN]
+	REGION_LINE_PROP = ['entity.name.function.c', 'Packages/FastOlympicCoding/icons/line.png', sublime.HIDDEN]
 
 	# Test
 	# REGION_POS_PROP = REGION_UNKNOWN_PROP
@@ -265,14 +268,14 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		if text is None:
 			if not self.tester.proc_run:
 				return None
-			to_shove = v.substr(Region(self.delta_input, v.size()))
+			to_shove = v.substr(Region(self.delta_input, v.sel()[0].b))
 			# print('shovel -> ', to_shove)
-			v.insert(edit, v.size(), '\n')
+			v.insert(edit, v.sel()[0].b, '\n')
 
 		else:
 			to_shove = text
-			v.insert(edit, v.size(), to_shove + '\n')
-		self.delta_input = v.size()
+			v.insert(edit, v.sel()[0].b, to_shove + '\n')
+		self.delta_input = v.sel()[0].b 
 		self.tester.insert(to_shove + '\n')
 
 	def insert_cb(self, edit):
@@ -285,18 +288,30 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def new_test(self, edit):
 		v = self.view
-		v.insert(edit, self.view.size(), \
-				(self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
+		# v.insert(edit, self.view.size(), \
+				# (self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
 
-		v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
-			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
-				*self.REGION_POS_PROP)
+		# v.insert(edit, v.size(), '\n')
+		# v.insert(edit, v.size(), '\n')
 
+		# v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
+			# [Region(v.size() - 2, v.size() - 1)], *self.REGION_BEGIN_PROP)
+
+		# v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
+		# 	[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
+		# 		*self.REGION_POS_PROP)
+
+		self.input_start = v.size()
 		self.delta_input = v.size()
+		self.output_start = v.size() + 1
 		self.out_region_set = False
-		v.insert(edit, self.view.size(), self.OUT_TEST_STRING)
-		# v.add_regions(self.REGION_OUT_KEY % (self.tester.test_iter + 1), \
-		# 	[sublime.Region(v.size() - 2, v.size() - 2)], *self.REGION_OUT_PROP)
+		v.insert(edit, self.view.size(), '\n')
+		v.sel().clear()
+		v.sel().add(Region(v.size() - 1, v.size() - 1))
+
+		v.add_regions('type', \
+			[sublime.Region(v.size() - 1, v.size())], *self.REGION_BEGIN_PROP)
+
 		self.tester.next_test()
 		# v.window().active_view().set_status('process_status', 'Process Run')
 		if self.tester.test_iter > 4:
@@ -318,33 +333,69 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		self.view.run_command('test_manager', {'action': 'insert_opd_out', 'text': s})
 		if not self.out_region_set:
-			v.add_regions(self.REGION_OUT_KEY % (self.tester.test_iter + 1), \
-				[sublime.Region(v.size() - 1, v.size() - 1)], *self.REGION_OUT_PROP)
+			# v.add_regions(self.REGION_OUT_KEY % (self.tester.test_iter + 1), \
+				# [sublime.Region(v.size() - 1, v.size() - 1)], *self.REGION_OUT_PROP)
 			self.out_region_set = True
+
+	def add_region(self, line, region_prop):
+		v = self.view
+		pos = v.line(line)
+		from random import randint
+		v.add_regions(str(randint(0, 1e9)), [Region(pos.a, pos.a + 1)], *region_prop)
+
 
 	def on_stop(self, rtcode, crash_line=None):
 		v = self.view
-		self.view.run_command('test_manager', {'action': 'insert_opd_out', \
-			'text': (('\n' + self.END_TEST_STRING + '\n') % (str(rtcode)))})
-		v.add_regions("test_end_%d" % (self.tester.test_iter - 1), \
-			[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
-				*self.REGION_POS_PROP)
+
+		v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
+			[Region(self.input_start, self.input_start + 1)], *self.REGION_BEGIN_PROP)
+
+		v.erase_regions('type')
+
+		v.add_regions("test_end_%d" % (self.tester.test_iter), \
+			[Region(self.delta_input + 1, self.delta_input + 2)], \
+				*self.REGION_END_PROP)
+
+		line = v.line(self.input_start)
+		v.add_regions('line_%d' % (self.tester.test_iter + 1), \
+			[Region(line.begin(), line.end())], 'string', 'dot', \
+				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
+					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE)
+
+		# for line in range(v.line(self.input_start).a, v.line(v.size()).b):
+			# self.add_region(line, self.REGION_LINE_PROP)
+		if v.substr(v.size() - 1) != '\n':
+			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
+		rtcode = str(rtcode)
+		if rtcode != '0':
+			v.run_command('test_manager', {
+				'action': 'insert_opd_out',
+				'text': '<return {rtcode}>'.format(rtcode=rtcode)
+			})
+			v.add_regions('test_error_%d' % (self.tester.test_iter + 1), \
+				[Region(v.size() - 5, v.size() - 4)], 'variable.c++', 'dot', sublime.HIDDEN)
+			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
+
+
+		v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
+
+		v.run_command('test_manager', {'action': 'set_cursor_to_end'})
+
 		tester = self.tester
-		# self.view.erase_status('process_status')
-		if str(rtcode) == '0':
+		if str(rtcode) == '0' or True:
 			if tester.have_pretests():
 				self.view.run_command('test_manager', {'action': 'new_test'})
 			else:
 				self.memorize_tests()
-		# print(self.tester.prog_out)
+
 		cur_test = self.tester.test_iter - 1
 		check = self.tester.check_test(cur_test)
-		if check:
-			self.set_test_status(cur_test, accept=True, call_tester=False)
-		elif check is False:
-			self.set_test_status(cur_test, accept=False, call_tester=False)
-		else:
-			self.set_test_status(cur_test, accept=None, call_tester=False)
+		# if check:
+		# 	self.set_test_status(cur_test, accept=True, call_tester=False)
+		# elif check is False:
+		# 	self.set_test_status(cur_test, accept=False, call_tester=False)
+		# else:
+		# 	self.set_test_status(cur_test, accept=None, call_tester=False)
 
 		# add crash regions
 		if crash_line is not None:
@@ -592,7 +643,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			((self.tester is None) or (not self.tester.proc_run)) and \
 			view.size() == view.sel()[0].a
 
-		view.set_read_only(have_sel_no_end or end_cursor)
+		# view.set_read_only(have_sel_no_end or end_cursor)
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
@@ -614,7 +665,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.delta_input += len(text)
 
 		elif action == 'insert_opd_out':
-			self.delta_input += len(text)
+			# self.delta_input += len(text)
 			v.insert(edit, self.view.size(), text)
 
 		elif action == 'make_opd':
@@ -668,6 +719,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				sublime.status_message('debugger enabled')
 			else:
 				sublime.status_message('debugger disabled')
+		elif action == 'set_cursor_to_end':
+			v.sel().clear()
+			v.sel().add(Region(v.size(), v.size()))
+
 		self.sync_read_only()
 
 	def isEnabled(view, args):
@@ -756,12 +811,13 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		# opd_view.run_command('erase_view')
 		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % base_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
+		dbg_view.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
 		dbg_view.run_command('test_manager', {
 				'action': 'make_opd', 
 				'build_sys': file_syntax, 
 				'run_file': v.file_name(), 
-				"clr_tests": clr_tests, 
-				"sync_out": sync_out, 
+				'clr_tests': clr_tests, 
+				'sync_out': sync_out, 
 				'code_view_id': v.id(), \
 				'use_debugger': self.use_debugger
 			})

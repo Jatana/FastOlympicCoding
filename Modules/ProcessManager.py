@@ -32,11 +32,12 @@ class ProcessManager(object):
 				rez += ' "' + x + '" '
 		return rez
 
-	def format_command(self, cmd):
+	def format_command(self, cmd, args=''):
 		return cmd.format(
 			source_file=self.file,
 			source_file_dir=path.dirname(self.file),
-			file_name=self.file_name
+			file_name=self.file_name,
+			args=args
 		)
 
 	def has_var_view_api(self):
@@ -53,14 +54,14 @@ class ProcessManager(object):
 		else:
 			return -1
 
-	def get_run_cmd(self):
+	def get_run_cmd(self, args):
 		opt = self.run_settings
 		file_ext = path.splitext(self.file)[1][1:]
 		for x in opt:
 			if file_ext in x['extensions']:
 				if x['run_cmd'] is None:
 					return None
-				return self.format_command(x['run_cmd'])
+				return self.format_command(x['run_cmd'], args=args)
 		else:
 			return -1
 
@@ -79,10 +80,10 @@ class ProcessManager(object):
 				p.wait()
 			return (p.returncode, p.stdout.read())
 
-	def run_file(self):
+	def run_file(self, args=[]):
 		if self.is_run and False:
 			raise AssertionError('cant run process because is already running')
-		cmd = self.get_run_cmd()
+		cmd = self.get_run_cmd(' '.join(args))
 		
 		self.is_run = False
 		PIPE = subprocess.PIPE

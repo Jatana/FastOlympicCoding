@@ -1,4 +1,5 @@
 {
 	"hide_minimap": true,
-	"show_minimap": false
+	"show_minimap": false,
+	"line_numbers": false,
 }

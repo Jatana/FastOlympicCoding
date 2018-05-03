@@ -184,36 +184,44 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			need_new = True
 		if not need_new:
 			dbg_view = self.tied_dbg
+			out_view = self.out_view
 			create_new = False
 		else:
 			dbg_view = window.new_file()
+			out_view = window.new_file()
 			self.tied_dbg = dbg_view
+			self.tied_out = out_view
 			self.have_tied_dbg = True
 			create_new = True
-			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
+			dbg_view.run_command('toggle_setting', {'setting': 'line_numbers'})
 			# dbg_view.run_command('toggle_setting', {"setting": "gutter"})
 			try:
 				sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
 			except:
 				# Version of sublime text < 3102
 				pass
-			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
+			dbg_view.run_command('toggle_setting', {'setting': 'word_wrap'})
 
 		window.set_layout({
-			"cols": [0, 0.8, 1],
-			"rows": [0, 1],
-			"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+			'cols': [0.0, 0.3333333333333333, 0.6666666666666666, 1.0],
+			'rows': [0, 1],
+			'cells': [[0, 0, 1, 1], [1, 0, 2, 1], [2, 0, 3, 1]]
 		})
 
+		print('hello')
+		print(out_view)
+
 		window.set_view_index(dbg_view, 1, 0)
+		window.set_view_index(out_view, 0, 0)
 		window.focus_view(v)
 		window.focus_view(dbg_view)
 		# opd_view.run_command('erase_view')
 		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % base_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
+		out_view.set_name(os.path.split(v.file_name())[-1] + ' [output]')
 		dbg_view.run_command('test_manager', \
 			{'action': 'make_opd', 'build_sys': file_syntax, 'run_file': v.file_name(), \
-			"clr_tests": clr_tests, "sync_out": sync_out})
+			'clr_tests': clr_tests, 'sync_out': sync_out})
 	
 	def close_opds(self):
 		w = self.view.window()
@@ -241,6 +249,7 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
+		print(action)
 		if action == 'can_pregen_classes':
 			return False
 		if action == 'insert':

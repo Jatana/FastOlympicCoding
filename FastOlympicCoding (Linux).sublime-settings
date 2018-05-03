@@ -4,7 +4,7 @@
 			"name": "C++",
 			"extensions": ["cpp"],
 			"compile_cmd": "g++ '{source_file}' -std=gnu++11",
-			"run_cmd": "./a.out -debug",
+			"run_cmd": "./a.out {args} -debug",
 
 			"lint_compile_cmd": "g++ -std=gnu++11 '{source_file}' -I '{source_file_dir}'"
 		},

@@ -3,6 +3,7 @@ from os import path
 
 from .settings import base_name, get_settings
 from .Modules.ProcessManager import ProcessManager
+from random import randint
 
 
 class StressManagerCommand(sublime_plugin.TextCommand):
@@ -11,7 +12,11 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 		result = self.start_test()
 		self.test_id += 1
 		if not result['success']:
-			sublime.message_dialog(str(result))
+			sublime.message_dialog('test:\n{test}\ngood:\n{good}\nbad:\n{bad}'.format(
+				test=result['test_data'],
+				good=result['good_output'],
+				bad=result['bad_output']
+			))
 		else:
 			if not self.stop_stress:
 				sublime.set_timeout_async(self.provide_stress)
@@ -19,7 +24,7 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 				sublime.status_message('stress stopped')
 
 	def start_test(self):
-		self.gen_process.run()
+		self.gen_process.run(args=[str(randint(0, int(1e9)))])
 		test_data = self.gen_process.read() + '\n'
 		self.good_process.run()
 		self.good_process.write(test_data)
