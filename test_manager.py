@@ -155,7 +155,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			proc = self.process_manager
 			while proc.is_stopped() is None:
 				if self.sync_out:
-					s = proc.read(bfsize=4096)
+					s = proc.read(bfsize=1)
 				else:
 					s = proc.read()
 				self.__on_out(s)
