@@ -27,9 +27,13 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.HIDDEN]
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
 	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
-	REGION_BEGIN_PROP = ['string', 'Packages/FastOlympicCoding/icons/arrow_right.png', sublime.HIDDEN]
+	REGION_BEGIN_PROP = ['string', 'Packages/FastOlympicCoding/icons/arrow_right.png', \
+				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
+					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE]
 	REGION_END_PROP = ['variable.c++', 'Packages/FastOlympicCoding/icons/arrow_left.png', sublime.HIDDEN]
-	REGION_LINE_PROP = ['entity.name.function.c', 'Packages/FastOlympicCoding/icons/line.png', sublime.HIDDEN]
+	REGION_LINE_PROP = ['string', 'dot', \
+				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
+					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE]
 
 	# Test
 	# REGION_POS_PROP = REGION_UNKNOWN_PROP
@@ -40,7 +44,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.delta_input = 0
 		self.tester = None
 		self.session = None
-
 
 	class Test(object):
 		"""
@@ -213,6 +216,11 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.tests.pop(nth)
 			self.prog_out.pop(nth)
 
+		def set_tests(self, tests):
+			self.tests.clear()
+			for test in tests:	
+				self.tests.append(TestManagerCommand.Test(test))
+
 		def del_tests(self, to_del):
 			dont_add = set(to_del)
 			tests = self.tests
@@ -288,36 +296,23 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def new_test(self, edit):
 		v = self.view
-		# v.insert(edit, self.view.size(), \
-				# (self.BEGIN_TEST_STRING + '\n') % (self.tester.test_iter + 1))
-
-		# v.insert(edit, v.size(), '\n')
-		# v.insert(edit, v.size(), '\n')
-
-		# v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
-			# [Region(v.size() - 2, v.size() - 1)], *self.REGION_BEGIN_PROP)
-
-		# v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
-		# 	[Region(v.line(v.size() - 2).begin(), v.line(v.size() - 2).begin() + 1)], \
-		# 		*self.REGION_POS_PROP)
 
 		self.input_start = v.size()
 		self.delta_input = v.size()
 		self.output_start = v.size() + 1
 		self.out_region_set = False
-		v.insert(edit, self.view.size(), '\n')
-		v.sel().clear()
-		v.sel().add(Region(v.size() - 1, v.size() - 1))
+		
+		# v.insert(edit, self.view.size(), '\n')
+		# v.sel().clear()
+		# v.sel().add(Region(v.size() - 1, v.size() - 1))
 
 		v.add_regions('type', \
-			[sublime.Region(v.size() - 1, v.size())], *self.REGION_BEGIN_PROP)
+			[sublime.Region(v.size(), v.size())], *self.REGION_BEGIN_PROP)
 
 		self.tester.next_test()
-		# v.window().active_view().set_status('process_status', 'Process Run')
+
 		if self.tester.test_iter > 4:
 			self.fold_accept_tests()
-
-
 
 	def memorize_tests(self):
 		# print([x.memorize() for x in (self.tester.get_tests())])
@@ -347,42 +342,51 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def on_stop(self, rtcode, crash_line=None):
 		v = self.view
 
-		v.add_regions(self.REGION_BEGIN_KEY % self.tester.test_iter, \
-			[Region(self.input_start, self.input_start + 1)], *self.REGION_BEGIN_PROP)
+		test_id = self.tester.test_iter - 1
+		_inp = self.tester.tests[test_id].test_string
+		_outp = self.tester.prog_out[test_id]
+
+		v.run_command('test_manager', {
+			'action': 'replace',
+			'region': (self.input_start, v.size()),
+			'text': _inp + '\n' + _outp 
+		})
 
 		v.erase_regions('type')
 
-		v.add_regions("test_end_%d" % (self.tester.test_iter), \
-			[Region(self.delta_input + 1, self.delta_input + 2)], \
-				*self.REGION_END_PROP)
 
 		line = v.line(self.input_start)
-		v.add_regions('line_%d' % (self.tester.test_iter + 1), \
-			[Region(line.begin(), line.end())], 'string', 'dot', \
-				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
-					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE)
 
-		# for line in range(v.line(self.input_start).a, v.line(v.size()).b):
-			# self.add_region(line, self.REGION_LINE_PROP)
-		if v.substr(v.size() - 1) != '\n':
+		v.add_regions(self.REGION_BEGIN_KEY % test_id, \
+			[Region(line.begin(), line.end())], *self.REGION_BEGIN_PROP)
+
+		v.add_regions('line_%d' % test_id, \
+			[Region(line.begin(), line.end())], *self.REGION_LINE_PROP)
+
+		if v.substr(v.size() - 1) != '\n' or not _outp:
 			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
+
 		rtcode = str(rtcode)
 		if rtcode != '0':
 			v.run_command('test_manager', {
 				'action': 'insert_opd_out',
 				'text': '<return {rtcode}>'.format(rtcode=rtcode)
 			})
-			v.add_regions('test_error_%d' % (self.tester.test_iter + 1), \
+			v.add_regions('test_error_%d' % (test_id), \
 				[Region(v.size() - 5, v.size() - 4)], 'variable.c++', 'dot', sublime.HIDDEN)
 			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
 
 
 		v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
 
+		v.add_regions("test_end_%d" % test_id, \
+			[Region(self.input_start + len(_inp) + 1, self.input_start + len(_inp) + 1)], \
+				*self.REGION_END_PROP)
+
 		v.run_command('test_manager', {'action': 'set_cursor_to_end'})
 
 		tester = self.tester
-		if str(rtcode) == '0' or True:
+		if str(rtcode) == '0':
 			if tester.have_pretests():
 				self.view.run_command('test_manager', {'action': 'new_test'})
 			else:
@@ -436,7 +440,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		else:
 			prop = self.REGION_UNKNOWN_PROP
 
-		#prop = self.get_style_test_status(nth)
+		# prop = self.get_style_test_status(nth)
 		v.add_regions(beg_key, [rs], *prop)
 
 	def set_tests_status(self, accept=True):
@@ -471,13 +475,30 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		# self.view.set_name(name[:name.index(' ')] + ' -' + status.lower())
 		self.view.set_status('process_status', status)
 
+	def clear_all(self):
+		v = self.view
+		v.run_command('test_manager', {'action': 'erase_all'})
+		if self.tester:
+			for i in range(self.tester.test_iter):
+				v.erase_regions(self.REGION_BEGIN_KEY % i)
+				v.erase_regions(self.REGION_END_KEY % i)
+				v.erase_regions('line_%d' % i)
+				v.erase_regions('test_error_%d' % i)
+
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
 		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
 		self.use_debugger = use_debugger
 		v = self.view
+
+		self.delta_input = 0
+		self.session = None
+
+		if v.settings().get('edit_mode'):
+			self.apply_edit_changes()
+
 		v.set_scratch(True)
 		v.set_status('opd_info', 'opdebugger-file')
-		v.run_command('test_manager', {'action': 'erase_all'})
+		self.clear_all()
 		if load_session:
 			if self.session is None:
 				v.run_command('test_manager', {'action': 'insert_opd_out', 'text': 'Can\'t restore session'})
@@ -502,8 +523,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		if not v.settings().get('word_wrap'):
 			v.run_command('toggle_setting', {"setting": "word_wrap"})
-		# if SysManager.is_sidebar_open(v.window()):
-			# sublime.set_timeout(self.toggle_side_bar, 500)
+
 		if not clr_tests:
 			try:
 				f = open(run_file + ':tests')
@@ -517,29 +537,24 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			f.close()
 			tests = []
 		file_ext = path.splitext(run_file)[1][1:]
-		DebugModule = debugger_info.get_best_debug_module(file_ext) #self.have_debugger(file_ext)
-		# if DebugModule is None:
+		DebugModule = debugger_info.get_best_debug_module(file_ext)
 		if (not self.use_debugger) or (DebugModule is None):
-			# print('called here')
 			process_manager = ProcessManager(
 				run_file,
 				build_sys,
 				run_settings=get_settings().get('run_settings')
 			)
 		else:
-			# print(DebugModule)
 			process_manager = DebugModule(run_file)
 		sublime.set_timeout_async(lambda :self.change_process_status('COMPILING'))
 		cmp_data = process_manager.compile()
-		# print('compile: data', type(cmp_data))
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
 				self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
 				tests=tests, sync_out=sync_out)
+			v.settings().set('edit_mode', False)
 			v.run_command('test_manager', {'action': 'new_test'})
-			# v.set_status('process_status', 'Process Run')
 		else:
-			# v.insert(edit, 0, cmp_data[1])
 			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': cmp_data[1]})
 
 	def delete_nth_test(self, edit, nth, fixed_end=None):
@@ -552,10 +567,15 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		if fixed_end is not None:
 			end = fixed_end
 		else:
-			end = v.line(v.get_regions(self.REGION_END_KEY % nth)[0].begin()).end() + 1
+			if self.get_begin_region(nth + 1):
+				end = self.get_begin_region(nth + 1)[0].begin()
+			else:
+				end = v.size()
+			# end = v.line(v.get_regions(self.REGION_END_KEY % nth)[0].begin()).end() + 1 + 1
 		v.replace(edit, Region(begin, end), '')
 		v.erase_regions(self.REGION_BEGIN_KEY % nth)
 		v.erase_regions(self.REGION_END_KEY % nth)
+		v.erase_regions('line_%d' % nth)
 
 	def get_style_test_status(self, nth):
 		check = self.tester.check_test(nth)
@@ -579,10 +599,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			rs_beg = v.get_regions(begin_key)
 			if rs_beg:
 				rs_beg = rs_beg[0]
-				v.replace(edit, v.word(rs_beg.begin() + 5), str(cur_nth + 1))
+				# v.replace(edit, v.word(rs_beg.begin() + 5), str(cur_nth + 1))
 				v.erase_regions(begin_key)
 				v.add_regions(self.REGION_BEGIN_KEY % (cur_nth), [rs_beg], \
-					*self.get_style_test_status(cur_nth))
+					*self.REGION_BEGIN_PROP)
+
+				rs_line = v.get_regions('line_%d' % cur_nth)
+
+				v.erase_regions('line_%d' % i)
+				v.add_regions('line_%d' % cur_nth, rs_line, \
+					*self.REGION_LINE_PROP)
+
 
 				end_key = self.REGION_END_KEY % i
 				rs_end = v.get_regions(end_key)
@@ -590,10 +617,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 					rs_end = rs_end[0]
 					v.erase_regions(end_key)
 					v.add_regions(self.REGION_END_KEY % (cur_nth), [rs_end], \
-						*self.REGION_POS_PROP)
+						*self.REGION_END_PROP)
 
 				cur_nth += 1
-
 
 	def delete_tests(self, edit):
 		v = self.view
@@ -619,7 +645,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			for x in sels:
 				if x.intersects(r):
 					to_del.append(i)
-		# print('deleted -> ', ' '.join(map(str, to_del)))
+
 		sublime.status_message('deleted tests: ' + (', '.join(map(lambda x: str(x + 1), to_del))))
 		self.tester.del_tests(to_del)
 		for x in to_del:
@@ -631,23 +657,89 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def sync_read_only(self):
 		view = self.view
+		if view.settings().get('edit_mode'):
+			view.set_read_only(False)
+			return
 		have_sel_no_end = False
 		for sel in view.sel():
-			# print(sel.begin(), view.size())
 			if sel.begin() != view.size():
 				have_sel_no_end = True
 				break
-
 
 		end_cursor = len(view.sel()) and \
 			((self.tester is None) or (not self.tester.proc_run)) and \
 			view.size() == view.sel()[0].a
 
-		# view.set_read_only(have_sel_no_end or end_cursor)
+		view.set_read_only(have_sel_no_end or end_cursor)
+
+	def enable_edit_mode(self):
+		v = self.view 
+		if v.settings().get('edit_mode'): return
+		v.settings().set('edit_mode', True)
+
+		if self.tester.proc_run:
+			self.tester.terminate()
+		tests = self.tester.test_iter
+		for i in range(tests):
+			out_begin = v.get_regions(self.REGION_END_KEY % i)[0].begin()
+			if i == tests - 1:
+				out_end = v.size()
+			else:
+				out_end = v.get_regions(self.REGION_BEGIN_KEY % (i + 1))[0].begin()
+			v.erase_regions(self.REGION_END_KEY % i)
+			v.erase_regions('line_%d' % i)
+			v.erase_regions('test_error_%d' % i)
+			v.run_command('test_manager', {
+				'action': 'erase',
+				'region': (out_begin, out_end)
+			})
+		self.sync_read_only()
+
+	def get_begin_region(self, id):
+		v = self.view
+		return v.get_regions(self.REGION_BEGIN_KEY % id)
+
+	def apply_edit_changes(self):
+		v = self.view
+
+		tests = []
+		i = 0
+		while self.get_begin_region(i):
+			st = self.get_begin_region(i)[0].begin()
+			if not self.get_begin_region(i + 1):
+				end = v.size()
+			else:
+				end = self.get_begin_region(i + 1)[0].begin()
+			tests.append(v.substr(Region(st, end)).strip() + '\n')
+			i += 1
+
+		self.tester.set_tests(tests)
+		self.memorize_tests()
+
+	def toggle_new_test(self):
+		v = self.view
+		places = []
+		i = 0
+		while self.get_begin_region(i):
+			places.append(self.get_begin_region(i)[0].begin())
+			i += 1
+		cur = v.line(v.sel()[0].begin()).begin()
+		if cur in places:
+			places.remove(cur)
+			v.erase_regions(self.REGION_BEGIN_KEY % len(places))
+		else:
+			places.append(cur)
+			places.sort()
+
+		for i in range(len(places)):
+			v.erase_regions(self.REGION_BEGIN_KEY % i)
+			v.add_regions(self.REGION_BEGIN_KEY % i, [Region(places[i], places[i])], \
+				*self.REGION_BEGIN_PROP)
 
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
-			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, load_session=False):
+			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, \
+			load_session=False, region=None):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -665,8 +757,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.delta_input += len(text)
 
 		elif action == 'insert_opd_out':
-			# self.delta_input += len(text)
+			self.delta_input += len(text)
 			v.insert(edit, self.view.size(), text)
+
+		elif action == 'replace':
+			v.replace(edit, Region(region[0], region[1]), text)
+
+		elif action == 'erase':
+			v.erase(edit, Region(region[0], region[1]))
+
+		elif action == 'apply_edit_changes':
+			self.apply_edit_changes()
 
 		elif action == 'make_opd':
 			self.make_opd(edit, run_file=run_file, build_sys=build_sys, clr_tests=clr_tests, \
@@ -684,6 +785,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		elif action == 'new_test':
 			self.new_test(edit)
+
+		elif action == 'toggle_new_test':
+			self.toggle_new_test()
 		
 		elif action == 'delete_tests':
 			self.delete_tests(edit)
@@ -713,12 +817,16 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'sync_read_only':
 			self.sync_read_only()
 
+		elif action == 'enable_edit_mode':
+			self.enable_edit_mode()
+
 		elif action == 'toggle_using_debugger':
 			self.use_debugger = not self.use_debugger
 			if (self.use_debugger):
 				sublime.status_message('debugger enabled')
 			else:
 				sublime.status_message('debugger disabled')
+
 		elif action == 'set_cursor_to_end':
 			v.sel().clear()
 			v.sel().add(Region(v.size(), v.size()))
@@ -738,7 +846,6 @@ class ModifiedListener(sublime_plugin.EventListener):
 		if hover_zone == sublime.HOVER_TEXT:
 			view.run_command('view_tester', { 'action': 'get_var_value', 'pos': point })
 
-
 class CloseListener(sublime_plugin.EventListener):
 	"""Listen to Close"""
 	def __init__(self):
@@ -751,7 +858,7 @@ class CloseListener(sublime_plugin.EventListener):
 
 class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
-	ruler_opd_panel = 0.75
+	ruler_opd_panel = 0.68
 	have_tied_dbg = False
 	use_debugger = False
 
@@ -764,16 +871,10 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		file_syntax = scope_name.split()[0]
 		file_name = v.file_name()
 		file_ext = path.splitext(file_name)[1][1:]
-		# v.window().show_input_panel("Runned", "123", \
-		# 	self.DebugArea.on_done, self.DebugArea.on_change, self.DebugArea.on_cancel)
-		# v.window().show_quick_panel(["5"], \
-		# 	1, 1, 1, 1)
-		#print('windowshe4ka generat')
+
 		window = v.window()
 		v.erase_regions('crash_line')
-		# opd_view = window.create_output_panel("opd_view")
-		# print(opd_view.settings().get('syntax'))
-		# window.run_command('show_panel', {'panel': 'output.opd_view'})
+
 		if self.have_tied_dbg:
 			prop = (window.get_view_index(self.tied_dbg))
 			if prop == (-1, -1):
@@ -782,7 +883,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				need_new = False
 		else:
 			need_new = True
-		need_new = True
+
 		if not need_new:
 			dbg_view = self.tied_dbg
 			create_new = False
@@ -791,19 +892,19 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			self.tied_dbg = dbg_view
 			self.have_tied_dbg = True
 			create_new = True
-			dbg_view.run_command('toggle_setting', {"setting": "line_numbers"})
+			dbg_view.run_command('toggle_setting', {'setting': 'line_numbers'})
 			# dbg_view.run_command('toggle_setting', {"setting": "gutter"})
 			try:
 				sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
 			except:
 				# Version of sublime text < 3102
 				pass
-			dbg_view.run_command('toggle_setting', {"setting": "word_wrap"})
+			dbg_view.run_command('toggle_setting', {'setting': 'word_wrap'})
 
 		window.set_layout({
-			"cols": [0, self.ruler_opd_panel, 1],
-			"rows": [0, 1],
-			"cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+			'cols': [0, self.ruler_opd_panel, 1],
+			'rows': [0, 1],
+			'cells': [[0, 0, 1, 1], [1, 0, 2, 1]]
 		})
 		window.set_view_index(dbg_view, 1, 0)
 		window.focus_view(v)
@@ -813,20 +914,22 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
 		dbg_view.run_command('test_manager', {
-				'action': 'make_opd', 
-				'build_sys': file_syntax, 
-				'run_file': v.file_name(), 
-				'clr_tests': clr_tests, 
-				'sync_out': sync_out, 
-				'code_view_id': v.id(), \
-				'use_debugger': self.use_debugger
-			})
+			'action': 'make_opd', 
+			'build_sys': file_syntax, 
+			'run_file': v.file_name(), 
+			'clr_tests': clr_tests, 
+			'sync_out': sync_out, 
+			'code_view_id': v.id(), \
+			'use_debugger': self.use_debugger
+		})
 	
 	def close_opds(self):
 		w = self.view.window()
+		tied_id = None
+		if self.have_tied_dbg:
+			tied_id = self.tied_dbg.id()
 		for v in w.views():
-			# if v.get_status('opd_info') == 'opdebugger-file':
-			# print(v.name()[::-1][:len('-run')][::-1])
+			if v.id() == tied_id: continue
 			if v.name()[::-1][:len('-run')][::-1] == '-run':
 				v.close()
 
@@ -872,7 +975,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			pt = v.text_point(crash_line - 1, 0)
 			v.erase_regions('crash_line')
 			v.add_regions('crash_line', [sublime.Region(pt + 0, pt + 0)], \
-				'variable.language.python', 'bookmark', \
+				'variable.language.python', 'Packages/FastOlympicCoding/icons/arrow_right.png', \
 				sublime.DRAW_SOLID_UNDERLINE)
 			sublime.set_timeout_async(lambda pt=pt: v.show_at_center(pt), 39)
 			# print(pt)

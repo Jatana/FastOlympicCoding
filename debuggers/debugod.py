@@ -37,7 +37,7 @@ def decode(data):
 	for x in data:
 		s += chr(x)
 	return s
-		
+
 
 class Debugger(object):
 	"""docstring for Debugger"""
