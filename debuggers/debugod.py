@@ -38,6 +38,7 @@ def decode(data):
 		s += chr(x)
 	return s
 
+log = open('/Users/Uhuhu/Desktop/log.txt', 'w')
 
 class Debugger(object):
 	"""docstring for Debugger"""
@@ -107,6 +108,7 @@ class Debugger(object):
 					if process.GetState() == lldb.eStateExited:
 						_.state = 'EXITED'
 						_.rtcode = process.GetExitStatus()
+						_.global_vars = _.get_globals()
 						_.clear()
 						break
 					elif process.GetState() == lldb.eStateStopped:
@@ -114,6 +116,7 @@ class Debugger(object):
 						frame = _.get_crash_frame()
 						_.crash_line = int(frame.line_entry.GetLine().__str__())
 						_.rtcode = process.GetExitStatus()
+						_.global_vars = _.get_globals()
 						# print(frame.line_entry.GetLine())
 						_.state = 'STOPPED'
 						# _.filter_frames()
@@ -131,12 +134,15 @@ class Debugger(object):
 		dbg = lldb.SBDebugger.Create()
 		dbg.SetAsync(True)
 		target = dbg.CreateTargetWithFileAndArch(exe, lldb.LLDB_ARCH_DEFAULT)
+		module = target.module[target.executable.basename]
 		self.miss_cnt = 0
 		process = target.LaunchSimple(None, None, path.dirname(self.file))
 		self.change_state('RUNNING')
 		# print(self.is_stopped())
 		# print('__runed')
 		self.process = process
+		self.target = target
+		self.module = module
 		self.main_thread = self.process.GetThreadAtIndex(0)
 		self.sbdbg = dbg
 
@@ -145,6 +151,8 @@ class Debugger(object):
 		exit_listener.start()
 		self.exit_listener = exit_listener
 
+		# log.write(str(module))
+		# log.flush()
 		# print(dir(dbg))
 		# print(dir(target))
 		# print(dir(process))
@@ -186,8 +194,47 @@ class Debugger(object):
 			frame = self.get_crash_frame()
 		else:
 			frame = self.main_thread.GetFrameAtIndex(frame_id)
-		return frame.FindVariable(var_name)
+		rez = frame.FindVariable(var_name).__str__()
+		if rez == 'No value':
+			rez = self.global_vars.get('::' + var_name, 'No value')
+		return rez
 
+	def get_globals(self):
+		module = self.module
+		target = self.target
+		global_vars = dict()
+		global_names = []
+		for symbol in module.symbols:
+			if symbol.type == lldb.eSymbolTypeData:
+				global_name = symbol.name
+				if global_name not in global_names:
+					global_names.append(global_name)
+					global_variable_list = module.FindGlobalVariables(
+						target, global_name, lldb.UINT32_MAX)
+					if global_variable_list:
+						for global_variable in global_variable_list:
+							global_vars[global_variable.name] = global_variable.__str__()	
+		return global_vars
+
+	def get_frames(self):
+		frames = []
+		log.write(str(dir(self.main_thread)))
+		log.flush()
+		for frame in self.main_thread.frames:
+			# log.write(str(dir(frame)) + '\n')
+			# log.write(str(dir(frame.line_entry)) + '\n')
+			# log.write(frame.__str__() + '\n')
+			# log.write(str(frame.get_arguments()) + '\n')
+			# log.write(str(dir(frame.args)) + '\n')
+
+			frames.append({
+				'line': frame.line_entry.GetLine().__str__(),
+				'file': frame.line_entry.file.__str__(),
+				'function_name': frame.GetFunctionName().__str__(),
+				'desc': str(frame)[str(frame).index('`') + 1:],
+				'frame_id': frame.GetFrameID().__str__()
+			})	
+		return frames
 
 if len(sys.argv) > 1:
 	file = sys.argv[1]

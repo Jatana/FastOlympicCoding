@@ -394,6 +394,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		cur_test = self.tester.test_iter - 1
 		check = self.tester.check_test(cur_test)
+
 		# if check:
 		# 	self.set_test_status(cur_test, accept=True, call_tester=False)
 		# elif check is False:
@@ -420,6 +421,19 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 						'value': value,
 						'pos': pos
 					})
+
+	def redirect_frames(self):
+		v = self.view
+		frames = self.tester.process_manager.get_frames()
+		for sub in v.window().views():
+			if sub.id() == self.code_view_id:
+				sub.run_command('view_tester', {
+					'action': 'show_frames',
+					'frames': frames
+				})
+
+	def select_frame(self, id):
+		self.tester.process_manager.select_frame(id)
 
 	def toggle_side_bar(self):
 		self.view.window().run_command('toggle_side_bar')
@@ -739,7 +753,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, \
-			load_session=False, region=None):
+			load_session=False, region=None, frame_id=None):
 		v = self.view
 		pt = v.sel()[0].begin()
 		scope_name = (v.scope_name(pt).rstrip())
@@ -782,6 +796,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			except:
 				print('[FastOlympicCoding] process terminating error')
 			# v.run_command('test_manager', {'action': 'erase_all'})
+
+		elif action == 'redirect_frames':
+			self.redirect_frames()
+
+		elif action == 'select_frame':
+			self.select_frame(frame_id)
 
 		elif action == 'new_test':
 			self.new_test(edit)
@@ -949,6 +969,59 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				'pos': pt
 			})
 
+	def show_frames(self, frames=None):
+		v = self.view
+		
+		if not self.have_tied_dbg:
+			sublime.status_message('nothing to show')
+			return
+
+		dbg_view = self.tied_dbg
+
+		if not frames:
+			dbg_view.run_command('test_manager', {
+				'action': 'redirect_frames'
+			})
+			return
+
+		def sep(desc):
+			bal = 0
+			for i in range(len(desc)):
+				if desc[i] == '(':
+					bal += 1
+				elif desc[i] == ')':
+					bal -= 1
+					if bal == 0:
+						return [desc[:i + 1], desc[i + 2:]]
+			return desc
+
+		frames = eval(frames)
+		items = [sep(frame['desc']) for frame in frames]
+
+		def on_select(id):
+			v.erase_regions('highlight')
+			if id == -1: return
+			pt = v.text_point(int(frames[id]['line']) - 1, 0)
+			v.show_at_center(pt)
+			v.sel().clear()
+			v.sel().add(v.line(pt))
+			v.run_command('view_tester', {
+				'action': 'show_crash_line',
+				'crash_line': int(frames[id]['line'])
+			})
+
+			dbg_view.run_command('test_manager', {
+				'action': 'select_frame',
+				'frame_id': id		
+			})
+
+		def on_highlight(id, frames=frames):
+			pt = v.text_point(int(frames[id]['line']) - 1, 0)
+			v.show_at_center(pt)
+			v.add_regions('highlight', [v.line(pt)], 'variable.c++', 'dot', sublime.HIDDEN)
+
+		v.window().show_quick_panel(items, on_select, sublime.MONOSPACE_FONT, 0, on_highlight)
+
 	def show_var_value(self, value, pos=None):
 		# print(value)
 		def nop(): pass
@@ -962,7 +1035,8 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			sublime.status_message('debugger disabled')
 
 
-	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, crash_line=None, value=None, pos=None):
+	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, \
+			crash_line=None, value=None, pos=None, frames=None):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -984,6 +1058,9 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 
 		elif action == 'show_var_value':
 			self.show_var_value(value, pos=pos)
+
+		elif action == 'show_frames':
+			self.show_frames(frames=frames)
 
 		elif action == 'toggle_using_debugger':
 			self.toggle_using_debugger()

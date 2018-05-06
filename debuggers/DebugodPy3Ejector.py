@@ -27,9 +27,11 @@ class PyLLDBDebugger(Debugger):
 	supported_exts = ['cpp']
 	RUN_PRIOR = 1
 
+
 	def __init__(self, file):
 		self.file = file
 		self.last_state = ''
+		self.selected_frame_id = None
 		PIPE = subprocess.PIPE
 		# subprocess.STDOUT
 		self.proc_dbg = subprocess.Popen('python debugod.py "{name}"'.format(name=file), \
@@ -111,7 +113,18 @@ class PyLLDBDebugger(Debugger):
 			return value
 
 	def get_var_value(self, var_name, frame_id=None):
-		return self.cut_var_value(self.interact('_.get_var_value(decode({bytes}.__str__()))'.format(bytes=encode(var_name))))
+		return self.cut_var_value(
+			self.interact(
+				'_.get_var_value(decode({bytes}.__str__()), frame_id={frame_id})'
+					.format(bytes=encode(var_name), frame_id=self.selected_frame_id)
+				)
+			)
+
+	def get_frames(self):
+		return self.interact('_.get_frames()')
+
+	def select_frame(self, id):
+		self.selected_frame_id = id
 
 	def compile(self):
 		return eval(self.interact('_.compile()'))

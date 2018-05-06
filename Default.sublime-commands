@@ -19,5 +19,12 @@
 		"args": {
 			"action": "stop_stress"
 		}
+	},
+	{
+		"caption": "FastOlympicCoding: Select Frame",
+		"command": "view_tester",
+		"args": {
+			"action": "show_frames"
+		}
 	}
 ]
