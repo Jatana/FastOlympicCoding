@@ -1,0 +1,58 @@
+.panel {
+	background-color: color(var(--foreground) alpha(0.25));	
+	padding: 0px;
+	margin: 0px;
+}
+
+.test {
+	color: color(var(--foreground));	
+	text-decoration: none;
+	background-color: color(var(--foreground) alpha(0.3));
+	padding: 1px;
+}
+
+.test-accept {
+	background-color: color(var(--greenish) alpha(0.2));
+}
+
+.test-decline {
+	background-color: color(var(--redish) alpha(0.3));
+}
+
+.sep {
+	text-decoration: none;
+}
+
+.config {
+	color: color(var(--foreground));	
+	text-decoration: none;
+	background-color: color(var(--foreground) alpha(0.3));
+	padding: 1px;
+}
+
+.config-run {
+	background-color: color(var(--bluish) alpha(1));
+}
+
+.config-action {
+	background-color: color(var(--bluish) alpha(1));
+}
+
+.config-stop {
+	background-color: color(var(--redish) alpha(0.3));
+}
+
+.config-next {
+	padding: 1px;
+	color: color(var(--foreground));	
+	text-decoration: none;
+	background-color: color(var(--foreground) alpha(0.5));
+}
+
+a {
+	line-height: none;
+}
+
+html {
+	padding: 0px;
+}

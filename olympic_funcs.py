@@ -420,6 +420,10 @@ class GenListener(sublime_plugin.EventListener):
 				(not pregen_class(prefix) is None):
 			# print(pregen_class(prefix))
 			return [(pregen_class(prefix), pregen_class(prefix))]
+		print('fuck', prefix)
+		print(view.scope_name(view.sel()[0].a).find('source.c'))
+		print(pregen_class(prefix))
+		# view.sel().clear()
 		return []
 
 		

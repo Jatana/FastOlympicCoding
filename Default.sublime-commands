@@ -26,5 +26,12 @@
 		"args": {
 			"action": "show_frames"
 		}
+	},
+	{
+		"caption": "FastOlympicCoding: Run",
+		"command": "view_tester",
+		"args": {
+			"action": "make_opd"
+		}
 	}
 ]
