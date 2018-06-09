@@ -15,6 +15,7 @@ from .Modules.ProcessManager import ProcessManager
 from .settings import base_name, get_settings, root_dir
 from .debuggers import debugger_info
 from .Highlight.CppVarHighlight import highlight
+from .Highlight.test_interface import get_test_styles
 
 
 class TestManagerCommand(sublime_plugin.TextCommand):
@@ -123,9 +124,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			else:
 				return str(runtime // 1000) + 's'
 
-		def get_config(self, i, pt, _cb_act, _out, running=False):	
+		def get_config(self, i, pt, _cb_act, _out, view, running=False):	
 			if not running:
-				styles = open(root_dir + '/Highlight/test_styles.css').read()
+				styles = get_test_styles(view)
 				content = open(root_dir + '/Highlight/test_config.html').read()
 				test_type = ''
 				if self.is_correct_answer(_out):
@@ -147,7 +148,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				phantom = Phantom(Region(pt), content, sublime.LAYOUT_BLOCK, onclick)
 				return phantom
 			else:
-				styles = open(root_dir + '/Highlight/test_styles.css').read()
+				styles = get_test_styles(view) 
 				content = open(root_dir + '/Highlight/test_running.html').read()
 				content = content.format(
 					test_id=i
@@ -252,7 +253,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		def insert(self, s, call_on_insert=False):
 			n = self.test_iter
 			if self.proc_run:
-				self.on_insert(s)
+				# self.on_insert(s)
 				self.tests[n].append_string(s)
 				self.process_manager.write(s)
 				if call_on_insert:
@@ -359,7 +360,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			to_shove = v.substr(Region(self.delta_input, v.sel()[0].b))
 			# print('shovel -> ', to_shove)
 			v.insert(edit, v.sel()[0].b, '\n')
-
 		else:
 			to_shove = text
 			v.insert(edit, v.sel()[0].b, to_shove + '\n')
@@ -498,6 +498,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				pt,
 				self.on_test_action,
 				tester.prog_out[i],
+				self.view,
 				running=running
 			)
 			configs.append(config)

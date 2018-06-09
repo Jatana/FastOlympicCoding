@@ -1,39 +1,39 @@
 [
-	{ 
-		"keys": ["shift+tab"], 
-		"command": "olympic_funcs",
-		"args": {
-			"action": "insert_pregen_class"
-		},
-		"context": [
-			{
-				"operand": "source.c++",
-				"operator": "equal",
-				"match_all": true,
-				"key" : "selector"
-			},
-			// {
-			// 	"key": "preceding_text",
-			// 	"operator": "regex_contains",
-			// 	"operand": ".+([a-z]+)",
-			// 	"match_all": true
-			// },
-			// {
-			// 	"key": "following_text",
-			// 	"operator": "not_regex_contains",
-			// 	"operand": ".{1,}",
-			// 	"match_all": true
-			// },
-			// {
-			// 	"key" : "olympic_funcs",
-			// 	"args": {
-			// 		"action": "can_pregen_classes"
-			// 	},
-			// 	"operator": "equal", 
-			// 	"operand": true
-			// }
-		]
-	},
+	// { 
+	// 	"keys": ["shift+tab"], 
+	// 	"command": "olympic_funcs",
+	// 	"args": {
+	// 		"action": "insert_pregen_class"
+	// 	},
+	// 	"context": [
+	// 		{
+	// 			"operand": "source.c++",
+	// 			"operator": "equal",
+	// 			"match_all": true,
+	// 			"key" : "selector"
+	// 		},
+	// 		// {
+	// 		// 	"key": "preceding_text",
+	// 		// 	"operator": "regex_contains",
+	// 		// 	"operand": ".+([a-z]+)",
+	// 		// 	"match_all": true
+	// 		// },
+	// 		// {
+	// 		// 	"key": "following_text",
+	// 		// 	"operator": "not_regex_contains",
+	// 		// 	"operand": ".{1,}",
+	// 		// 	"match_all": true
+	// 		// },
+	// 		// {
+	// 		// 	"key" : "olympic_funcs",
+	// 		// 	"args": {
+	// 		// 		"action": "can_pregen_classes"
+	// 		// 	},
+	// 		// 	"operator": "equal", 
+	// 		// 	"operand": true
+	// 		// }
+	// 	]
+	// },
 
 	{ 
 		"keys": ["tab"], 
