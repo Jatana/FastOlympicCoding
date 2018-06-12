@@ -1,5 +1,5 @@
 html {
-	--action-color: color(var(--bluish) alpha(1));
+	--action-color: color(var(--bluish) alpha(0.3));
 	padding: 0px;
 }
 
