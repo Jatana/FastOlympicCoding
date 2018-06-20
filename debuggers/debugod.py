@@ -38,8 +38,6 @@ def decode(data):
 		s += chr(x)
 	return s
 
-log = open('/Users/Uhuhu/Desktop/log.txt', 'w')
-
 class Debugger(object):
 	"""docstring for Debugger"""
 
@@ -218,8 +216,8 @@ class Debugger(object):
 
 	def get_frames(self):
 		frames = []
-		log.write(str(dir(self.main_thread)))
-		log.flush()
+		# log.write(str(dir(self.main_thread)))
+		# log.flush()
 		for frame in self.main_thread.frames:
 			# log.write(str(dir(frame)) + '\n')
 			# log.write(str(dir(frame.line_entry)) + '\n')
