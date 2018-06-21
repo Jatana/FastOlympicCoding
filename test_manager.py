@@ -686,6 +686,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		if v.substr(v.size() - 1) != '\n' or not _outp:
 			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
 
+		v.show(self.input_start + 10)
+
 		rtcode = str(rtcode)
 		# if rtcode != '0':
 		# 	v.run_command('test_manager', {
@@ -1040,7 +1042,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			for x in sels:
 				if x.intersects(r):
 					to_del.append(i)
-					
+
 		sublime.status_message('deleted tests: ' + (', '.join(map(lambda x: str(x + 1), to_del))))
 		for test in reversed(to_del):
 			self.delete_test(edit, test)
