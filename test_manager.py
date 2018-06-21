@@ -47,7 +47,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.delta_input = 0
 		self.tester = None
 		self.session = None
-		self.phantoms = PhantomSet(view, 'test-phantoms') 
+		self.phantoms = PhantomSet(view, 'test-phantoms')
 
 	class Test(object):
 		"""
@@ -824,14 +824,33 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
 		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
+
 		self.use_debugger = use_debugger
 		v = self.view
 
-		self.delta_input = 0
-
 		if v.get_status('process_status') == 'RUNNING':
-			print('force terminating')
+			print('terminating')
 			self.tester.terminate()
+
+			kwargs = {
+				'run_file': run_file,
+				'build_sys': build_sys,
+				'clr_tests': clr_tests,
+				'sync_out': sync_out,
+				'code_view_id': code_view_id,
+				'use_debugger': use_debugger,
+				'load_session': load_session,
+				'action': 'make_opd'
+			}
+
+			def rerun(kwargs=kwargs):
+				v.run_command(
+					'test_manager',
+					kwargs
+				)
+
+			sublime.set_timeout_async(rerun, 30)
+			return
 
 		if v.settings().get('edit_mode'):
 			self.apply_edit_changes()
@@ -890,6 +909,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			process_manager = DebugModule(run_file)
 		sublime.set_timeout_async(lambda :self.change_process_status('COMPILING'))
 		cmp_data = process_manager.compile()
+		self.delta_input = 0
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
 				self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
@@ -927,7 +947,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		k = tester.test_iter
 		if tester.proc_run:
-			k  += 1
+			k += 1
 		iter = 0
 		for i in range(k):
 			if not tester.tests[i].fold:
@@ -1020,14 +1040,16 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			for x in sels:
 				if x.intersects(r):
 					to_del.append(i)
-
+					
 		sublime.status_message('deleted tests: ' + (', '.join(map(lambda x: str(x + 1), to_del))))
-		self.tester.del_tests(to_del)
-		for x in to_del:
-			self.delete_nth_test(edit, x)
-		self.renumerate_tests(edit, cur_test + 2)
-		if self.tester.proc_run:
-			self.delta_input = v.get_regions('delta_input')[0].begin()
+		for test in reversed(to_del):
+			self.delete_test(edit, test)
+		# self.tester.del_tests(to_del)
+		# for x in to_del:
+		# 	self.delete_nth_test(edit, x)
+		# self.renumerate_tests(edit, cur_test + 2)
+		# if self.tester.proc_run:
+		# 	self.delta_input = v.get_regions('delta_input')[0].begin()
 		self.memorize_tests()
 
 	def sync_read_only(self):
@@ -1282,7 +1304,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				need_new = False
 		else:
 			need_new = True
-
 		if not need_new:
 			dbg_view = self.tied_dbg
 			create_new = False
