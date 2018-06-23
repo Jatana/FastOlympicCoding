@@ -314,3 +314,16 @@ class TestEditCommand(sublime_plugin.TextCommand):
 	def isEnabled(view, args):
 		pass
 
+class EditModifyListener(sublime_plugin.EventListener):
+	def on_selection_modified(self, view):
+		if view.settings().get('edit_mode'):
+			mod = []
+			change = False
+			for reg in view.sel():
+				if reg.a == 0:
+					change = True
+				mod.append(Region(max(reg.a, 1), max(reg.b, 1)))
+
+			if change:
+				view.sel().clear()
+				view.sel().add_all(mod)

@@ -486,12 +486,16 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				'action': 'replace',
 				'region': (tie_pos, tie_pos),
 				'text': '\n\n'
-			})	
-			print(i, tie_pos)
+			})
 			v.add_regions('type', \
 				[Region(tie_pos + 1)], *self.REGION_BEGIN_PROP)
+
 			self.input_start = tie_pos + 1
 			self.delta_input = tie_pos + 1
+
+			v.sel().clear()
+			v.sel().add(Region(tie_pos + 1))
+
 			tester.run_test(i)	
 			self.update_configs()
 
@@ -559,7 +563,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			configs.append(config)
 
 			if running:
-				pt += len(tester.tests[i].test_string) + len(tester.prog_out[i]) + 1 
+				pt += len(tester.tests[i].test_string) + len(tester.prog_out[i]) + 2
 			elif not tester.tests[i].fold:
 				pt += len(tester.tests[i].test_string) + len(tester.prog_out[i]) + 1
 
@@ -612,6 +616,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		v.add_regions('type', \
 			[Region(v.size(), v.size())], *self.REGION_BEGIN_PROP)
+
+		v.sel().clear()
+		v.sel().add(Region(v.size()))
 
 		self.tester.next_test(v.size() - 1)
 		self.update_configs()
@@ -816,6 +823,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def clear_all(self):
 		v = self.view
 		v.run_command('test_manager', {'action': 'erase_all'})
+		v.sel().clear()
+		v.sel().add(Region(v.size(), v.size()))
 		if self.tester:
 			v.erase_regions('type')
 			for i in range(-1, self.tester.test_iter + 1):
@@ -1056,29 +1065,33 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def sync_read_only(self):
 		view = self.view
-		if view.settings().get('edit_mode'):
-			view.set_read_only(False)
-			return
-		have_sel_no_end = False
-		for sel in view.sel():
-			if sel.begin() != view.size():
-				have_sel_no_end = True
-				break
+		tester = self.tester
 
-		end_cursor = len(view.sel()) and \
-			((self.tester is None) or (not self.tester.proc_run)) and \
-			view.size() == view.sel()[0].a
+		err = True
+		if tester and tester.proc_run:
+			err = False
+			forb_before = self.delta_input
+			forb_after = view.line(self.delta_input).b
+			forbs = [Region(0, forb_before)]
+			forbs.append(Region(forb_after, view.size() - 1))
 
-		# view.set_read_only(have_sel_no_end or end_cursor)
+			for forb in forbs:
+				for sel in view.sel():
+					if forb.intersects(sel):
+						err = True
+
+			delete_forb = False
+			for sel in view.sel():
+				if sel.a == self.delta_input:
+					delete_forb = True
+					break
+
+			view.settings().set('delete_forb', delete_forb)
+
+		view.set_read_only(err)
 
 	def enable_edit_mode(self):
 		v = self.view
-		# print('hello')
-		# ph = Phantom(Region(11, 11), text, sublime.LAYOUT_BLOCK)
-		# _set = self.phantoms
-		# _set.update([ph])
-		# print(_set)
-		# return
 		if self.tester.proc_run:
 			self.tester.terminate()
 			# sublime.set_timeout_async(self.enable_edit_mode, 500)
@@ -1473,7 +1486,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		elif action == 'sync_opdebugs':
 			w = v.window()
 			layout = w.get_layout()
-
 
 			if len(layout['cols']) == 3:
 				if layout['cols'][1] != 1:

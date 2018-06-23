@@ -206,15 +206,9 @@
 				"key": "selector"
 			},
 			{
-				"key": "preceding_text",
-				"operator": "regex_contains",
-				"operand": "^$",
-				"match_all": true
-			},
-			{
-				"key": "setting.edit_mode",
+				"key": "setting.delete_forb",
 				"operator": "equal",
-				"operand": false
+				"operand": true
 			}
 		]
 	},
