@@ -30,10 +30,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_DECLINE_PROP = ['variable.c++', 'dot', sublime.HIDDEN]
 	REGION_UNKNOWN_PROP = ['text.plain', 'dot', sublime.HIDDEN]
 	REGION_OUT_PROP = ['entity.name.function.opd', 'bookmark', sublime.HIDDEN]
-	REGION_BEGIN_PROP = ['string', 'Packages/FastOlympicCoding/icons/arrow_right.png', \
+	REGION_BEGIN_PROP = ['string', 'Packages/' + base_name + '/icons/arrow_right.png', \
 				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
 					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE]
-	REGION_END_PROP = ['variable.c++', 'Packages/FastOlympicCoding/icons/arrow_left.png', sublime.HIDDEN]
+	REGION_END_PROP = ['variable.c++', 'Packages/' + base_name + '/icons/arrow_left.png', sublime.HIDDEN]
 	REGION_LINE_PROP = ['string', 'dot', \
 				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
 					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE]
@@ -373,6 +373,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def insert_text(self, edit, text=None):
 		v = self.view
+		expected = v.line(self.delta_input).end()
+		print(v.sel()[0], expected)
+		if len(v.sel()) > 1: return
+		if v.sel()[0].a != expected or v.sel()[0].b != expected: return
 		if text is None:
 			if not self.tester.proc_run:
 				return None
@@ -1082,7 +1086,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 			delete_forb = False
 			for sel in view.sel():
-				if sel.a == self.delta_input:
+				if sel.a == self.delta_input or sel.begin() == 0:
 					delete_forb = True
 					break
 

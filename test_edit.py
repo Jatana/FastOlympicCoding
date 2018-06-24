@@ -317,6 +317,13 @@ class TestEditCommand(sublime_plugin.TextCommand):
 class EditModifyListener(sublime_plugin.EventListener):
 	def on_selection_modified(self, view):
 		if view.settings().get('edit_mode'):
+			if view.size() == 0:
+				view.run_command('test_edit', {
+					'action': 'replace',
+					'region': [0, view.size()],
+					'text': '\n'
+				})
+
 			mod = []
 			change = False
 			for reg in view.sel():

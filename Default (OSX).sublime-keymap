@@ -191,7 +191,6 @@
 			}
 		]
 	},
-
 	{
 		"keys": ["backspace"],
 		"command": "test_manager",
