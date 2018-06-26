@@ -850,6 +850,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.use_debugger = use_debugger
 		v = self.view
 
+		if v.get_status('process_status') == 'COMPILING':
+			return
+
 		if v.get_status('process_status') == 'RUNNING':
 			print('terminating')
 			self.tester.terminate()
@@ -920,6 +923,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			f.close()
 			tests = []
 		file_ext = path.splitext(run_file)[1][1:]
+
+		self.change_process_status('COMPILING')
+
 		DebugModule = debugger_info.get_best_debug_module(file_ext)
 		if (not self.use_debugger) or (DebugModule is None):
 			process_manager = ProcessManager(
