@@ -210,10 +210,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			if type(self.process_manager) != ProcessManager:
 				self.process_manager.set_calls(self.__on_out, self.__on_stop, on_status_change)
 
-		def __on_stop(self, rtcode, crash_line=None):
+		def __on_stop(self, rtcode, runtime=-1, crash_line=None):
+			self.prog_out[self.running_test] = self.prog_out[self.running_test].rstrip()
 			self.proc_run = False
-			self.test_iter += 1
-			self.on_stop(rtcode, 0, crash_line=crash_line)
+
+			if self.running_new:
+				self.test_iter += 1
+
+			if type(self.process_manager) == ProcessManager:
+				self.on_status_change('STOPPED')
+
+			self.on_stop(rtcode, runtime, crash_line=crash_line)
 
 		def __on_out(self, s):
 			n = self.running_test
@@ -246,13 +253,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			except:
 				'output already putted'
 			runtime = int((time() - start_time) * 1000)
-			self.prog_out[self.running_test] = self.prog_out[self.running_test].rstrip()
-			self.proc_run = False
-			if self.running_new:
-				self.test_iter += 1
-			self.on_stop(proc.is_stopped(), runtime)
-			if type(self.process_manager) == ProcessManager:
-				self.on_status_change('STOPPED')
+			self.__on_stop(proc.is_stopped(), runtime)
 
 		def insert(self, s, call_on_insert=False):
 			n = self.running_test
@@ -476,6 +477,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def on_test_action(self, i, event):
 		v = self.view
 		tester = self.tester
+		if tester.proc_run and event in {'test-click', 'test-edit', 'test-run'}:
+			sublime.status_message('can not {action} while process running'.format(action=event))
+			return
 		if event == 'test-click':	
 			self.toggle_fold(i)	
 		elif event == 'test-edit':
@@ -571,7 +575,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			elif not tester.tests[i].fold:
 				pt += len(tester.tests[i].test_string) + len(tester.prog_out[i]) + 1
 
-			if not running and not tester.tests[i].fold and str(tester.tests[i].rtcode) == '0':
+			if not running and not tester.tests[i].fold and str(tester.tests[i].rtcode) == '0' and tester.prog_out[i]:
 				if tester.tests[i].is_correct_answer(tester.prog_out[i]):
 					type = 'decline'
 				else:
@@ -693,9 +697,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 			v.add_regions(self.REGION_BEGIN_KEY % test_id, \
 				[Region(line.begin(), line.end())], *self.REGION_BEGIN_PROP)
-
-		if v.substr(v.size() - 1) != '\n' or not _outp:
-			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n'})
 
 		v.show(self.input_start + 10)
 

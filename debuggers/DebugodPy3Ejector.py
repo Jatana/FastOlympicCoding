@@ -64,7 +64,7 @@ class PyLLDBDebugger(Debugger):
 				crash_line = self.get_crash_line()
 				if crash_line is not None:
 					crash_line = int(crash_line)
-			self.cb_on_stop(self.get_return_value(), crash_line=crash_line)
+			self.cb_on_stop(self.get_return_value(), runtime=self.get_runtime(), crash_line=crash_line)
 
 	def __status_change_listener(self):
 		state = self.get_state()
@@ -97,6 +97,9 @@ class PyLLDBDebugger(Debugger):
 
 	def get_return_value(self):
 		return self.interact('_.rtcode')
+
+	def get_runtime(self):
+		return int(self.interact('_.get_runtime()'))
 
 	def cut_var_value(self, value):
 		try:

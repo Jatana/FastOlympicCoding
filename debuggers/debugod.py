@@ -106,6 +106,7 @@ class Debugger(object):
 					if process.GetState() == lldb.eStateExited:
 						_.state = 'EXITED'
 						_.rtcode = process.GetExitStatus()
+						_.stop_time = time()
 						_.global_vars = _.get_globals()
 						_.clear()
 						break
@@ -114,6 +115,7 @@ class Debugger(object):
 						frame = _.get_crash_frame()
 						_.crash_line = int(frame.line_entry.GetLine().__str__())
 						_.rtcode = process.GetExitStatus()
+						_.stop_time = time()
 						_.global_vars = _.get_globals()
 						# print(frame.line_entry.GetLine())
 						_.state = 'STOPPED'
@@ -134,6 +136,7 @@ class Debugger(object):
 		target = dbg.CreateTargetWithFileAndArch(exe, lldb.LLDB_ARCH_DEFAULT)
 		module = target.module[target.executable.basename]
 		self.miss_cnt = 0
+		self.start_time = time()
 		process = target.LaunchSimple(None, None, path.dirname(self.file))
 		self.change_state('RUNNING')
 		# print(self.is_stopped())
@@ -196,6 +199,9 @@ class Debugger(object):
 		if rez == 'No value':
 			rez = self.global_vars.get('::' + var_name, 'No value')
 		return rez
+
+	def get_runtime(self):
+		return int((self.stop_time - self.start_time) * 1000)
 
 	def get_globals(self):
 		module = self.module
