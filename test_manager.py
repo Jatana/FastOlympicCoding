@@ -678,18 +678,19 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		v.erase_regions('type')
 		line = v.line(self.input_start)
-		# v.add_regions('kok', [Region(self.delta_input)], 'string', 'dot')
-		# print(v.substr(Region(self.input_start, self.delta_input)))
+
+		input_end = v.line(Region(self.delta_input)).end()
+
 		if tester.running_new and self.tester.tests[test_id].is_correct_answer(self.tester.prog_out[test_id]):
 			v.run_command('test_manager', {
 				'action': 'replace',
-				'region': (self.input_start, self.delta_input),
+				'region': (self.input_start, input_end),
 				'text': ''
 			})
 		else:
 			v.run_command('test_manager', {
 				'action': 'replace',
-				'region': (self.input_start, self.delta_input),
+				'region': (self.input_start, input_end),
 				'text': _inp + '\n' + _outp
 			})
 
