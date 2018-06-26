@@ -282,6 +282,11 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			n = self.test_iter
 			tests = self.tests
 			prog_out = self.prog_out
+
+			if self.proc_run:
+				sublime.status_message('process already running')
+				return
+
 			if n >= len(tests):
 				tests.append(TestManagerCommand.Test(''))
 			if n >= len(prog_out):
@@ -1035,38 +1040,32 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def delete_tests(self, edit):
 		v = self.view
-		cur_test = self.tester.test_iter
-		if self.tester.proc_run:
-			v.add_regions('delta_input', [Region(self.delta_input, self.delta_input + 1)], \
-				'', '', sublime.HIDDEN)
+		tester = self.tester
 
-		sels = v.sel()
-		if self.tester.proc_run:
-			end_tbegin = v.get_regions(self.REGION_BEGIN_KEY % cur_test)[0].begin()
-			for x in sels:
-				if x.end() >= end_tbegin:
-					self.tester.terminate()
-					self.delete_nth_test(edit, cur_test, fixed_end=v.size())
-					cur_test -= 1
-					break
+		if tester.proc_run:
+			sublime.status_message('stop process before delete action')
+			return
+
+		if tester.proc_run:
+			k = tester.test_iter + 1
+		else:
+			k = tester.test_iter
+			
 		to_del = []
-		for i in range(cur_test):
-			begin = v.get_regions(self.REGION_BEGIN_KEY % i)[0].begin()
-			end = v.line(v.get_regions(self.REGION_END_KEY % i)[0].begin()).end()
+		for i in range(k):
+			begin = self.get_tie_pos(i)
+			if i == k - 1:
+				end = v.size()
+			else:
+				end = self.get_tie_pos(i + 1)
 			r = Region(begin, end)
-			for x in sels:
-				if x.intersects(r):
+			for sel in v.sel():
+				if sel.intersects(r):
 					to_del.append(i)
 
 		sublime.status_message('deleted tests: ' + (', '.join(map(lambda x: str(x + 1), to_del))))
 		for test in reversed(to_del):
 			self.delete_test(edit, test)
-		# self.tester.del_tests(to_del)
-		# for x in to_del:
-		# 	self.delete_nth_test(edit, x)
-		# self.renumerate_tests(edit, cur_test + 2)
-		# if self.tester.proc_run:
-		# 	self.delta_input = v.get_regions('delta_input')[0].begin()
 		self.memorize_tests()
 
 	def sync_read_only(self):
