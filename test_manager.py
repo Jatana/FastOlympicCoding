@@ -935,8 +935,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			)
 		else:
 			process_manager = DebugModule(run_file)
-		sublime.set_timeout_async(lambda :self.change_process_status('COMPILING'))
 		cmp_data = process_manager.compile()
+		self.change_process_status('COMPILED')
 		self.delta_input = 0
 		if cmp_data is None or cmp_data[0] == 0:
 			self.tester = self.Tester(process_manager, \
