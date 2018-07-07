@@ -1,5 +1,5 @@
 html {
-	--action-color: color(var(--bluish) alpha(0.3));
+	--action-color: color(var(--bluish) alpha(1));
 	padding: 0px;
 }
 
@@ -39,7 +39,6 @@ a {
 	padding: 1px;
 }
 
-
 .config-run {
 	background-color: var(--action-color);
 }
@@ -58,4 +57,3 @@ a {
 	text-decoration: none;
 	background-color: color(var(--foreground) alpha(0.5));
 }
-

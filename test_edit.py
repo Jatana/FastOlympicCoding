@@ -15,6 +15,7 @@ from .Modules.ProcessManager import ProcessManager
 from .settings import base_name, get_settings, root_dir
 from .debuggers import debugger_info
 from .Highlight.CppVarHighlight import highlight
+from .Highlight.test_interface import get_test_styles
 
 
 class TestEditCommand(sublime_plugin.TextCommand):
@@ -119,7 +120,7 @@ class TestEditCommand(sublime_plugin.TextCommand):
 
 	def update_config(self):
 		v = self.view
-		styles = open(root_dir + '/Highlight/test_styles.css').read()
+		styles = get_test_styles(v)
 		content = open(root_dir + '/Highlight/test_edit.html').read()
 
 		content = content.format(
