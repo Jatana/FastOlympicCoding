@@ -1343,11 +1343,13 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				pass
 			dbg_view.run_command('toggle_setting', {'setting': 'word_wrap'})
 
-		window.set_layout({
-			'cols': [0, self.ruler_opd_panel, 1],
-			'rows': [0, 1],
-			'cells': [[0, 0, 1, 1], [1, 0, 2, 1]]
-		})
+		if len(window.get_layout()['cols']) != 3 or window.get_layout()['cols'][1] >= 0.89:
+			window.set_layout({
+				'cols': [0, self.ruler_opd_panel, 1],
+				'rows': [0, 1],
+				'cells': [[0, 0, 1, 1], [1, 0, 2, 1]]
+			})
+
 		window.set_view_index(dbg_view, 1, 0)
 		window.focus_view(v)
 		window.focus_view(dbg_view)
@@ -1445,7 +1447,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		v.window().show_quick_panel(items, on_select, sublime.MONOSPACE_FONT, 0, on_highlight)
 
 	def show_var_value(self, value, pos=None):
-		# print(value)
 		def nop(): pass
 		self.view.show_popup(highlight(value), sublime.HIDE_ON_MOUSE_MOVE_AWAY, pos)
 
@@ -1477,7 +1478,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				'variable.language.python', 'Packages/FastOlympicCoding/icons/arrow_right.png', \
 				sublime.DRAW_SOLID_UNDERLINE)
 			sublime.set_timeout_async(lambda pt=pt: v.show_at_center(pt), 39)
-			# print(pt)
+
 		elif action == 'get_var_value':
 			self.get_var_value(pos=pos)
 
