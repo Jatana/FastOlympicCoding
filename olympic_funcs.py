@@ -208,9 +208,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			'cells': [[0, 0, 1, 1], [1, 0, 2, 1], [2, 0, 3, 1]]
 		})
 
-		print('hello')
-		print(out_view)
-
 		window.set_view_index(dbg_view, 1, 0)
 		window.set_view_index(out_view, 0, 0)
 		window.focus_view(v)
@@ -249,7 +246,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
-		print(action)
 		if action == 'can_pregen_classes':
 			return False
 		if action == 'insert':
@@ -361,34 +357,6 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			# w.run_command('toggle_side_bar')
 		elif action == 'open_settings':
 			self.view.window().open_file(path.join(root_dir, settings_file))
-		
-# class LayoutListener(sublime_plugin.EventListener):
-# 	"""docstring for LayoutListener"""
-# 	def __init__(self):
-# 		super(LayoutListener, self).__init__()
-	
-# 	def move_syncer(self, view):
-# 		try:
-# 			w = view.window()
-# 			prop = w.get_view_index(view)
-# 			print(view.name())
-# 			if view.name()[-4:] == '-run':
-# 				w.set_view_index(view, 1, 0)
-# 				print('moved to second group')
-# 			elif prop[0] == 1:
-# 				active_view_index = w.get_view_index(w.active_view_in_group(0))[1]
-# 				print('moved to first group')
-# 				w.set_view_index(view, 0, active_view_index + 1)
-# 		except:
-# 			pass
-		
-
-# 	def on_load(self, view):
-# 		self.move_syncer(view)
-
-# 	def on_new(self, view):
-# 		self.move_syncer(view)
-
 
 class GenListener(sublime_plugin.EventListener):
 	"""docstring for GenListener"""
@@ -418,11 +386,7 @@ class GenListener(sublime_plugin.EventListener):
 	def on_query_completions(self, view, prefix, locations):
 		if (view.scope_name(view.sel()[0].a).find('source.c') != -1) and \
 				(not pregen_class(prefix) is None):
-			# print(pregen_class(prefix))
 			return [(pregen_class(prefix), pregen_class(prefix))]
-		print(view.scope_name(view.sel()[0].a).find('source.c'))
-		print(pregen_class(prefix))
-		# view.sel().clear()
 		return []
 
 		

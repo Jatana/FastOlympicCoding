@@ -380,14 +380,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def insert_text(self, edit, text=None):
 		v = self.view
 		expected = v.line(self.delta_input).end()
-		print(v.sel()[0], expected)
 		if len(v.sel()) > 1: return
 		if v.sel()[0].a != expected or v.sel()[0].b != expected: return
 		if text is None:
 			if not self.tester.proc_run:
 				return None
 			to_shove = v.substr(Region(self.delta_input, v.sel()[0].b))
-			# print('shovel -> ', to_shove)
 			v.insert(edit, v.sel()[0].b, '\n')
 		else:
 			to_shove = text
@@ -752,10 +750,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def redirect_var_value(self, var_name, pos=None):
 		view = self.view
-		# print('VarName:', var_name, pos)
 		if self.tester.process_manager.has_var_view_api():
 			value = self.tester.process_manager.get_var_value(var_name)
-			# print(value)
 			for x in view.window().views():
 				if x.id() == self.code_view_id:
 					x.run_command('view_tester', {
