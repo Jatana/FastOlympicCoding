@@ -10,7 +10,7 @@ from os import path
 from .Modules.ProcessManager import ProcessManager
 from .settings import root_dir, base_name, settings_file, \
 			get_settings, is_run_supported_ext
-from .Modules.ClassPregen.ClassPregen import pregen as pregen_class
+from .Modules.ClassPregen.ClassPregen import gen as gen_template
 
 
 class PreGenParser(object):
@@ -360,6 +360,10 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 
 class GenListener(sublime_plugin.EventListener):
 	"""docstring for GenListener"""
+
+	def try_expand(self, prefix):
+		return gen_template(prefix, get_settings().get('cpp_complete_settings'))
+			
 	def on_text_command(self, view, command_name, args):
 		if command_name == 'olympic_funcs':
 			if args['action'] == 'insert_pregen_class':
@@ -383,12 +387,28 @@ class GenListener(sublime_plugin.EventListener):
 				if ext != 'cpp':
 					return ('olympic_funcs', { 'action': 'pass' })
 
+	def on_modified(self, view):
+		if view.scope_name(view.sel()[0].a).find('source.c') == -1: return
+
+		prefix = view.substr(view.word(view.sel()[0]))
+		if len(prefix) <= 1: return
+		
+		if self.try_expand(prefix):
+			print('invoking')
+			view.run_command('hide_auto_complete')
+			def run():
+				view.run_command('auto_complete', {
+					'disable_auto_insert': True,
+					'next_completion_if_showing': False,
+					'auto_complete_commit_on_tab': True
+				})
+			sublime.set_timeout(run)
 
 	def on_query_completions(self, view, prefix, locations):
-		print('invoking self <---', prefix)
-		if (view.scope_name(view.sel()[0].a).find('source.c') != -1) and \
-				(not pregen_class(prefix) is None):
-			print('resuilt', (pregen_class(prefix)))
-			return [(prefix + '\t' + pregen_class(prefix), pregen_class(prefix))]
-		print('not found', prefix)
+		if not get_settings().get('cpp_complete_enabled'): return
+		if len(prefix) == 1: return
+		expand = self.try_expand(prefix)
+		if (view.scope_name(view.sel()[0].a).find('source.c') != -1) and expand:
+			if prefix == expand: return []
+			return [(prefix + '\t' + expand, expand)]
 		return []

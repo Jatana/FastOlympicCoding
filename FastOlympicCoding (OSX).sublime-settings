@@ -1,4 +1,10 @@
 {
+	// "lint_error_region_scope": "variable.c++",
+	"lint_error_region_scope": "invalid.illegal",
+	"lint_warning_region_scope": "constant",
+
+	"algorithms_base": null,
+
 	"run_settings": [
 		{
 			"name": "C++",
@@ -17,9 +23,54 @@
 		},
 	],
 
-	// "lint_error_region_scope": "variable.c++",
-	"lint_error_region_scope": "invalid.illegal",
-	"lint_warning_region_scope": "constant",
+	"cpp_complete_enabled": true,
 
-	"algorithms_base": null
+	"cpp_complete_settings": {
+		"classes": {
+			"int": {
+				"template_size": 0,
+			},
+
+			"char": {
+				"template_size": 0
+			},
+
+			"string": {
+				"template_size": 0,
+			},
+
+			"pair": {
+				"template_size": 2,
+			},
+
+			"vector": {
+				"template_size": 1
+			},
+
+			"bool": {
+				"template_size": 0
+			},
+
+			"ll": {
+				"template_size": 0
+			},
+
+			"double": {
+				"template_size": 0
+			},
+
+			"set": {
+				"template_size": 1,
+				"bind": "S"
+			},
+
+			"map": {
+				"template_size": 2
+			}
+		},
+
+		"dont_expand": [
+			"pii"
+		]
+	}
 }
