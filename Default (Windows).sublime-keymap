@@ -1,41 +1,5 @@
 [
 	{ 
-		"keys": ["shift+tab"], 
-		"command": "olympic_funcs",
-		"args": {
-			"action": "insert_pregen_class"
-		},
-		"context": [
-			{
-				"operand": "source.c++",
-				"operator": "equal",
-				"match_all": true,
-				"key" : "selector"
-			},
-			// {
-			// 	"key": "preceding_text",
-			// 	"operator": "regex_contains",
-			// 	"operand": ".+([a-z]+)",
-			// 	"match_all": true
-			// },
-			// {
-			// 	"key": "following_text",
-			// 	"operator": "not_regex_contains",
-			// 	"operand": ".{1,}",
-			// 	"match_all": true
-			// },
-			// {
-			// 	"key" : "olympic_funcs",
-			// 	"args": {
-			// 		"action": "can_pregen_classes"
-			// 	},
-			// 	"operator": "equal", 
-			// 	"operand": true
-			// }
-		]
-	},
-
-	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
 		"args": {
@@ -58,7 +22,7 @@
 				"key": "preceding_text",
 				"operator": "regex_contains",
 				// "operand": "[[:word:]]+",
-				"operand": "([\t ]+)(f )(.+)",
+				"operand": "([\t ]+)(f|fr )(.+)",
 				"match_all": true
 			},
 			{
@@ -69,6 +33,8 @@
 			},
 		]
 	},
+
+	
 	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
@@ -116,10 +82,16 @@
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
+			},
+			{
+				"key": "setting.edit_mode",
+				"operator": "equal",
+				"operand": false,
 			}
 		]
 	},
 
+	// New test
 	{
 		"keys": ["ctrl+enter"],
 		"command": "test_manager",
@@ -132,6 +104,33 @@
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
+			},
+			{
+				"key": "setting.edit_mode",
+				"operator": "equal",
+				"operand": false
+			}
+		]
+	},
+
+	// Toggle new test
+	{
+		"keys": ["ctrl+enter"],
+		"command": "test_manager",
+		"args": {
+			"action": "toggle_new_test"
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			},
+			{
+				"key": "setting.edit_mode",
+				"operator": "equal",
+				"operand": true 
 			}
 		]
 	},
@@ -148,10 +147,14 @@
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
+			},
+			{
+				"key": "setting.edit_mode",
+				"operator": "equal",
+				"operand": false,
 			}
 		]
 	},
-
 	{
 		"keys": ["backspace"],
 		"command": "test_manager",
@@ -166,17 +169,16 @@
 				"key": "selector"
 			},
 			{
-				"key": "preceding_text",
-				"operator": "regex_contains",
-				"operand": "^$",
-				"match_all": true
-			},
+				"key": "setting.delete_forb",
+				"operator": "equal",
+				"operand": true
+			}
 		]
 	},
 
 	// Terminate Process in OPD
 	{
-		"keys": ["ctrl+x"],
+		"keys": ["ctrl+c"],
 		"command": "test_manager",
 		"args": {
 			"action": "kill_proc"
@@ -210,7 +212,7 @@
 
 	// Accept Test
 	{
-		"keys": ["ctrl+shift+o"],
+		"keys": ["super+ctrl+o"],
 		"command": "test_manager",
 		"args": {
 			"action": "accept_test"
@@ -227,7 +229,7 @@
 
 	// Decline Test
 	{
-		"keys": ["ctrl+shift+p"],
+		"keys": ["super+ctrl+p"],
 		"command": "test_manager",
 		"args": {
 			"action": "decline_test"
@@ -247,7 +249,8 @@
 		"keys": ["ctrl+alt+b"],
 		"command": "view_tester",
 		"args": {
-			"action": "make_opd"
+			"action": "make_opd",
+			"use_debugger": false
 		},
 		"context": [
 			{
@@ -264,7 +267,44 @@
 		"command": "test_manager",
 		"args": {
 			"action": "make_opd",
-			"load_session": true
+			"load_session": true,
+			"use_debugger": false
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	// Run with Debugger
+	{
+		"keys": ["ctrl+shift+b"],
+		"command": "view_tester",
+		"args": {
+			"action": "make_opd",
+			"use_debugger": true
+		},
+		"context": [
+			{
+				"operand": "source.OPDebugger",
+				"operator": "not_equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	{
+		"keys": ["ctrl+shift+b"],
+		"command": "test_manager",
+		"args": {
+			"action": "make_opd",
+			"load_session": true,
+			"use_debugger": true
 		},
 		"context": [
 			{

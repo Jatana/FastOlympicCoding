@@ -1,25 +1,76 @@
 {
+	// "lint_error_region_scope": "variable.c++",
+	"lint_error_region_scope": "invalid.illegal",
+	"lint_warning_region_scope": "constant",
+
+	"algorithms_base": null,
+
 	"run_settings": [
 		{
 			"name": "C++",
 			"extensions": ["cpp"],
-			"compile_cmd": "g++ \"{source_file}\" -std=gnu++11",
-			"run_cmd": "\"{source_file_dir}/a.exe\" {args} -debug",
+			"compile_cmd": "g++ '{source_file}' -std=gnu++11 -o {file_name}",
+			"run_cmd": "./\"{file_name}\" {args} -debug",
 
-			"lint_compile_cmd": "g++ -std=gnu++11 \"{source_file}\" -I \"{source_file_dir}\""
+			"lint_compile_cmd": "g++ -std=gnu++11 '{source_file}' -I '{source_file_dir}'"
 		},
 
 		{
 			"name": "Python",
 			"extensions": ["py"],
 			"compile_cmd": null,
-			"run_cmd": "python \"{source_file}\""
+			"run_cmd": "python '{source_file}'"
 		},
 	],
 
-	// "lint_error_region_scope": "variable.c++",
-	"lint_error_region_scope": "invalid.illegal",
-	"lint_warning_region_scope": "constant",
+	"cpp_complete_enabled": true,
 
-	"algorithms_base": null
+	"cpp_complete_settings": {
+		"classes": {
+			"int": {
+				"template_size": 0,
+			},
+
+			"char": {
+				"template_size": 0
+			},
+
+			"string": {
+				"template_size": 0,
+			},
+
+			"pair": {
+				"template_size": 2,
+			},
+
+			"vector": {
+				"template_size": 1
+			},
+
+			"bool": {
+				"template_size": 0
+			},
+
+			"ll": {
+				"template_size": 0
+			},
+
+			"double": {
+				"template_size": 0
+			},
+
+			"set": {
+				"template_size": 1,
+				"bind": "S"
+			},
+
+			"map": {
+				"template_size": 2
+			}
+		},
+
+		"dont_expand": [
+			"pii"
+		]
+	}
 }
