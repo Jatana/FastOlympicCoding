@@ -27,6 +27,9 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 		self.gen_process.run(args=[str(randint(0, int(1e9)))])
 		test_data = self.gen_process.read() + '\n'
 		self.good_process.run()
+		f = open('/Users/Uhuhu/temp.txt', 'w')
+		print(test_data, file=f)
+		f.close()
 		self.good_process.write(test_data)
 		self.bad_process.run()
 		self.bad_process.write(test_data)

@@ -368,6 +368,7 @@ class GenListener(sublime_plugin.EventListener):
 				text = view.substr(text_sel)
 				text = text.rstrip().lstrip()
 				if pregen_class(text) is None:
+					print('invoke')
 					return ('insert_best_completion', {'exact': False, 'default': '\t'})
 			# elif args['action'] == 'gen_def':
 				# if get_settings().get('algorithms_base', None) is None:
@@ -384,9 +385,10 @@ class GenListener(sublime_plugin.EventListener):
 
 
 	def on_query_completions(self, view, prefix, locations):
+		print('invoking self <---', prefix)
 		if (view.scope_name(view.sel()[0].a).find('source.c') != -1) and \
 				(not pregen_class(prefix) is None):
-			return [(pregen_class(prefix), pregen_class(prefix))]
+			print('resuilt', (pregen_class(prefix)))
+			return [(prefix + '\t' + pregen_class(prefix), pregen_class(prefix))]
+		print('not found', prefix)
 		return []
-
-		

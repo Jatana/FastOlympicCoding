@@ -1305,7 +1305,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 	have_tied_dbg = False
 	use_debugger = False
 
-	def create_opd(self, clr_tests=False, sync_out=True):
+	def create_opd(self, clr_tests=False, sync_out=True, use_debugger=False):
 		'''
 		creates opd with supported language
 		'''
@@ -1364,7 +1364,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			'clr_tests': clr_tests, 
 			'sync_out': sync_out, 
 			'code_view_id': v.id(), \
-			'use_debugger': self.use_debugger
+			'use_debugger': use_debugger
 		})
 	
 	def close_opds(self):
@@ -1459,7 +1459,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 
 
 	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True, \
-			crash_line=None, value=None, pos=None, frames=None):
+			crash_line=None, value=None, pos=None, frames=None, use_debugger=False):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
@@ -1467,10 +1467,14 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			v.insert(edit, v.sel()[0].begin(), text)
 		elif action == 'make_opd':
 			if v.settings().get('syntax') == 'Packages/FastOlympicCoding/OPDebugger.tmLanguage':
-				v.run_command('test_manager', {'action': 'make_opd', 'load_session': True})
+				v.run_command('test_manager', {
+					'action': 'make_opd',
+					'load_session': True,
+					'use_debugger': use_debugger
+				})
 			else:
 				self.close_opds()
-				self.create_opd(clr_tests=clr_tests, sync_out=sync_out)
+				self.create_opd(clr_tests=clr_tests, sync_out=sync_out, use_debugger=use_debugger)
 		elif action == 'show_crash_line':
 			pt = v.text_point(crash_line - 1, 0)
 			v.erase_regions('crash_line')
