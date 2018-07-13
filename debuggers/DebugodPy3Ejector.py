@@ -129,6 +129,9 @@ class PyLLDBDebugger(Debugger):
 	def select_frame(self, id):
 		self.selected_frame_id = id
 
+	def get_compile_cmd(self):
+		return self.interact('_.get_compile_cmd()')
+
 	def compile(self):
 		return eval(self.interact('_.compile()'))
 

@@ -9,17 +9,17 @@
 		{
 			"name": "C++",
 			"extensions": ["cpp"],
-			"compile_cmd": "g++ '{source_file}' -std=gnu++11 -o {file_name}",
-			"run_cmd": "./\"{file_name}\" {args} -debug",
+			"compile_cmd": "g++ \"{source_file}\" -std=gnu++11 -o {file_name}",
+			"run_cmd": "\"{file_name}.exe\" {args} -debug",
 
-			"lint_compile_cmd": "g++ -std=gnu++11 '{source_file}' -I '{source_file_dir}'"
+			"lint_compile_cmd": "g++ -std=gnu++11 \"{source_file}\" -I \"{source_file_dir}\""
 		},
 
 		{
 			"name": "Python",
 			"extensions": ["py"],
 			"compile_cmd": null,
-			"run_cmd": "python '{source_file}'"
+			"run_cmd": "python \"{source_file}\""
 		},
 	],
 

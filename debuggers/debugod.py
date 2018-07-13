@@ -62,6 +62,9 @@ class Debugger(object):
 			self.add_buff()
 			self.process.Kill()
 			lldb.SBDebugger.Destroy(self.sbdbg)
+
+	def get_compile_cmd(self):
+		return self.COMPILE_CMD.format(name=self.file)
 		
 	def compile(self):
 		PIPE = subprocess.PIPE

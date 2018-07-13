@@ -117,6 +117,9 @@ class ProcessManager(object):
 			self.process.stdin.write(s)
 			self.process.stdin.flush()
 
+	def communicate(self, s, timeout=None):
+		return self.process.communicate(input=s, timeout=timeout)
+
 	def is_stopped(self):
 		return self.process.poll()
 

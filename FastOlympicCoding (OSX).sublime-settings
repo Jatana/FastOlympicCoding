@@ -23,6 +23,8 @@
 		},
 	],
 
+	"stress_time_limit_seconds": 2,
+
 	"cpp_complete_enabled": true,
 
 	"cpp_complete_settings": {

@@ -723,12 +723,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		v.run_command('test_manager', {'action': 'set_cursor_to_end'})
 
 		tester = self.tester
+		self.memorize_tests()
 		if str(rtcode) == '0':
 			if tester.running_new and tester.have_pretests():
 				self.view.run_command('test_manager', {'action': 'new_test'})
 			else:
 				sublime.set_timeout(self.update_configs, 100)
-				self.memorize_tests()
 		else:
 			sublime.set_timeout(self.update_configs, 100)
 
@@ -832,6 +832,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		v.run_command('test_manager', {'action': 'erase_all'})
 		v.sel().clear()
 		v.sel().add(Region(v.size(), v.size()))
+		self.phantoms.update([])
 		if self.tester:
 			v.erase_regions('type')
 			for i in range(-1, self.tester.test_iter + 1):
@@ -839,6 +840,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				v.erase_regions(self.REGION_END_KEY % i)
 				v.erase_regions('line_%d' % i)
 				v.erase_regions('test_error_%d' % i)
+
+	def set_compile_bar(self, cmd, type=''):
+		view = self.view
+		if type == 'error':
+			type = 'config-stop'
+
+		styles = get_test_styles(view)
+		content = open(root_dir + '/Highlight/compile.html').read().format(cmd=cmd, type=type)
+		content = '<style>' + styles + '</style>' + content
+		phantom = Phantom(Region(0), content, sublime.LAYOUT_BLOCK)
+		self.phantoms.update([phantom])	
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
 		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
@@ -931,17 +943,24 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			)
 		else:
 			process_manager = DebugModule(run_file)
-		cmp_data = process_manager.compile()
-		self.change_process_status('COMPILED')
-		self.delta_input = 0
-		if cmp_data is None or cmp_data[0] == 0:
-			self.tester = self.Tester(process_manager, \
-				self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
-				tests=tests, sync_out=sync_out)
-			v.settings().set('edit_mode', False)
-			v.run_command('test_manager', {'action': 'new_test'})
-		else:
-			v.run_command('test_manager', {'action': 'insert_opd_out', 'text': cmp_data[1]})
+
+		def compile(self=self, v=v):
+			cmp_data = process_manager.compile()
+			self.change_process_status('COMPILED')
+			self.delta_input = 0
+			if cmp_data is None or cmp_data[0] == 0:
+				self.tester = self.Tester(process_manager, \
+					self.on_insert, self.on_out, self.on_stop, self.change_process_status, \
+					tests=tests, sync_out=sync_out)
+				v.settings().set('edit_mode', False)
+				v.run_command('test_manager', {'action': 'new_test'})
+			else:
+				v.run_command('test_manager', {'action': 'insert_opd_out', 'text': '\n' + cmp_data[1]})
+				self.set_compile_bar('compilation error', type='error')
+
+		self.set_compile_bar('compiling')
+
+		sublime.set_timeout_async(compile, 10)
 
 	def delete_nth_test(self, edit, nth, fixed_end=None):
 		'''
