@@ -42,7 +42,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * to edit lint open Run Settings
  
 ### Debugger
- ![Debugger](ScreenShots/DebuggerNew.png)
+ ![Debugger](ScreenShots/DebuggerNew2.png)
 
  * currently debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> disable/enable debugger
