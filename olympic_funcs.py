@@ -388,7 +388,7 @@ class GenListener(sublime_plugin.EventListener):
 					return ('olympic_funcs', { 'action': 'pass' })
 
 	def on_modified(self, view):
-		if view.scope_name(view.sel()[0].a).find('source.c') == -1: return
+		if not len(view.sel()) or view.scope_name(view.sel()[0].a).find('source.c') == -1: return
 
 		prefix = view.substr(view.word(view.sel()[0]))
 		if len(prefix) <= 1: return

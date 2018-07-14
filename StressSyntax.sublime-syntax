@@ -1,0 +1,9 @@
+%YAML 1.2
+---
+name: StressSyntax
+file_extensions: []
+scope: source.Stress
+contexts:
+  main:
+    - match: \d+
+      scope: constant.numeric.OPD

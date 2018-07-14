@@ -11,34 +11,10 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 	def provide_stress(self):
 		view = self.view
 		sublime.status_message('stressing, test: ' + str(self.test_id))
+		view.set_name('Stress: Test #' + str(self.test_id))
 		result = self.start_test()
 		self.test_id += 1
-		if not result['success']:
-			if result['crash'] and not result['log']:
-				sublime.message_dialog(result['message'])
-			else:
-				result_view = view.window().new_file()
-				result_view.set_scratch(True)
-				# result_view.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
-				# result_view.run_command('set_setting', {'setting': 'line_numbers', 'value': False})
-				# result_view.run_command('set_setting', {'setting': 'gutter', 'value': False})
-				if result['crash']:
-					text = 'test:\n{test}\noutput:\n{output}\nerror:\n{error}'.format(
-						error=result['message'],
-						test=result['input'],
-						output=result['output']
-					)
-				else:
-					text = 'test:\n{test}\ngood:\n{good}\nbad:\n{bad}'.format(
-						test=result['test_data'],
-						good=result['good_output'],
-						bad=result['bad_output']
-					)
-				result_view.run_command('stress_manager', {
-					'action': 'insert_result',
-					'text': text 
-				})
-		else:
+		if result['success']:
 			if not self.stop_stress:
 				sublime.set_timeout_async(self.provide_stress)
 			else:
@@ -53,7 +29,6 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 					'success': False,
 					'input': input,
 					'message': process.file + ': crashed with exit code: %d' % process.is_stopped(),
-					'crash': True,
 					'output': outs
 				}
 			else:
@@ -64,31 +39,51 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 				'success': False,
 				'input': input,
 				'message': process.file + ': time limit exceeded (%d seconds)' % tl,
-				'crash': True,
 				'output': ''
 			}
+
+	def _print_log(self, test_data, good_output, bad_output):
+		view = self.view
+		text = 'test #{test_id}:\n{test_data}\ngood:\n{good_output}\nbad:\n{bad_output}'
+		text = text.format(
+			test_id=self.test_id,
+			test_data=self.shift_right(test_data),
+			good_output=self.shift_right(good_output),
+			bad_output=self.shift_right(bad_output)
+		)
+		view.run_command('stress_manager', {
+			'action': 'insert_result',
+			'text': text 
+		})
 
 	def start_test(self):
 		seed = str(randint(0, int(1e9)))
 		tl = get_settings().get('stress_time_limit_seconds')
 
-		data = self.perfom_run(self.gen_process, seed, tl)
+		data = self.perfom_run(self.process['gen'], seed, tl)
 		if not type(data) == str:
-			data['log'] = False
+			self._print_log(data['message'], '', '')
 			return data
+
 		test_data = data
-
-		data = self.perfom_run(self.good_process, test_data, tl)
+		self._print_log(test_data, '', '')
+		err = False	
+		data = self.perfom_run(self.process['good'], test_data, tl)
 		if not type(data) == str:
-			data['log'] = True
-			return data
-		good_output = data
+			good_output = data['message']
+			err = True
+		else:
+			good_output = data
+		self._print_log(test_data, good_output, '')
 
-		data = self.perfom_run(self.bad_process, test_data, tl)
+		data = self.perfom_run(self.process['bad'], test_data, tl)
 		if not type(data) == str:
-			data['log'] = True
-			return data
-		bad_output = data
+			bad_output = data['message']
+			err = True
+		else:
+			bad_output = data
+
+		self._print_log(test_data, good_output, bad_output)
 
 		resp = {
 			'test_data': test_data,
@@ -100,14 +95,61 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 		if good_output.strip() != bad_output.strip():
 			resp['success'] = False
 		else:
-			resp['success'] = True
+			resp['success'] = not err
 		return resp
 
-	def run(self, edit, action=None, text=''):
+	def shift_right(self, s):
+		return '\t' + s.replace('\n', '\n\t')
+
+	def _print_compile_results(self, results):
+		process = self.process
+		view = self.view
+		text = '{gen_file}:\n{gen_compile}\n{bad_file}:\n{bad_compile}\n{good_file}:\n{good_compile}'
+		text = ''
+		for key in process:
+			text += process[key].file + ':' + '\n' + self.shift_right(results[key]) + '\n'
+		
+		view.run_command('stress_manager', {
+			'action': 'insert_result',
+			'text': text
+		})
+
+	def _compile(self):
+		results = {
+			'gen': 'compiling',
+			'good': 'compiling',
+			'bad': 'compiling',
+		} 
+		self._print_compile_results(results)
+		ce = False
+		for key in self.process:
+			p = self.process[key]
+			code, s = p.compile()
+			if code: ce = True	
+			results[key] = s if s else 'compiled'
+			self._print_compile_results(results)
+
+		if not ce:
+			self.test_id = 1
+			self.stop_stress = False
+			sublime.set_timeout_async(self.provide_stress, 100)
+
+	def run(self, edit, action=None, text='', file=None):
 		view = self.view
 		window = view.window()
 		if action == 'make_stress':
 			file = view.file_name()
+			stress_view = window.new_file()
+			stress_view.run_command('stress_manager', {
+				'action': 'init',
+				'file': view.file_name()
+			})
+
+		elif action == 'init':
+			view.set_name('Stress: compile')
+			view.set_syntax_file('Packages/%s/StressSyntax.tmLanguage' % base_name)
+			view.set_scratch(True)
+			view.run_command('set_setting', {'setting': 'line_numbers', 'value': False})
 			ext = path.splitext(file)[1][1:]
 			base_dir = path.dirname(file)
 			task_name = path.splitext(path.split(file)[1])[0]
@@ -121,31 +163,43 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 				return True
 			
 			if check_exist(good_source) and check_exist(bad_source) and check_exist(gen_source):
-				self.good_process = ProcessManager(
+				self.process = dict()
+				self.process['good'] = ProcessManager(
 					good_source,
 					None,
 					run_settings=get_settings().get('run_settings')
 				)
 
-				self.bad_process = ProcessManager(
+				self.process['bad'] = ProcessManager(
 					bad_source,
 					None,
 					run_settings=get_settings().get('run_settings')
 				)
 
-				self.gen_process = ProcessManager(
+				self.process['gen'] = ProcessManager(
 					gen_source,
 					None,
 					run_settings=get_settings().get('run_settings')
 				)
 
-				self.good_process.compile()
-				self.bad_process.compile()
-				self.gen_process.compile()
-				self.test_id = 1
-				self.stop_stress = False
-				sublime.set_timeout_async(self.provide_stress, 100)
+				sublime.set_timeout_async(self._compile)
+
+		elif action == 'provide_stress':
+			self.provide_stress()
+				
 		elif action == 'stop_stress':
 			self.stop_stress = True
 		elif action == 'insert_result':
-			view.insert(edit, 0, text)
+			view.replace(edit, sublime.Region(0, view.size()), text)
+			view.sel().clear()
+
+class StressListener(sublime_plugin.EventListener):
+	"""docstring for StressListener"""
+
+	def on_close(self, view):
+		if view.settings().get('syntax').find('StressSyntax') != -1:
+			view.run_command('stress_manager', {
+				'action': 'stop_stress'
+			})
+		
+		
