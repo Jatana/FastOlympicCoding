@@ -14,7 +14,7 @@ Fast Olympic Coding plugin for Sublime Text 3
        `Warning! rename plugin folder to FastOlympicCoding`
 
 ### TestManager
- ![TestManager](ScreenShots/TestManager.gif)
+ ![TestManager](ScreenShots/TestManagerNew.gif)
 #### TestManager Keybindings
  * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+alt+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test

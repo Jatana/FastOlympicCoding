@@ -1320,8 +1320,7 @@ class CloseListener(sublime_plugin.EventListener):
 
 class ViewTesterCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
-	# ruler_opd_panel = 0.68
-	ruler_opd_panel = 0.56
+	ruler_opd_panel = 0.68
 	have_tied_dbg = False
 	use_debugger = False
 
