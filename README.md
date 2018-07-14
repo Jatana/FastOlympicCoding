@@ -4,7 +4,6 @@ Fast Olympic Coding plugin for Sublime Text 3
  * [TestManager](#testmanager)
  * [RunSettings](#runsettings)
  * [FastClassComplete](#fastclasscomplete)
- * [FastFor](#fastfor)
  * [CppLint](#cpplint)
  * [Debugger](#debugger)
  
@@ -20,10 +19,9 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+alt+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
  * <kbd>ctrl+c (OSX)</kbd>  <kbd>ctrl+x (Linux + Win)</kbd> kill process
- * <kbd>ctrl+shift+b (OSX)</kbd> enable/disable debugger
+ * <kbd>ctrl+shift+b (OSX)</kbd> run with debugger
  * <kbd>ctrl+d</kbd> delete test
  * <kbd>cmd+k, cmd+p (OSX)</kbd> <kbd>ctrl+k, ctrl+p (Linux + Win)</kbd> close/open right panel
-
 
 ### RunSettings
  * to edit settings
@@ -35,12 +33,6 @@ Fast Olympic Coding plugin for Sublime Text 3
  ![FastClassComplete](ScreenShots/FastPregen.gif)
 
 to complete press <kbd>shift+tab</kbd>
- 
- 
-### FastFor
- ![FastFor](ScreenShots/FastFor.gif)
-
-to complete press <kbd>tab</kbd>
 
 ### CppLint
  ![CppLint](ScreenShots/CppLint.png)
