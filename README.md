@@ -29,6 +29,10 @@ Fast Olympic Coding plugin for Sublime Text 3
    * or `tools — FastOlympicCoding — settings`
 
 
+### Stress
+ ![Stress](ScreenShots/Stress.gif)
+
+
 ### FastClassComplete
  ![FastClassComplete](ScreenShots/FastPregen.gif)
 
