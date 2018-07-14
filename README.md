@@ -30,7 +30,7 @@ Fast Olympic Coding plugin for Sublime Text 3
 
 
 ### Stress
- ![Stress](ScreenShots/Stress.gif)
+ ![Stress](ScreenShots/StressSmall.gif)
 
 
 ### FastClassComplete
