@@ -34,17 +34,15 @@ Fast Olympic Coding plugin for Sublime Text 3
 
 
 ### FastClassComplete
- ![FastClassComplete](ScreenShots/FastPregen.gif)
-
-to complete press <kbd>shift+tab</kbd>
+ ![FastClassComplete](ScreenShots/ClassComplete.gif)
 
 ### CppLint
- ![CppLint](ScreenShots/CppLint.png)
+ ![CppLint](ScreenShots/CppLintNew.png)
  
  * to edit lint open Run Settings
  
 ### Debugger
- ![Debugger](ScreenShots/Debugger.png)
+ ![Debugger](ScreenShots/DebuggerNew.png)
 
  * currently debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> disable/enable debugger
