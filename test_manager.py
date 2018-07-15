@@ -604,25 +604,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.delta_input = v.size()
 		self.output_start = v.size() + 1
 		self.out_region_set = False
-		
-		# v.insert(edit, v.size(), '\n')
-		# v.insert(edit, v.size(), '\n')
-		# v.insert(edit, v.size(), '\n')
-		# v.add_regions('test_st_pos_%d' % self.tester.test_iter, [Region(v.size() - 1, v.size() - 1)])
-		# print('add', self.tester.test_iter)
-		# v.sel().add(Region(v.size() - 1, v.size() - 1))
-		# v.sel().clear()
-		# print('calling out mayday')
-
-		# styles = open(root_dir + '/Highlight/test_styles.css').read()
-		# content = open(root_dir + '/Highlight/test_config.html').read()
-		# content = content.format(
-		# 	test_id=self.tester.test_iter
-		# )
-		# content = '<style>' + styles + '</style>' + content
-
-		# phantom = Phantom(Region(v.size() - 1), content, sublime.LAYOUT_BLOCK)
-		# self.phantoms.update([phantom])
 
 		v.add_regions('type', \
 			[Region(v.size(), v.size())], *self.REGION_BEGIN_PROP)
@@ -637,7 +618,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			# self.fold_accept_tests()
 
 	def memorize_tests(self):
-		# print([x.memorize() for x in (self.tester.get_tests())])
 		f = open(self.dbg_file + ':tests', 'w')
 		f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
 		f.close()
@@ -651,8 +631,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.view.run_command('test_manager', {'action': 'insert_opd_out', 'text': s})
 
 		if not self.out_region_set:
-			# v.add_regions(self.REGION_OUT_KEY % (self.tester.test_iter + 1), \
-				# [sublime.Region(v.size() - 1, v.size() - 1)], *self.REGION_OUT_PROP)
 			self.out_region_set = True
 
 	def add_region(self, line, region_prop):
@@ -672,8 +650,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		if tester.running_new:
 			_outp += '\n' + '\n'
-
-		# print('call on stop', self.input_start, self.delta_input)
 
 		self.tester.tests[test_id].set_cur_runtime(runtime)
 		self.tester.tests[test_id].set_cur_rtcode(rtcode)
@@ -791,7 +767,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		else:
 			prop = self.REGION_UNKNOWN_PROP
 
-		# prop = self.get_style_test_status(nth)
 		v.add_regions(beg_key, [rs], *prop)
 
 	def set_tests_status(self, accept=True):
@@ -822,8 +797,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				v.fold(Region(v.word(beg + 5).end(), end))
 
 	def change_process_status(self, status):
-		# name = self.view.name()
-		# self.view.set_name(name[:name.index(' ')] + ' -' + status.lower())
 		self.view.set_status('process_status', status)
 
 	def clear_all(self):
@@ -893,7 +866,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		v.set_status('opd_info', 'opdebugger-file')
 		self.clear_all()
 		if load_session:
-			print('loading')
 			if self.session is None:
 				v.run_command('test_manager', {'action': 'insert_opd_out', 'text': 'Can\'t restore session'})
 			else:
@@ -904,7 +876,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				code_view_id = self.session['code_view_id']
 				use_debugger = self.session['use_debugger']
 		else:
-			print('saving session')
+			print('[FastOlympicCoding] session saved')
 			self.session = {
 				'run_file': run_file,
 				'build_sys': build_sys,
@@ -1123,7 +1095,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.tester.terminate()
 			# sublime.set_timeout_async(self.enable_edit_mode, 500)
 			sublime.set_timeout_async(lambda :v.run_command('test_manager', {'action': 'enable_edit_mode'}), 500)
-			# sublime.set_timeout(lambda :print('hello'), 500)
 			return
 
 		if v.settings().get('edit_mode'): return
