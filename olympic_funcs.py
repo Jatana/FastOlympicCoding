@@ -371,6 +371,15 @@ class GenListener(sublime_plugin.EventListener):
 				text_sel = view.line(sel)
 				text = view.substr(text_sel)
 				text = text.rstrip().lstrip()
+				if view.match_selector(view.sel()[0].a, 'meta.function.parameters.c++'):
+					reg = "[ ,(]"
+					match = re.search(reg, text[-1::-1])
+					text = text[-match.start():]
+					# print (text)
+					reg = "[ ,)]"
+					match = re.search(reg, text)
+					text = text[:match.start()]
+					# print (text)
 				if pregen_class(text) is None:
 					print('invoke')
 					return ('insert_best_completion', {'exact': False, 'default': '\t'})
