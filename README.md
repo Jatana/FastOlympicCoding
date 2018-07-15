@@ -31,7 +31,7 @@ Fast Olympic Coding plugin for Sublime Text 3
 ### Stress
  ![Stress](ScreenShots/StressNew.gif)
 
-### Class Completion
+### ClassCompletion
  ![ClassCompletion](ScreenShots/ClassComplete.gif)
 
 ### CppLint
