@@ -2,8 +2,8 @@ Fast Olympic Coding plugin for Sublime Text 3
 ================
  * [Installation](#installation)
  * [TestManager](#testmanager)
- * [RunSettings](#runsettings)
- * [FastClassComplete](#fastclasscomplete)
+ * [Settings](#settings)
+ * [Class Completion](#classcompletion)
  * [CppLint](#cpplint)
  * [Debugger](#debugger)
  
@@ -23,29 +23,27 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>ctrl+d</kbd> delete test
  * <kbd>cmd+k, cmd+p (OSX)</kbd> <kbd>ctrl+k, ctrl+p (Linux + Win)</kbd> close/open right panel
 
-### RunSettings
+### Settings
  * to edit settings
    * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `Open Settings`
    * or `tools — FastOlympicCoding — settings`
 
-
 ### Stress
- ![Stress](ScreenShots/StressSmall.gif)
+ ![Stress](ScreenShots/StressNew.gif)
 
-
-### FastClassComplete
- ![FastClassComplete](ScreenShots/ClassComplete.gif)
+### Class Completion
+ ![ClassCompletion](ScreenShots/ClassComplete.gif)
 
 ### CppLint
  ![CppLint](ScreenShots/CppLintNew.png)
  
- * to edit lint open Run Settings
+ * to edit lint open Settings
  
 ### Debugger
  ![Debugger](ScreenShots/DebuggerNew2.png)
 
- * currently debugger only for OSX
- * <kbd>ctrl+shift+b</kbd> disable/enable debugger
+ * debugger only for OSX
+ * <kbd>ctrl+shift+b</kbd> to run with debugger
  * hover cursor on variable to see its value
 
 

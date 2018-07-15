@@ -131,7 +131,6 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 
 		if not ce:
 			self.test_id = 1
-			self.stop_stress = False
 			sublime.set_timeout_async(self.provide_stress, 100)
 
 	def run(self, edit, action=None, text='', file=None):
@@ -182,6 +181,7 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 					run_settings=get_settings().get('run_settings')
 				)
 
+				self.stop_stress = False
 				sublime.set_timeout_async(self._compile)
 
 		elif action == 'provide_stress':
