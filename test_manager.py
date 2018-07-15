@@ -70,7 +70,6 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.end = end
 			self.runtime = '-'
 
-
 		def add_correct_answer(self, answer):
 			self.correct_answers.add(answer.lstrip().rstrip())
 

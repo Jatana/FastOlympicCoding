@@ -1,45 +1,9 @@
-[
+[	
 	{ 
 		"keys": ["tab"], 
 		"command": "olympic_funcs",
 		"args": {
-			"action": "fast_gen"
-		},
-		"context": [
-			{
-				"operand": "source.c++",
-				"operator": "equal",
-				"match_all": true,
-				"key" : "selector"
-			},
-			{
-				"operand": "meta.block.c, meta.block.c++",
-				"operator": "equal",
-				"match_all": false,
-				"key" : "selector"
-			},
-			{
-				"key": "preceding_text",
-				"operator": "regex_contains",
-				// "operand": "[[:word:]]+",
-				"operand": "([\t ]+)(f|fr )(.+)",
-				"match_all": true
-			},
-			{
-				"key": "following_text",
-				"operator": "not_regex_contains",
-				"operand": ".{1,}",
-				"match_all": true
-			},
-		]
-	},
-
-	
-	{ 
-		"keys": ["tab"], 
-		"command": "olympic_funcs",
-		"args": {
-			"action": "gen_def"
+			"action": "insert_template"
 		},
 		"context": [
 			{
@@ -56,9 +20,8 @@
 			},
 			{
 				"key": "preceding_text",
-				"operator": "not_regex_contains",
-				// "operand": "[[:word:]]+",
-				"operand": "([\t ]+)(f )(.+)",
+				"operator": "regex_contains",
+				"operand": "^(\\w+)$",
 				"match_all": true
 			},
 			{
