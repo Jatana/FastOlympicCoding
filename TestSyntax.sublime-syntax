@@ -1,8 +1,8 @@
 %YAML 1.2
 ---
-name: OPDebugger
+name: TestSyntax
 file_extensions: []
-scope: source.OPDebugger
+scope: source.TestSyntax
 
 contexts:
   main:

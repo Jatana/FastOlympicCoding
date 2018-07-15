@@ -889,6 +889,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.apply_edit_changes()
 
 		v.set_scratch(True)
+		v.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
+		v.run_command('set_setting', {'setting': 'line_numbers', 'value': False})
 		v.set_status('opd_info', 'opdebugger-file')
 		self.clear_all()
 		if load_session:
@@ -916,7 +918,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.code_view_id = code_view_id
 
 		if not v.settings().get('word_wrap'):
-			v.run_command('toggle_setting', {"setting": "word_wrap"})
+			v.run_command('toggle_setting', {'setting': 'word_wrap'})
 
 		if not clr_tests:
 			try:
@@ -1353,8 +1355,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			self.tied_dbg = dbg_view
 			self.have_tied_dbg = True
 			create_new = True
-			dbg_view.run_command('toggle_setting', {'setting': 'line_numbers'})
-			# dbg_view.run_command('toggle_setting', {"setting": "gutter"})
 			try:
 				sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
 			except:
@@ -1372,8 +1372,8 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		window.set_view_index(dbg_view, 1, 0)
 		window.focus_view(v)
 		window.focus_view(dbg_view)
-		# opd_view.run_command('erase_view')
-		dbg_view.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % base_name)
+
+		dbg_view.set_syntax_file('Packages/%s/TestSyntax.tmLanguage' % base_name)
 		dbg_view.set_name(os.path.split(v.file_name())[-1] + ' -run')
 		dbg_view.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
 		dbg_view.run_command('test_manager', {
@@ -1395,7 +1395,6 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			if v.id() == tied_id: continue
 			if v.name()[::-1][:len('-run')][::-1] == '-run':
 				v.close()
-
 
 	def get_var_value(self, pos=None):
 		view = self.view

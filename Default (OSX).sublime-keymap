@@ -78,7 +78,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -100,7 +100,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -122,7 +122,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -143,7 +143,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -163,7 +163,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -185,7 +185,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -202,7 +202,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -219,7 +219,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -236,7 +236,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -254,7 +254,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "not_equal",
 				"match_all": true,
 				"key": "selector"
@@ -272,7 +272,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
@@ -290,7 +290,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "not_equal",
 				"match_all": true,
 				"key": "selector"
@@ -308,7 +308,7 @@
 		},
 		"context": [
 			{
-				"operand": "source.OPDebugger",
+				"operand": "source.TestSyntax",
 				"operator": "equal",
 				"match_all": true,
 				"key": "selector"
