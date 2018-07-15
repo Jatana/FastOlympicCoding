@@ -33,6 +33,7 @@
 		]
 	},
 
+	// Insert Text
 	{
 		"keys": ["enter"],
 		"command": "test_manager",
@@ -98,6 +99,7 @@
 		]
 	},
 
+	// Paste
 	{
 		"keys": ["super+v"],
 		"command": "test_manager",
@@ -118,6 +120,8 @@
 			}
 		]
 	},
+
+	// Backspace
 	{
 		"keys": ["backspace"],
 		"command": "test_manager",
@@ -173,40 +177,6 @@
 		]
 	},
 
-	// Accept Test
-	{
-		"keys": ["super+ctrl+o"],
-		"command": "test_manager",
-		"args": {
-			"action": "accept_test"
-		},
-		"context": [
-			{
-				"operand": "source.TestSyntax",
-				"operator": "equal",
-				"match_all": true,
-				"key": "selector"
-			}
-		]
-	},
-
-	// Decline Test
-	{
-		"keys": ["super+ctrl+p"],
-		"command": "test_manager",
-		"args": {
-			"action": "decline_test"
-		},
-		"context": [
-			{
-				"operand": "source.TestSyntax",
-				"operator": "equal",
-				"match_all": true,
-				"key": "selector"
-			}
-		]
-	},
-
 	// Run
 	{
 		"keys": ["ctrl+b"],
@@ -225,6 +195,7 @@
 		]
 	},
 
+	// Run
 	{
 		"keys": ["ctrl+b"],
 		"command": "test_manager",
@@ -261,6 +232,7 @@
 		]
 	},
 
+	// Run with Debugger
 	{
 		"keys": ["ctrl+shift+b"],
 		"command": "test_manager",
@@ -279,39 +251,7 @@
 		]
 	},
 
-	// Show All Olympic Functions
-	{
-		"keys": ["ctrl+shift+o"],
-		"command": "olympic_funcs",
-		"args": {
-			"action": "show_funcs"
-		},
-		"context": [
-			{
-				"operand": "source.c++",
-				"operator": "equal",
-				"match_all": true,
-				"key": "selector"
-			}
-		]
-	},
-
-	{
-		"keys": ["ctrl+shift+alt+o"],
-		"command": "inteli_sense",
-		"args": {
-			"action": "sync_sense"
-		},
-		"context": [
-			{
-				"operand": "source.c++",
-				"operator": "equal",
-				"match_all": true,
-				"key": "selector"
-			}
-		]
-	},
-
+	// Toggle Right panel
 	{
 		"keys": ["super+k", "super+p"],
 		"command": "view_tester",
