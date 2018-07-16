@@ -145,7 +145,7 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 			})
 
 		elif action == 'init':
-			view.set_name('Stress: compile')
+			view.set_name('Stress: Compile')
 			view.set_syntax_file('Packages/%s/StressSyntax.tmLanguage' % base_name)
 			view.set_scratch(True)
 			view.run_command('set_setting', {'setting': 'line_numbers', 'value': False})

@@ -1,4 +1,5 @@
 {
+	"lint_enabled": true,
 	// "lint_error_region_scope": "variable.c++",
 	"lint_error_region_scope": "invalid.illegal",
 	"lint_warning_region_scope": "constant",
@@ -22,6 +23,8 @@
 			"run_cmd": "python '{source_file}'"
 		},
 	],
+
+	"stress_time_limit_seconds": 2,
 
 	"cpp_complete_enabled": true,
 
