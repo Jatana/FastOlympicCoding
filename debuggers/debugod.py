@@ -11,19 +11,6 @@ from os import path
 import threading
 
 
-def wait(ms):
-	# print 'wait: ' + str(ms)
-	start = time()
-	while abs(start - time()) < ms:
-		pass
-	# print 'wait: continue'
-
-
-def disassemble_instructions(insts):
-	pass
-	# for i in insts:
-		# print 'dis', i
-
 def encode(s):
 	return str([ord(c) for c in s])
 	return s
@@ -125,10 +112,6 @@ class Debugger(object):
 						# _.filter_frames()
 						break
 
-				else:
-					'OK lets try again'
-					pass # dont forget
-
 	def run(self):
 		self.buff = ''
 		exe = path.join(path.dirname(self.file), 'main')
@@ -142,8 +125,7 @@ class Debugger(object):
 		self.start_time = time()
 		process = target.LaunchSimple(None, None, path.dirname(self.file))
 		self.change_state('RUNNING')
-		# print(self.is_stopped())
-		# print('__runed')
+
 		self.process = process
 		self.target = target
 		self.module = module
@@ -154,12 +136,6 @@ class Debugger(object):
 		exit_listener._dbg = self
 		exit_listener.start()
 		self.exit_listener = exit_listener
-
-		# log.write(str(module))
-		# log.flush()
-		# print(dir(dbg))
-		# print(dir(target))
-		# print(dir(process))
 
 	def add_buff(self):
 		out = self.process.GetSTDOUT(2 ** 18)
@@ -228,12 +204,6 @@ class Debugger(object):
 		# log.write(str(dir(self.main_thread)))
 		# log.flush()
 		for frame in self.main_thread.frames:
-			# log.write(str(dir(frame)) + '\n')
-			# log.write(str(dir(frame.line_entry)) + '\n')
-			# log.write(frame.__str__() + '\n')
-			# log.write(str(frame.get_arguments()) + '\n')
-			# log.write(str(dir(frame.args)) + '\n')
-
 			frames.append({
 				'line': frame.line_entry.GetLine().__str__(),
 				'file': frame.line_entry.file.__str__(),
@@ -241,6 +211,7 @@ class Debugger(object):
 				'desc': str(frame)[str(frame).index('`') + 1:],
 				'frame_id': frame.GetFrameID().__str__()
 			})	
+
 		return frames
 
 if len(sys.argv) > 1:
@@ -248,7 +219,6 @@ if len(sys.argv) > 1:
 debugger = Debugger(file)
 
 
-# print(debugger.compile())
 def _console_connecter(debugger):
 	global decode
 	global encode
@@ -272,28 +242,8 @@ def _console_connecter(debugger):
 
 
 	while True:
-
 		print(encode(input().__str__()))
-		# print('____')
 		sys.stdout.flush()
-		# query = raw_input().rstrip()
-		# if query == 'compile':
-		# 	debugger.compile()
-		# elif query == 'run':
-		# 	debugger.run()
-		# elif query == 'is_running':
-		# 	print(debugger.is_running())
-		# elif query == 'destroy':
-		# 	debugger.destroy()
-		# elif query == 'get_state':
-		# 	print(debugger.state())
-		# elif query == 'put_stdin':
-		# 	debugger.put_stdin()
-		# elif query == 'get_output':
-		# 	print(debugger.get_output())
-		# elif query == 'exit':
-		# 	debugger.destroy()
-		# 	exit(0)
-
+		
 _console_connecter(debugger)
 		
