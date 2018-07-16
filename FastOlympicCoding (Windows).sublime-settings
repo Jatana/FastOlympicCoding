@@ -1,12 +1,15 @@
 {
+	// enable/disable lint
 	"lint_enabled": true,
 	
-	// "lint_error_region_scope": "variable.c++",
+	// lint style properties
 	"lint_error_region_scope": "invalid.illegal",
+	// "lint_error_region_scope": "variable.c++",
 	"lint_warning_region_scope": "constant",
 
 	"algorithms_base": null,
 
+	// run settings
 	"run_settings": [
 		{
 			"name": "C++",
@@ -25,10 +28,13 @@
 		},
 	],
 
+	// time limit for stress
 	"stress_time_limit_seconds": 2,
 
+	// enable/disable complete
 	"cpp_complete_enabled": true,
 
+	// class completion settings
 	"cpp_complete_settings": {
 		"classes": {
 			"int": {

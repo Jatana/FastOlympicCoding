@@ -14,7 +14,7 @@ Fast Olympic Coding plugin for Sublime Text 3
        `Warning! rename plugin folder to FastOlympicCoding`
 
 ### TestManager
- ![TestManager](ScreenShots/TestManagerNew.gif)
+ ![TestManager](ScreenShots/TestManager.gif)
 #### TestManager Keybindings
  * <kbd>ctrl+b (OSX)</kbd> <kbd>ctrl+alt+b (Linux + Win)</kbd> compile and run
  * <kbd>ctrl+enter</kbd> new test
@@ -29,7 +29,7 @@ Fast Olympic Coding plugin for Sublime Text 3
    * or `tools — FastOlympicCoding — settings`
 
 ### Stress
- ![Stress](ScreenShots/StressNew.gif)
+ ![Stress](ScreenShots/Stress.gif)
  
  * to stress you need to implement three following files:
    * `<name>.cpp` - program that works incorrect
@@ -42,12 +42,12 @@ Fast Olympic Coding plugin for Sublime Text 3
  * to edit completions open settings
 
 ### CppLint
- ![CppLint](ScreenShots/CppLintNew.png)
+ ![CppLint](ScreenShots/CppLint.png)
  
  * to edit lint open settings
  
 ### Debugger
- ![Debugger](ScreenShots/DebuggerNew2.png)
+ ![Debugger](ScreenShots/Debugger.png)
 
  * debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> to run with debugger
