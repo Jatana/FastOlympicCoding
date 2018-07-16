@@ -71,8 +71,22 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 			wind.show_quick_panel(to_view_funcs, on_done, 1, 0, 1)
 
 		elif action == 'open_settings':
-			self.view.window().open_file(path.join(root_dir, settings_file))
+			v.window().run_command('new_window')
+			sublime.active_window().set_sidebar_visible(False)
+			sublime.active_window().open_file(path.join(root_dir, settings_file))
+			sublime.active_window().set_layout({
+				'cols': [0, 0.5, 1],
+				'rows': [0, 1],
+				'cells': [[0, 0, 1, 1], [1, 0, 2, 1]]
+			})
+			_opt_path = path.join(sublime.packages_path(), 'User', 'FastOlympicCoding.sublime-settings')
+			if not path.exists(_opt_path):
+				_opt = open(_opt_path, 'w')
+				_opt.write('{\n\t\n}')
+				_opt.close()
 
+			_opt_view = sublime.active_window().open_file(_opt_path)
+			sublime.active_window().set_view_index(_opt_view, 1, 0)
 
 class GenListener(sublime_plugin.EventListener):
 	"""docstring for GenListener"""

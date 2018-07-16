@@ -41,14 +41,15 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		st = self.run_status
 		if self.timer_run:
 			self.stop_sense()
-			sublime.status_message('sensa disabled')
+			sublime.status_message('sense disabled')
 		else:
 			self.run_sense()
-			sublime.status_message('sensa enabled')
+			sublime.status_message('sense enabled')
 
 	def run_sense(self):
 		compile_cmd = self.get_compile_cmd()
 		if compile_cmd is None: return
+		if not get_settings().get('lint_enabled'): return
 		if self.timer_run:
 			self.run_status = 'do_waited_sense'
 			return 0
@@ -166,10 +167,8 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		v.erase_regions('error_marks')
 		try:
 			errors = (self.parse_cpp_errors_smart(s, run_file_path))
-			# errors = (self.parse_cpp_errors_smart(s, v.file_name()))
-			# errors = self.parse_cpp_errors(s)
 		except:
-			print('cant parse errors')
+			print('[FastOlympicCoding] can not parse errors')
 			return 0
 
 		for x in errors:
