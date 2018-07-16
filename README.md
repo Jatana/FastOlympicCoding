@@ -31,7 +31,7 @@ Fast Olympic Coding plugin for Sublime Text 3
 ### Stress
  ![Stress](ScreenShots/StressNew.gif)
  
- * to stress you need to implement three files:
+ * to stress you need to implement three following files:
    * `<name>.cpp` - program that works incorrect
    * `<name>__Good.cpp` - program that works correct
    * `<name>__Generator.cpp` - program that generates tests, you can read a seed for random in input
