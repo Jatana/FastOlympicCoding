@@ -79,8 +79,6 @@ def get_best_debug_module(ext):
 				dbgs.append(dbg)
 	dbgs.sort(key=lambda dbg: dbg.RUN_PRIOR)
 	dbgs.reverse()
-	# print(dbgs)
-	# print(dbgs[0])
 	if dbgs:
 		return dbgs[0]
 	return None
