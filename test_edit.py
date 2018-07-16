@@ -176,7 +176,7 @@ class TestEditCommand(sublime_plugin.TextCommand):
 		v.run_command('toggle_setting', {'setting': 'line_numbers'})
 		v.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
 		v.settings().set('edit_mode', True)
-		v.set_syntax_file('Packages/%s/OPDebugger.tmLanguage' % base_name)
+		v.set_syntax_file('Packages/%s/TestSyntax.tmLanguage' % base_name)
 		v.insert(edit, 0, '\n' + test)
 		self.update_config()
 
