@@ -124,7 +124,12 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 		ce = False
 		for key in self.process:
 			p = self.process[key]
-			code, s = p.compile()
+			_result = p.compile()
+			if _result is None:
+				code, s = 0, ''
+			else:
+				code, s = _result[0], _result[1]
+
 			if code: ce = True	
 			results[key] = s if s else 'compiled'
 			self._print_compile_results(results)
@@ -152,9 +157,31 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 			ext = path.splitext(file)[1][1:]
 			base_dir = path.dirname(file)
 			task_name = path.splitext(path.split(file)[1])[0]
+
+			def find_source(base_dir, name, run_settings):
+				_found = None
+				for lang in run_settings:
+					for ext in lang['extensions']:
+						src = path.join(base_dir, name + '.' + ext)
+						if path.exists(src):
+							if _found:
+								return [_found, src]
+							_found = src	
+				return _found
+
+
 			bad_source = file
-			good_source = path.join(base_dir, task_name + '__Good.cpp')
-			gen_source = path.join(base_dir, task_name + '__Generator.cpp')
+			good_source = find_source(base_dir, task_name + '__Good', get_settings().get('run_settings'))
+			gen_source = find_source(base_dir, task_name + '__Generator', get_settings().get('run_settings'))
+
+			if type(good_source) is list:
+				sublime.error_message('conflict files: ' + ' and '.join(good_source))
+				return
+
+			if type(gen_source) is list:
+				sublime.error_message('conflict files:' + ' and '.join(gen_source))
+				return
+
 			def check_exist(source):
 				if not path.exists(source):
 					sublime.error_message(source + ' not found')
