@@ -3,6 +3,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * [Installation](#installation)
  * [TestManager](#testmanager)
  * [Settings](#settings)
+ * [StressTesting](*stresstesting)
  * [Class Completion](#classcompletion)
  * [CppLint](#cpplint)
  * [Debugger](#debugger)
@@ -28,8 +29,8 @@ Fast Olympic Coding plugin for Sublime Text 3
    * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `Open Settings`
    * or `tools — FastOlympicCoding — settings`
 
-### Stress
- ![Stress](ScreenShots/Stress.gif)
+### StressTesting
+ ![StressTesting](ScreenShots/Stress.gif)
  
  * to stress you need to implement three following files:
    * `<name>.cpp` - program that works incorrect
