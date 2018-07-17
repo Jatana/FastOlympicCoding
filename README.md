@@ -3,9 +3,9 @@ Fast Olympic Coding plugin for Sublime Text 3
  * [Installation](#installation)
  * [TestManager](#testmanager)
  * [Settings](#settings)
- * [StressTesting](#stresstesting)
+ * [Stress Testing](#stresstesting)
  * [Class Completion](#classcompletion)
- * [CppLint](#cpplint)
+ * [C++ Lint](#cpplint)
  * [Debugger](#debugger)
  
 ### Installation
