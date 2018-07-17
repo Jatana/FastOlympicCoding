@@ -7,6 +7,10 @@ base_name = path.split(root_dir)[1]
 
 settings_file = 'FastOlympicCoding.sublime-settings'
 
+default_settings_file = 'FastOlympicCoding ({os}).sublime-settings'.format(
+	os={ 'windows': 'Windows', 'linux': 'Linux', 'osx': 'OSX' }[sublime.platform().lower()]
+)
+
 settings = {}
 run_supported_exts = set()
 

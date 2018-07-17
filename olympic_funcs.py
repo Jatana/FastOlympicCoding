@@ -8,7 +8,7 @@ from os import path
 
 
 from .Modules.ProcessManager import ProcessManager
-from .settings import root_dir, base_name, settings_file, \
+from .settings import root_dir, base_name, settings_file, default_settings_file, \
 			get_settings, is_run_supported_ext
 from .Modules.ClassPregen.ClassPregen import gen as gen_template
 
@@ -73,7 +73,8 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		elif action == 'open_settings':
 			v.window().run_command('new_window')
 			sublime.active_window().set_sidebar_visible(False)
-			sublime.active_window().open_file(path.join(root_dir, settings_file))
+			
+			sublime.active_window().open_file(path.join(root_dir, default_settings_file))
 			sublime.active_window().set_layout({
 				'cols': [0, 0.5, 1],
 				'rows': [0, 1],
