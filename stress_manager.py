@@ -179,7 +179,7 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 				return
 
 			if type(gen_source) is list:
-				sublime.error_message('conflict files:' + ' and '.join(gen_source))
+				sublime.error_message('conflict files: ' + ' and '.join(gen_source))
 				return
 
 			def check_exist(source):
