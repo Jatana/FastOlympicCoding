@@ -50,7 +50,7 @@
 			{
 				"key": "setting.edit_mode",
 				"operator": "equal",
-				"operand": false,
+				"operand": false
 			}
 		]
 	},
@@ -116,7 +116,7 @@
 			{
 				"key": "setting.edit_mode",
 				"operator": "equal",
-				"operand": false,
+				"operand": false
 			}
 		]
 	},
