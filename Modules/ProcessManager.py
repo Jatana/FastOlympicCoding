@@ -68,17 +68,12 @@ class ProcessManager(object):
 	def compile(self, wait_close=True):
 		cmd = self.get_compile_cmd()
 		if cmd is not None:
-			# print('command:', cmd)
-			# cmd = cmd(self.file)
-			# print(cmd)
 			PIPE = subprocess.PIPE
-			#cwd=os.path.split(self.file)[0], \
 			p = subprocess.Popen(cmd, \
 				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
-					cwd=os.path.split(self.file)[0], universal_newlines=True)
-			if wait_close:
-				p.wait()
-			return (p.returncode, p.stdout.read())
+					cwd=os.path.split(self.file)[0])
+			compile_result = p.communicate()[0].decode()
+			return (p.returncode, compile_result)
 
 	def run_file(self, args=[]):
 		if self.is_run and False:
