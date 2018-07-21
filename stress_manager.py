@@ -169,10 +169,17 @@ class StressManagerCommand(sublime_plugin.TextCommand):
 							_found = src	
 				return _found
 
-
 			bad_source = file
 			good_source = find_source(base_dir, task_name + '__Good', get_settings().get('run_settings'))
 			gen_source = find_source(base_dir, task_name + '__Generator', get_settings().get('run_settings'))
+
+			if not good_source:
+				sublime.error_message(task_name + '__Good' + ' not found')
+				return
+
+			if not gen_source:
+				sublime.error_message(task_name + '__Generator' + ' not found')
+				return
 
 			if type(good_source) is list:
 				sublime.error_message('conflict files: ' + ' and '.join(good_source))
