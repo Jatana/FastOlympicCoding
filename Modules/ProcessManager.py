@@ -33,7 +33,9 @@ class ProcessManager(object):
 		return rez
 
 	def format_command(self, cmd, args=''):
+		file = path.split(self.file)[1]
 		return cmd.format(
+			file=file,
 			source_file=self.file,
 			source_file_dir=path.dirname(self.file),
 			file_name=self.file_name,

@@ -158,8 +158,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 		file_dir_path = path.split(v.file_name())[0]
 		cmd = self.get_compile_cmd().format(source_file=run_file_path, source_file_dir=file_dir_path)
 		process = Popen(cmd, \
-				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
-					cwd=os.path.split(run_file_path)[0])
+				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT)
 		# process.wait()
 		# s = process.stdout.read().decode()
 		s = process.communicate()[0].decode()
