@@ -1161,9 +1161,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, \
 			load_session=False, region=None, frame_id=None, data=None, id=None):
+	
 		v = self.view
-		pt = v.sel()[0].begin()
-		scope_name = (v.scope_name(pt).rstrip())
 
 		v.set_read_only(False)
 
