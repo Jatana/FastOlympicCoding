@@ -22,6 +22,7 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>ctrl+c (OSX)</kbd>  <kbd>ctrl+x (Linux + Win)</kbd> kill process
  * <kbd>ctrl+shift+b (OSX)</kbd> run with debugger
  * <kbd>ctrl+d</kbd> delete test
+ * <kbd>ctrl+super+up/ctrl+super+down (OSX)</kbd> <kbd>ctrl+shift+up/ctrl+shift+down (Linux + Win)</kbd> swap tests
  * <kbd>cmd+k, cmd+p (OSX)</kbd> <kbd>ctrl+k, ctrl+p (Linux + Win)</kbd> close/open right panel
 
 ### Settings
