@@ -48,6 +48,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.tester = None
 		self.session = None
 		self.phantoms = PhantomSet(view, 'test-phantoms')
+		self.test_phantoms = [PhantomSet(view, 'test-phantoms-' + str(i)) for i in range(10)]
 
 	class Test(object):
 		"""
@@ -277,7 +278,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.process_manager.write(tests[id].test_string)
 			self.on_insert(tests[id].test_string)
 
-		def next_test(self, tie_pos):
+		def next_test(self, tie_pos, cb):
 			n = self.test_iter
 			tests = self.tests
 			prog_out = self.prog_out
@@ -293,9 +294,14 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			tests[n].set_tie_pos(tie_pos)
 			self.running_test = n
 			self.running_new = True
-			self.insert_test()
-			if type(self.process_manager) == ProcessManager:
-				sublime.set_timeout_async(self.__process_listener)
+
+			def go(self=self, cb=cb):
+				self.insert_test()
+				if type(self.process_manager) == ProcessManager:
+					sublime.set_timeout_async(self.__process_listener)
+				cb()
+
+			sublime.set_timeout_async(go, 10)
 
 		def run_test(self, id):
 			tests = self.tests
@@ -450,6 +456,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	def open_test_edit(self, i):
 		v = self.view
 		tester = self.tester
+		v.window().focus_group(1)
 		edit_view = v.window().new_file()
 		v.window().set_view_index(edit_view, 1, 1)
 		edit_view.run_command('test_edit', {
@@ -549,7 +556,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		phantom = Phantom(Region(self.view.size() - 1), content, sublime.LAYOUT_BLOCK, onclick)
 		return phantom
 
-	def update_configs(self):
+	def update_configs(self, update_last=None):
 		v = self.view
 		tester = self.tester
 		configs = []
@@ -559,6 +566,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			k = tester.test_iter
 		k = min(k, len(tester.tests))
 		pt = 0
+		_last_test_entry = -1
 		for i in range(k):
 			running = tester.proc_run and i == tester.running_test
 
@@ -570,6 +578,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				self.view,
 				running=running
 			)
+			_last_test_entry = len(configs)
 			configs.append(config)
 
 			if running:
@@ -595,7 +604,20 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		if not tester.proc_run:
 			configs.append(self.get_next_title())
-		self.phantoms.update(configs)
+		# self.phantoms.update(configs)
+
+		while len(self.test_phantoms) < len(configs):
+			self.test_phantoms.append(PhantomSet(v, 'test-phantom-' + str(len(self.test_phantoms))))
+
+		if update_last:
+			self.test_phantoms[_last_test_entry].update([configs[_last_test_entry]])
+		else:
+			for i in range(len(configs)):
+				self.test_phantoms[i].update([configs[i]])
+
+			for i in range(len(configs), len(self.test_phantoms)):
+				self.test_phantoms[i].update([])
+
 
 	def new_test(self, edit):
 		v = self.view
@@ -611,8 +633,11 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		v.sel().clear()
 		v.sel().add(Region(v.size()))
 
-		self.tester.next_test(v.size() - 1)
-		self.update_configs()
+		self.tester.next_test(v.size() - 1, lambda: self.update_configs(update_last=True))
+
+		# sublime.set_timeout_async(self.update_configs)
+
+		# self.update_configs()
 
 		# if self.tester.test_iter > 4:
 			# self.fold_accept_tests()
@@ -677,7 +702,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.add_regions(self.REGION_BEGIN_KEY % test_id, \
 				[Region(line.begin(), line.end())], *self.REGION_BEGIN_PROP)
 
-		v.show(self.input_start + 10)
+		v.show(self.input_start + 20)
 
 		rtcode = str(rtcode)
 		# if rtcode != '0':
@@ -701,7 +726,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		self.memorize_tests()
 		if str(rtcode) == '0':
 			if tester.running_new and tester.have_pretests():
-				self.view.run_command('test_manager', {'action': 'new_test'})
+				self.update_configs(update_last=True)
+				sublime.set_timeout_async(lambda: v.run_command('test_manager', {'action': 'new_test'}), 10)
 			else:
 				sublime.set_timeout(self.update_configs, 100)
 		else:
@@ -805,6 +831,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		v.sel().clear()
 		v.sel().add(Region(v.size(), v.size()))
 		self.phantoms.update([])
+		for phs in self.test_phantoms:
+			phs.update([])
 		if self.tester:
 			v.erase_regions('type')
 			for i in range(-1, self.tester.test_iter + 1):
@@ -822,7 +850,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		content = open(root_dir + '/Highlight/compile.html').read().format(cmd=cmd, type=type)
 		content = '<style>' + styles + '</style>' + content
 		phantom = Phantom(Region(0), content, sublime.LAYOUT_BLOCK)
-		self.phantoms.update([phantom])	
+		self.test_phantoms[0].update([phantom])	
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
 		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
@@ -1157,11 +1185,14 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.add_regions(self.REGION_BEGIN_KEY % i, [Region(places[i], places[i])], \
 				*self.REGION_BEGIN_PROP)
 
+	def swap_test(self, edit, dir=1):
+		
+		pass
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, \
-			load_session=False, region=None, frame_id=None, data=None, id=None):
-	
+			load_session=False, region=None, frame_id=None, data=None, id=None, dir=1):
+
 		v = self.view
 
 		v.set_read_only(False)
@@ -1253,6 +1284,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'delete_test':
 			self.delete_test(edit, id)
 
+		elif action == 'swap_test':
+			self.swap_test(edit, dir=dir)
+
 		elif action == 'toggle_using_debugger':
 			self.use_debugger = not self.use_debugger
 			if (self.use_debugger):
@@ -1316,6 +1350,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 				need_new = False
 		else:
 			need_new = True
+
 		if not need_new:
 			dbg_view = self.tied_dbg
 			create_new = False
