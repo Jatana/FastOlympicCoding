@@ -1216,6 +1216,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		for sel in selected:
 			if 0 <= sel + dir < len(tester.tests):
 				tester.tests[sel], tester.tests[sel + dir] = tester.tests[sel + dir], tester.tests[sel]
+				tester.prog_out[sel], tester.prog_out[sel + dir] = tester.prog_out[sel + dir], tester.prog_out[sel]
 
 		for i in range(len(tester.tests)):	
 			if tester.tests[i].__unfold:
