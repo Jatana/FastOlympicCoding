@@ -177,6 +177,42 @@
 		]
 	},
 
+	// Swap Test
+	{
+		"keys": ["ctrl+super+up"],
+		"command": "test_manager",
+		"args": {
+			"action": "swap_tests",
+			"dir": -1
+		},
+		"context": [
+			{
+				"operand": "source.TestSyntax",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
+	// Swap Test
+	{
+		"keys": ["ctrl+super+down"],
+		"command": "test_manager",
+		"args": {
+			"action": "swap_tests",
+			"dir": 1
+		},
+		"context": [
+			{
+				"operand": "source.TestSyntax",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
 	// Run
 	{
 		"keys": ["ctrl+b"],

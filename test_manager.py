@@ -1185,9 +1185,46 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.add_regions(self.REGION_BEGIN_KEY % i, [Region(places[i], places[i])], \
 				*self.REGION_BEGIN_PROP)
 
-	def swap_test(self, edit, dir=1):
-		
-		pass
+	def swap_tests(self, edit, dir=-1):
+		tester = self.tester
+		view = self.view
+		selected = []
+		unfold = []
+
+		for i in range(len(tester.tests)):
+			begin = self.get_tie_pos(i)
+			end = self.get_tie_pos(i + 1)
+
+			tester.tests[i].__sel = []
+
+			for reg in view.sel():
+				if reg.intersects(Region(begin, end)):
+					selected.append(i)
+					inter = reg.intersection(Region(begin, end))
+					tester.tests[i].__sel.append(Region(inter.a - begin, inter.b - begin))
+					break
+
+		for i in range(len(tester.tests)):
+			if not tester.tests[i].fold:
+				tester.tests[i].__unfold = True
+				self.toggle_fold(i)
+			else:
+				tester.tests[i].__unfold = False
+
+		if dir == 1:
+			selected.reverse()
+		for sel in selected:
+			if 0 <= sel + dir < len(tester.tests):
+				tester.tests[sel], tester.tests[sel + dir] = tester.tests[sel + dir], tester.tests[sel]
+
+		for i in range(len(tester.tests)):	
+			if tester.tests[i].__unfold:
+				self.toggle_fold(i)
+		view.sel().clear()
+		for i in range(len(tester.tests)):
+			for x in tester.tests[i].__sel:
+				begin = self.get_tie_pos(i)
+				view.sel().add(Region(begin + x.a, begin + x.b))	
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, \
@@ -1284,8 +1321,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		elif action == 'delete_test':
 			self.delete_test(edit, id)
 
-		elif action == 'swap_test':
-			self.swap_test(edit, dir=dir)
+		elif action == 'swap_tests':
+			self.swap_tests(edit, dir=dir)
 
 		elif action == 'toggle_using_debugger':
 			self.use_debugger = not self.use_debugger
