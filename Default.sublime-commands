@@ -33,5 +33,12 @@
 		"args": {
 			"action": "make_opd"
 		}
+	},
+	{
+		"caption": "FastOlympicCoding: Show Funcs",
+		"command": "olympic_funcs",
+		"args": {
+			"action": "show_funcs"
+		}
 	}
 ]

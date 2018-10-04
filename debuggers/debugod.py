@@ -28,7 +28,7 @@ def decode(data):
 class Debugger(object):
 	"""docstring for Debugger"""
 
-	COMPILE_CMD = 'g++ -std=gnu++17 -g -o main "{name}"'
+	COMPILE_CMD = 'g++ -std=gnu++14 -g -o main "{name}"'
 
 
 	def __init__(self, file):

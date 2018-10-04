@@ -513,6 +513,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.sel().clear()
 			v.sel().add(Region(tie_pos + 1))
 
+			code_view = self.get_view_by_id(self.code_view_id)
+			if code_view:
+				code_view.run_command('save')
+
 			tester.run_test(i)	
 			self.update_configs()
 
@@ -727,7 +731,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		if str(rtcode) == '0':
 			if tester.running_new and tester.have_pretests():
 				self.update_configs(update_last=True)
-				sublime.set_timeout_async(lambda: v.run_command('test_manager', {'action': 'new_test'}), 10)
+				sublime.set_timeout(lambda: v.run_command('test_manager', {'action': 'new_test'}), 10)
 			else:
 				sublime.set_timeout(self.update_configs, 100)
 		else:
@@ -850,7 +854,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		content = open(root_dir + '/Highlight/compile.html').read().format(cmd=cmd, type=type)
 		content = '<style>' + styles + '</style>' + content
 		phantom = Phantom(Region(0), content, sublime.LAYOUT_BLOCK)
-		self.test_phantoms[0].update([phantom])	
+		self.test_phantoms[0].update([phantom])
+
+	def get_view_by_id(self, id):
+		for view in self.view.window().views():
+			if view.id() == id:
+				return view
 
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
 		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
@@ -888,6 +897,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		if v.settings().get('edit_mode'):
 			self.apply_edit_changes()
 
+
 		v.set_scratch(True)
 		v.run_command('set_setting', {'setting': 'fold_buttons', 'value': False})
 		v.run_command('set_setting', {'setting': 'line_numbers', 'value': False})
@@ -915,6 +925,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			}
 			self.dbg_file = run_file
 			self.code_view_id = code_view_id
+
+		code_view = self.get_view_by_id(code_view_id)
+		if code_view:
+			code_view.run_command('save')
 
 		if not v.settings().get('word_wrap'):
 			v.run_command('toggle_setting', {'setting': 'word_wrap'})
@@ -1372,6 +1386,7 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		creates opd with supported language
 		'''
 		v = self.view
+		v.run_command('save')
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
 		file_name = v.file_name()
