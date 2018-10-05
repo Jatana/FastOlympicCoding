@@ -74,7 +74,7 @@ class ProcessManager(object):
 			p = subprocess.Popen(cmd, \
 				shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, \
 					cwd=os.path.split(self.file)[0])
-			compile_result = p.communicate()[0].decode()
+			compile_result = p.communicate()[0].decode('utf-8', 'ignore')
 			return (p.returncode, compile_result)
 
 	def run_file(self, args=[]):

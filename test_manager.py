@@ -37,6 +37,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 	REGION_LINE_PROP = ['string', 'dot', \
 				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
 					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE]
+	TESTS_FILE_SUFFIX = ':tests'
 
 	# Test
 	# REGION_POS_PROP = REGION_UNKNOWN_PROP
@@ -513,9 +514,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			v.sel().clear()
 			v.sel().add(Region(tie_pos + 1))
 
-			code_view = self.get_view_by_id(self.code_view_id)
-			if code_view:
-				code_view.run_command('save')
+			self.prepare_code_view()
 
 			tester.run_test(i)	
 			self.update_configs()
@@ -647,7 +646,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			# self.fold_accept_tests()
 
 	def memorize_tests(self):
-		f = open(self.dbg_file + ':tests', 'w')
+		f = open(self.dbg_file + self.TESTS_FILE_SUFFIX, 'w')
 		f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
 		f.close()
 
@@ -861,6 +860,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			if view.id() == id:
 				return view
 
+	def prepare_code_view(self):
+		code_view = self.get_view_by_id(self.code_view_id)
+		if code_view:
+			if code_view.is_dirty():
+				code_view.run_command('save')
+
 	def make_opd(self, edit, run_file=None, build_sys=None, clr_tests=False, \
 		sync_out=False, code_view_id=None, use_debugger=False, load_session=False):
 
@@ -926,22 +931,20 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			self.dbg_file = run_file
 			self.code_view_id = code_view_id
 
-		code_view = self.get_view_by_id(code_view_id)
-		if code_view:
-			code_view.run_command('save')
+		self.prepare_code_view()
 
 		if not v.settings().get('word_wrap'):
 			v.run_command('toggle_setting', {'setting': 'word_wrap'})
 
 		if not clr_tests:
 			try:
-				f = open(run_file + ':tests')
+				f = open(run_file + self.TESTS_FILE_SUFFIX)
 				tests = [self.Test(x) for x in sublime.decode_value(f.read()) if x['test'].strip()]
 				f.close()
 			except:
 				tests = []
 		else:
-			f = open(run_file + ':tests', 'w')
+			f = open(run_file + self.TESTS_FILE_SUFFIX, 'w')
 			f.write('[]')
 			f.close()
 			tests = []
@@ -1386,7 +1389,8 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 		creates opd with supported language
 		'''
 		v = self.view
-		v.run_command('save')
+		if v.is_dirty():
+			v.run_command('save')
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
 		file_name = v.file_name()

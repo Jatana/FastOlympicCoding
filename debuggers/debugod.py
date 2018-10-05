@@ -28,7 +28,7 @@ def decode(data):
 class Debugger(object):
 	"""docstring for Debugger"""
 
-	COMPILE_CMD = 'g++ -std=gnu++14 -g -o main "{name}"'
+	COMPILE_CMD = 'g++ -std=gnu++17 -g -o main "{name}"'
 
 
 	def __init__(self, file):
@@ -201,8 +201,6 @@ class Debugger(object):
 
 	def get_frames(self):
 		frames = []
-		# log.write(str(dir(self.main_thread)))
-		# log.flush()
 		for frame in self.main_thread.frames:
 			frames.append({
 				'line': frame.line_entry.GetLine().__str__(),
@@ -212,7 +210,7 @@ class Debugger(object):
 				'frame_id': frame.GetFrameID().__str__()
 			})	
 
-		return frames
+		return frames[:100]
 
 if len(sys.argv) > 1:
 	file = sys.argv[1]
