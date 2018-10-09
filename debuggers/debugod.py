@@ -1,13 +1,16 @@
 #!/usr/bin/python
 import sys
+import os
+from os import path
 
-sys.path.append('/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Resources/Python')
+base_dir = path.dirname(path.abspath(__file__))
+framework = path.join(base_dir, 'LLDB.framework/Resources/Python')
+
+sys.path.append(framework)
 
 import lldb
-import os
 from time import time
 import subprocess
-from os import path
 import threading
 
 
@@ -121,6 +124,7 @@ class Debugger(object):
 		dbg.SetAsync(True)
 		target = dbg.CreateTargetWithFileAndArch(exe, lldb.LLDB_ARCH_DEFAULT)
 		module = target.module[target.executable.basename]
+		# print(target.executable.basename)
 		self.miss_cnt = 0
 		self.start_time = time()
 		process = target.LaunchSimple(None, None, path.dirname(self.file))
@@ -160,7 +164,6 @@ class Debugger(object):
 	def put_stdin(self, s):
 		self.add_buff()
 		self.process.PutSTDIN(s)
-		# print('LENNN', len(s))
 		self.miss_cnt += len(s)
 
 	def get_output(self):
