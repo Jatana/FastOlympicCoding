@@ -40,7 +40,7 @@ class PyLLDBDebugger(Debugger):
 		# print(dir(self.proc_dbg.stdout))
 
 	def is_runnable():
-		return (sublime.platform() == 'osx') and path.exists('/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Resources/Python/lldb/')
+		return (sublime.platform() == 'osx')
 
 	def has_var_view_api(self):
 		return True

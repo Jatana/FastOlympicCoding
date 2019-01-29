@@ -40,5 +40,12 @@
 		"args": {
 			"action": "show_funcs"
 		}
-	}
+	},
+	{
+		"caption": "FastOlympicCoding: Setup Contest",
+		"command": "contest_handler",
+		"args": {
+			"action": "setup_contest"
+		}
+	},
 ]

@@ -28,8 +28,6 @@ def safety(s):
 
 def highligh_regex(code, regex):
 	code = regex.split(code)
-	# print(code)
-
 
 def highlight(code):
 	rez = '''
@@ -39,12 +37,10 @@ def highlight(code):
 	</style>
 	''' % css
 
-
 	splited = NUMBER.split(code)
 	nums = NUMBER.findall(code)
 	spl3 = []
 
-	# print(splited)
 	for spl in splited:
 		spl2 = DEF_TYPE.split(spl)
 		nums2 = DEF_TYPE.findall(spl)
@@ -59,7 +55,6 @@ def highlight(code):
 	splited = spl3
 
 	nums = [('<div class="number">%s</div>' % num) for num in nums]
-	# print(splited)
 	for i in range(len(splited)):
 		s = (splited[i])
 		if i < len(nums):

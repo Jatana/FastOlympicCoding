@@ -151,6 +151,7 @@ class InteliSenseCommand(sublime_plugin.TextCommand):
 	def insert_error_marks(self):
 		v = self.view
 		s = v.substr(sublime.Region(0, v.size()))
+		# s = open('/Users/jatana/Desktop/cpp-cgdk/MyStrategy.cpp').read()
 		run_file_path = path.join(root_dir, 'cmp_sense/amin.cpp')
 		f = open(run_file_path, 'wb')
 		f.write(s.encode())

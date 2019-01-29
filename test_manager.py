@@ -14,6 +14,7 @@ import threading
 from .Modules.ProcessManager import ProcessManager
 from .settings import base_name, get_settings, root_dir
 from .debuggers import debugger_info
+from .ContestHandlers import handler_info
 from .Highlight.CppVarHighlight import highlight
 from .Highlight.test_interface import get_test_styles
 

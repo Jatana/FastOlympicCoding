@@ -4,10 +4,11 @@
 
 	// lint style properties
 	"lint_error_region_scope": "invalid.illegal",
-	// "lint_error_region_scope": "variable.c++",
-	"lint_warning_region_scope": "constant",
+	"lint_error_region_scope": "variable.c++",
+	// "lint_warning_region_scope": "constant",
 
 	"algorithms_base": null,
+	"contests_base": "~",
 
 	// run settings
 	"run_settings": [
