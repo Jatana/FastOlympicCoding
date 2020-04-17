@@ -213,6 +213,23 @@
 		]
 	},
 
+	// Hide phantoms 
+	{
+		"keys": ["ctrl+super+shift+h"],
+		"command": "test_manager",
+		"args": {
+			"action": "toggle_hide_phantoms",
+		},
+		"context": [
+			{
+				"operand": "source.TestSyntax",
+				"operator": "equal",
+				"match_all": true,
+				"key": "selector"
+			}
+		]
+	},
+
 	// Run
 	{
 		"keys": ["ctrl+b"],

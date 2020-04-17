@@ -16,13 +16,23 @@ from .Modules.ClassPregen.ClassPregen import gen as gen_template
 class OlympicFuncsCommand(sublime_plugin.TextCommand):
 	ROOT = dirname(__file__)
 
-	def run(self, edit, action=None, clr_tests=False, text=None, sync_out=True):
+	def run(self, edit, action=None, clr_tests=False,
+			text=None, sync_out=True, reselect=False, smart_fold=False):
 		v = self.view
 		scope_name = v.scope_name(v.sel()[0].begin()).rstrip()
 		file_syntax = scope_name.split()[0]
 
 		if action == 'insert':
-			v.insert(edit, v.sel()[0].begin(), text)
+			if reselect:
+				v.replace(edit, v.sel()[0], text)
+				v.unfold(v.sel()[0])
+				if smart_fold:
+					row_high, col = v.rowcol(v.sel()[0].b)
+					row_low, _ = v.rowcol(v.sel()[0].a)
+					row_high = min(row_high, row_low + 15)
+					v.fold(Region(v.text_point(row_high, col), v.sel()[0].b))
+			else:
+				v.insert(edit, v.sel()[0].begin(), text)
 			
 		elif action == 'insert_template':
 			w_sel = v.word(v.sel()[0])
@@ -60,15 +70,33 @@ class OlympicFuncsCommand(sublime_plugin.TextCommand):
 		elif action == 'show_funcs':
 			wind = v.window()
 			funcs = listdir(path.join(root_dir, get_settings().get('algorithms_base')))
+			def collect_all(base, lst, codes, prefix=''):
+				files = listdir(base)
+				for file in files:
+					if path.isfile(path.join(base, file)):
+						if file[-4:] == '.cpp':
+							lst.append(prefix + '/' + file)
+							codes.append(path.join(base, file))
+					elif path.isdir(path.join(base, file)):
+						if file != '.git':
+							lst.append(prefix + '/' + file + ' ->')
+							codes.append(path.join(base, file))
+							collect_all(path.join(base, file), lst, codes, prefix='\t' + prefix + ('/' if prefix else '*') + file)
+			all, codes = [], []
+			collect_all(path.join(root_dir, get_settings().get('algorithms_base')), all, codes)
 			to_view_funcs = [x[:-4] for x in funcs if x[-4:] == '.cpp']
-			def on_done(ind, funcs=funcs):
+			def on_done(ind, funcs=funcs, initial=v.substr(v.sel()[0])):
 				if ind == -1:
-					return 0
-				f = open(path.join(root_dir, get_settings().get('algorithms_base'), funcs[ind]))
-				self.view.run_command('olympic_funcs', {'text': f.read(), 'action': 'insert'})
-				f.close()
+					self.view.run_command('olympic_funcs', {'text': initial, 'action': 'insert', 'reselect': True})
+					return
 
-			wind.show_quick_panel(to_view_funcs, on_done, 1, 0, 1)
+			def on_highlight(ind, codes=codes, edit=edit, view=v):
+				if path.isfile(codes[ind]):
+					code = open(codes[ind], 'r', encoding='utf-8').read()
+					v.run_command('olympic_funcs', {'text': code,
+							'action': 'insert', 'reselect': True, 'smart_fold': True})
+
+			wind.show_quick_panel(all, on_done, 1, 0, on_highlight)
 
 		elif action == 'open_settings':
 			v.window().run_command('new_window')

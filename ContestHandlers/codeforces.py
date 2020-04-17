@@ -1,33 +1,43 @@
 import urllib
 import urllib.request
 import re
+import codecs
 
-		
-test_start_input = '<div class="input"><div class="title">Input</div><pre>'
-test_start_output = '<div class="output"><div class="title">Output</div><pre>'
-test_end = '</pre></div>'
+
+test_tokens = ['<div class="input">', '<div class="title">Input</div>', '<pre>',
+	'</pre>', '</div>', '<div class="output">', '<div class="title">Output</div>',
+	'<pre>', '</pre>', '</div>'
+]		
 
 def try_load_tests(contest_id, task_id):
 	url = 'https://codeforces.com/contest/{contest_id}/problem/{task_id}'.format(
 		contest_id=contest_id,
-		task_id=chr(ord('A') + task_id)
+		task_id=task_id
 	)
 	req = urllib.request.urlopen(url)
 	text = req.read().decode()
 	inputs = []
 	outputs = []
-	for i in range(len(text)):
-		if text[i:i + len(test_start_input)] == test_start_input:
-			for j in range(i, len(text)):
-				if text[j:j + len(test_end)] == test_end:
-					inputs.append(text[i + len(test_start_input):j].replace('<br />', '\n').strip())
-					break
-		if text[i:i + len(test_start_output)] == test_start_output:
-			for j in range(i, len(text)):
-				if text[j:j + len(test_end)] == test_end:
-					outputs.append(text[i + len(test_start_output):j].replace('<br />', '\n').strip())
-					break
-
+	state = 0
+	i = 0
+	while i < len(text):
+		if text[i:i + len(test_tokens[state])] == test_tokens[state]:
+			i += len(test_tokens[state])
+			state = (state + 1) % len(test_tokens)
+			if state == 3:
+				inputs.append('')
+			if state == 8:
+				outputs.append('')
+		else:
+			if state == 3:
+				inputs[-1] += text[i]
+			if state == 8:
+				outputs[-1] += text[i]
+			i += 1
+	for i in range(len(inputs)):
+		inputs[i] = inputs[i].replace('<br />', '\n').strip()
+	for i in range(len(outputs)):
+		outputs[i] = outputs[i].replace('<br />', '\n').strip()
 	if (len(inputs) != len(outputs)) or (not inputs): return None, None
 	return inputs, outputs
 
@@ -53,5 +63,3 @@ def is_valid_url(url):
 def extract_contest_id(url):
 	match = re.search(r'\d+', url)
 	return match.group(0)
-
-print(extract_contest_id('https://codeforces.com/contest/1078/problem/A'))

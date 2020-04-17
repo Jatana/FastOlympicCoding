@@ -162,8 +162,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				phantom = Phantom(Region(pt), content, sublime.LAYOUT_BLOCK, onclick)
 				return phantom
 
-		def get_accdec(self, i, pt, _cb_act, type):	
-			styles = open(root_dir + '/Highlight/test_styles.css').read()
+		def get_accdec(self, i, pt, _cb_act, type, _view):	
+			styles = get_test_styles(_view)
 			content = open(root_dir + '/Highlight/test_accdec.html').read()
 			content = content.format(
 				test_id=i,
@@ -384,6 +384,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		def terminate(self):
 			self.process_manager.terminate()
 
+	def get_tests_file_suffix(self):
+		return get_settings().get('tests_file_suffix') or self.TESTS_FILE_SUFFIX
+
 	def insert_text(self, edit, text=None):
 		v = self.view
 		expected = v.line(self.delta_input).end()
@@ -547,7 +550,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def get_next_title(self):
 		v = self.view
-		styles = open(root_dir + '/Highlight/test_styles.css').read()
+		styles = get_test_styles(v) 
 		content = open(root_dir + '/Highlight/test_next.html').read()
 
 		content = '<style>' + styles + '</style>' + content
@@ -599,7 +602,8 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 					i,
 					pt,
 					self.on_accdec_action,
-					type
+					type,
+					self.view
 				)
 				configs.append(accdec)
 
@@ -613,11 +617,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		while len(self.test_phantoms) < len(configs):
 			self.test_phantoms.append(PhantomSet(v, 'test-phantom-' + str(len(self.test_phantoms))))
 
+		hide_phantoms = v.settings().get('hide_phantoms')
 		if update_last:
-			self.test_phantoms[_last_test_entry].update([configs[_last_test_entry]])
+			self.test_phantoms[_last_test_entry].update([configs[_last_test_entry]] if not hide_phantoms else [])
 		else:
 			for i in range(len(configs)):
-				self.test_phantoms[i].update([configs[i]])
+				self.test_phantoms[i].update([configs[i]] if not hide_phantoms else [])
 
 			for i in range(len(configs), len(self.test_phantoms)):
 				self.test_phantoms[i].update([])
@@ -647,7 +652,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 			# self.fold_accept_tests()
 
 	def memorize_tests(self):
-		f = open(self.dbg_file + self.TESTS_FILE_SUFFIX, 'w')
+		f = open(self.dbg_file + self.get_tests_file_suffix(), 'w')
 		f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
 		f.close()
 
@@ -939,13 +944,13 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		if not clr_tests:
 			try:
-				f = open(run_file + self.TESTS_FILE_SUFFIX)
+				f = open(run_file + self.get_tests_file_suffix())
 				tests = [self.Test(x) for x in sublime.decode_value(f.read()) if x['test'].strip()]
 				f.close()
 			except:
 				tests = []
 		else:
-			f = open(run_file + self.TESTS_FILE_SUFFIX, 'w')
+			f = open(run_file + self.get_tests_file_suffix(), 'w')
 			f.write('[]')
 			f.close()
 			tests = []
@@ -1243,7 +1248,12 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		for i in range(len(tester.tests)):
 			for x in tester.tests[i].__sel:
 				begin = self.get_tie_pos(i)
-				view.sel().add(Region(begin + x.a, begin + x.b))	
+				view.sel().add(Region(begin + x.a, begin + x.b))
+
+	def toggle_hide_phantoms(self):
+		view = self.view
+		view.settings().set('hide_phantoms', not view.settings().get('hide_phantoms'))
+		self.update_configs()
 
 	def run(self, edit, action=None, run_file=None, build_sys=None, text=None, clr_tests=False, \
 			sync_out=False, code_view_id=None, var_name=None, use_debugger=False, pos=None, \
@@ -1342,6 +1352,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		elif action == 'swap_tests':
 			self.swap_tests(edit, dir=dir)
+
+		elif action == 'toggle_hide_phantoms':
+			self.toggle_hide_phantoms()
 
 		elif action == 'toggle_using_debugger':
 			self.use_debugger = not self.use_debugger

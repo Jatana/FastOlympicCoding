@@ -35,7 +35,7 @@
 		}
 	},
 	{
-		"caption": "FastOlympicCoding: Show Funcs",
+		"caption": "FastOlympicCoding: Auto",
 		"command": "olympic_funcs",
 		"args": {
 			"action": "show_funcs"
@@ -48,4 +48,11 @@
 			"action": "setup_contest"
 		}
 	},
+	// {
+	// 	"caption": "FastOlympicCoding: Submit",
+	// 	"command": "contest_handler",
+	// 	"args": {
+	// 		"action": "submit"
+	// 	}
+	// },
 ]
