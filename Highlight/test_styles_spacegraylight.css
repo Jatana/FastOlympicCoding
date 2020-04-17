@@ -1,0 +1,60 @@
+html {
+	--action-color: color(rgb(147, 164, 182) alpha(1));
+	padding: 0px;
+}
+
+a {
+	line-height: none;
+}
+
+.panel {
+	padding: 0px;
+	margin: 0px;
+	background-color: color(var(--foreground) alpha(0.1));
+}
+
+.test {
+	color: color(var(--foreground));	
+	text-decoration: none;
+	background-color: color(var(--foreground) alpha(0.1));
+	padding: 1px;
+}
+
+.test-accept {
+	background-color: color(rgb(192, 208, 176) alpha(1));
+}
+
+.test-decline {
+	background-color: color(var(--redish) alpha(0.3));
+}
+
+.sep {
+	text-decoration: none;
+}
+
+.config {
+	color: color(var(--foreground));	
+	text-decoration: none;
+	background-color: color(var(--bluish) alpha(0.1));
+	padding: 1px;
+}
+
+.config-run {
+	background-color: color(rgb(147, 164, 182) alpha(0.5));
+}
+
+.config-action {
+	background-color: color(var(--action-color) alpha(0.1));
+}
+
+.config-stop {
+	background-color: color(var(--redish) alpha(0.3));
+}
+
+.config-next {
+	padding: 1px;
+	color: color(var(--foreground));	
+	text-decoration: none;
+	background-color: color(var(--action-color) alpha(0.2));
+}
+
