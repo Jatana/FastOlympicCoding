@@ -83,5 +83,8 @@
 		"dont_expand": [
 			"pii"
 		]
-	}
+	},
+
+	// closing sidebar when executing
+	"close_sidebar": true
 }
