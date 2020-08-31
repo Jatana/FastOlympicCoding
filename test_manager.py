@@ -1430,11 +1430,12 @@ class ViewTesterCommand(sublime_plugin.TextCommand):
 			self.tied_dbg = dbg_view
 			self.have_tied_dbg = True
 			create_new = True
-			try:
-				sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
-			except:
-				# Version of sublime text < 3102
-				pass
+			if get_settings().get('close_sidebar'):
+				try:
+					sublime.set_timeout_async(lambda window=window: window.set_sidebar_visible(False), 50)
+				except:
+					# Version of sublime text < 3102
+					pass
 			dbg_view.run_command('toggle_setting', {'setting': 'word_wrap'})
 
 		if len(window.get_layout()['cols']) != 3 or window.get_layout()['cols'][1] >= 0.89:
