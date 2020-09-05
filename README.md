@@ -27,7 +27,7 @@ Fast Olympic Coding plugin for Sublime Text 3
 
 ### Settings
  * to edit settings
-   * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `Open Settings`
+   * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `FastOlympicCoding: Open Settings`
    * or `tools — FastOlympicCoding — settings`
 
 ### StressTesting
