@@ -9,7 +9,11 @@
 
 	"algorithms_base": null,
 
-	// run settings
+	// run settings:
+	// "{file}": file name
+	// "{source_file}": relative path to file
+	// "{source_file_dir}": relative path to file directory
+	// "{file_name}": file basename
 	"run_settings": [
 		{
 			"name": "C++",
@@ -26,6 +30,13 @@
 			"compile_cmd": null,
 			"run_cmd": "python '{source_file}'"
 		},
+
+		{
+			"name": "Java",
+			"extensions": ["java"],
+			"compile_cmd": "javac -J-Dfile.encoding=utf8 -d \"{source_file_dir}\" \"{source_file}\"",
+			"run_cmd": "java -classpath \"{source_file_dir}\" \"{file_name}\""
+		}
 	],
 
 	// time limit for stress
