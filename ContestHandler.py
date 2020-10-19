@@ -36,7 +36,7 @@ class ContestHandlerCommand(sublime_plugin.TextCommand):
 					'test': inputs[i],
 					'correct_answers': [outputs[i]]
 				})
-			file = open(file_name + TestManagerCommand.TESTS_FILE_SUFFIX, 'w')
+			file = open(file_name + (get_settings().get('tests_file_suffix') or TestManagerCommand.TESTS_FILE_SUFFIX), 'w')
 			file.write(sublime.encode_value(tests, True))
 			file.close()
 			def go(self=self, handler=handler, contest_id=contest_id, base=base, pid=self.next_problem(pid)):
