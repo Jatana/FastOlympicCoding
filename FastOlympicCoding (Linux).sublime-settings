@@ -96,9 +96,8 @@
 	},
 
 	// closing sidebar when executing
-	"close_sidebar": false, 
+	"close_sidebar": true, 
 
 	// tests files dir
-	// "" if none
 	"tests_dir": ".tests"
 }
