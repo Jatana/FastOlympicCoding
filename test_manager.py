@@ -39,6 +39,7 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				sublime.DRAW_NO_FILL | sublime.DRAW_STIPPLED_UNDERLINE | \
 					sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE]
 	TESTS_FILE_SUFFIX = ':tests'
+	TESTS_DIR = ''
 
 	# Test
 	# REGION_POS_PROP = REGION_UNKNOWN_PROP
@@ -386,6 +387,17 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 	def get_tests_file_suffix(self):
 		return get_settings().get('tests_file_suffix') or self.TESTS_FILE_SUFFIX
+	
+	def get_tests_file_path(self, file):
+		tests_dir = get_settings().get('tests_dir') or self.TESTS_DIR
+		dirname = os.path.join(os.path.dirname(file), tests_dir)
+
+		if not os.path.exists(dirname):
+			os.makedirs(dirname)
+
+		filename = os.path.basename(file) + self.get_tests_file_suffix()
+		
+		return os.path.join(dirname, filename)
 
 	def insert_text(self, edit, text=None):
 		v = self.view
@@ -650,11 +662,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		# if self.tester.test_iter > 4:
 			# self.fold_accept_tests()
-
+	
 	def memorize_tests(self):
-		f = open(self.dbg_file + self.get_tests_file_suffix(), 'w')
-		f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
-		f.close()
+		with open(self.get_tests_file_path(self.dbg_file), 'w') as f:
+			f.write(sublime.encode_value([x.memorize() for x in (self.tester.get_tests())], True))
 
 	def on_insert(self, s):
 		self.view.run_command('test_manager', {'action': 'insert_opd_input', 'text': s})
@@ -944,15 +955,13 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 
 		if not clr_tests:
 			try:
-				f = open(run_file + self.get_tests_file_suffix())
-				tests = [self.Test(x) for x in sublime.decode_value(f.read()) if x['test'].strip()]
-				f.close()
+				with open(self.get_tests_file_path(run_file)) as f:
+					tests = [self.Test(x) for x in sublime.decode_value(f.read()) if x['test'].strip()]
 			except:
 				tests = []
 		else:
-			f = open(run_file + self.get_tests_file_suffix(), 'w')
-			f.write('[]')
-			f.close()
+			with open(self.get_tests_file_path(run_file), 'w') as f:
+				f.write('[]')
 			tests = []
 		file_ext = path.splitext(run_file)[1][1:]
 
