@@ -1,5 +1,6 @@
 import sublime
 from os import path
+import os
 
 
 root_dir = path.split(__file__)[0]
@@ -10,6 +11,9 @@ settings_file = 'FastOlympicCoding.sublime-settings'
 default_settings_file = 'FastOlympicCoding ({os}).sublime-settings'.format(
 	os={ 'windows': 'Windows', 'linux': 'Linux', 'osx': 'OSX' }[sublime.platform().lower()]
 )
+
+tests_file_suffix = ':tests'
+tests_relative_dir = ''
 
 settings = {}
 run_supported_exts = set()
@@ -52,3 +56,17 @@ def try_load_settings():
 
 def plugin_loaded():
 	sublime.set_timeout(try_load_settings, 200)
+
+def get_tests_file_suffix():
+	return get_settings().get('tests_file_suffix') or tests_file_suffix
+
+def get_tests_file_path(file):
+	dirname = os.path.join(os.path.dirname(file),
+		get_settings().get('tests_relative_dir') or tests_relative_dir)
+
+	if not os.path.exists(dirname):
+		os.makedirs(dirname)
+
+	filename = os.path.basename(file) + get_tests_file_suffix()
+	
+	return os.path.join(dirname, filename)

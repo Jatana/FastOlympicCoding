@@ -8,8 +8,10 @@ except ImportError:
 	pass
 from .test_manager import TestManagerCommand
 from sublime import Region
+from .settings import get_tests_file_path
 
 handlers = [codeforces]
+
 
 class ContestHandlerCommand(sublime_plugin.TextCommand):
 	def create_path(self, base, _path):
@@ -36,11 +38,13 @@ class ContestHandlerCommand(sublime_plugin.TextCommand):
 					'test': inputs[i],
 					'correct_answers': [outputs[i]]
 				})
-			file = open(file_name + (get_settings().get('tests_file_suffix') or TestManagerCommand.TESTS_FILE_SUFFIX), 'w')
-			file.write(sublime.encode_value(tests, True))
-			file.close()
+
+			with open(get_tests_file_path(file_name), 'w') as f:
+				f.write(sublime.encode_value(tests, True))
+
 			def go(self=self, handler=handler, contest_id=contest_id, base=base, pid=self.next_problem(pid)):
 				self.init_problems(handler, contest_id, base, pid=pid)
+
 			sublime.set_timeout_async(go)
 		else:
 			if len(pid) == 1:
