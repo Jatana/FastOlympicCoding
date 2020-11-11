@@ -99,5 +99,5 @@
 	"close_sidebar": true, 
 
 	// tests files dir
-	"tests_dir": ".tests"
+	"tests_relative_dir": ""
 }

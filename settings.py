@@ -13,7 +13,7 @@ default_settings_file = 'FastOlympicCoding ({os}).sublime-settings'.format(
 )
 
 tests_file_suffix = ':tests'
-tests_dir = ''
+tests_relative_dir = ''
 
 settings = {}
 run_supported_exts = set()
@@ -61,8 +61,8 @@ def get_tests_file_suffix():
 	return get_settings().get('tests_file_suffix') or tests_file_suffix
 
 def get_tests_file_path(file):
-	tests_dir = get_settings().get('tests_dir') or tests_dir
-	dirname = os.path.join(os.path.dirname(file), tests_dir)
+	dirname = os.path.join(os.path.dirname(file),
+		get_settings().get('tests_relative_dir') or tests_relative_dir)
 
 	if not os.path.exists(dirname):
 		os.makedirs(dirname)
