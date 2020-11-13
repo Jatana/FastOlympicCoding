@@ -11,7 +11,7 @@ Fast Olympic Coding plugin for Sublime Text 3
 ### Installation
  * Install via [Package Control](https://packagecontrol.io/packages/CppFastOlympicCoding)
  * Install manually:<br>
-       [download plugin](https://github.com/Jatana/FastOlympicCoding/archive/master.zip) into packages (`preferences — browse packages`)<br>
+       [download plugin](https://github.com/Jatana/FastOlympicCoding/archive/master.zip) into packages (`Preferences — Browse packages...`)<br>
        `Warning! rename plugin folder to FastOlympicCoding`
 
 ### TestManager
@@ -26,27 +26,28 @@ Fast Olympic Coding plugin for Sublime Text 3
  * <kbd>cmd+k, cmd+p (OSX)</kbd> <kbd>ctrl+k, ctrl+p (Linux + Win)</kbd> close/open right panel
 
 ### Settings
- * to edit settings
+ * To edit settings
    * press <kbd>cmd+shift+p (OSX)</kbd> <kbd>ctrl+shift+p (Linux + Win)</kbd> and type `FastOlympicCoding: Open Settings`
-   * or `tools — FastOlympicCoding — settings`
+   * or `Preferences — Package Settings — FastOlympicCoding`
 
 ### StressTesting
  ![StressTesting](ScreenShots/Stress.gif)
  
- * to stress you need to implement three following files:
+ * To stress you need to implement three following files:
    * `<name>.cpp` - program that works incorrect
    * `<name>__Good.cpp` - program that works correct
    * `<name>__Generator.cpp` - program that generates tests, you can read a seed for random in input
+ * then type `FastOlympicCoding: Make Stress` in command palette to run and `FastOlympicCoding: Stop Stress` to stop stress test
 
 ### ClassCompletion
  ![ClassCompletion](ScreenShots/ClassComplete.gif)
 
- * to edit completions open settings
+ * To edit completions open settings
 
 ### CppLint
  ![CppLint](ScreenShots/CppLint.png)
  
- * to edit lint open settings
+ * To edit lint open settings
  
 ### Debugger
  ![Debugger](ScreenShots/Debugger.png)
@@ -54,6 +55,6 @@ Fast Olympic Coding plugin for Sublime Text 3
  * debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> to run with debugger
  * hover cursor on variable to see its value
- * also you can select frame (type `FastOlympicCoding: Select Frame` on command pallete)
+ * also you can select frame (type `FastOlympicCoding: Select Frame` in command palette)
  * the only one dependency is the xcode (you can install it with `xcode-select --install`)
 

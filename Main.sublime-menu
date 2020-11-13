@@ -1,21 +1,24 @@
 [
-	{
-		"id": "tools",
-		"children":
-		[{
-			"caption": "FastOlympicCoding",
-			"mnemonic": "R",
-			"id": "FastOlympicCoding",
-			"children":
-			[
-				{
-					"caption": "settings", 
-					"command": "olympic_funcs", 
-					"args": {
-						"action": "open_settings"
-					}
-				},
-			]
-		}]
-	},
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children": [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "FastOlympicCoding", 
+                        "command": "olympic_funcs", 
+                        "args": {
+                            "action": "open_settings"
+                        }
+                    }
+                ],
+            }
+        ],
+    }
 ]
