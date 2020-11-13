@@ -33,28 +33,30 @@ Fast Olympic Coding plugin for Sublime Text 3
 ### StressTesting
  ![StressTesting](ScreenShots/Stress.gif)
  
- * To stress you need to implement three following files:
+ * To stress test a solution, you need to implement the three following files:
    * `<name>.cpp` - program that works incorrect
    * `<name>__Good.cpp` - program that works correct
-   * `<name>__Generator.cpp` - program that generates tests, you can read a seed for random in input
+   * `<name>__Generator.cpp` - program that generates tests, you can read a seed for a random generator in the input
  * then type `FastOlympicCoding: Make Stress` in command palette to run and `FastOlympicCoding: Stop Stress` to stop stress test
 
 ### ClassCompletion
  ![ClassCompletion](ScreenShots/ClassComplete.gif)
 
- * To edit completions open settings
+ * Type aliases to substitute them with data types
+ * Customize aliases in the settings file
 
 ### CppLint
  ![CppLint](ScreenShots/CppLint.png)
  
- * To edit lint open settings
+ * Error highlighting works in real-time
+ * Specify custom compile command in the settings file
  
 ### Debugger
  ![Debugger](ScreenShots/Debugger.png)
 
  * debugger only for OSX
  * <kbd>ctrl+shift+b</kbd> to run with debugger
- * hover cursor on variable to see its value
- * also you can select frame (type `FastOlympicCoding: Select Frame` in command palette)
- * the only one dependency is the xcode (you can install it with `xcode-select --install`)
+ * point the cursor on a variable to see its value
+ * to select a stack frame (type `FastOlympicCoding: Select Frame` in command palette)
+ * the only one dependency is xcode (you can install it with `xcode-select --install`)
 
