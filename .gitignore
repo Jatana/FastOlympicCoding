@@ -2,5 +2,5 @@
 *.pyc
 cmp_sense/amin.cpp
 .DS_Store
-ContestHandlers/deps
-ContestHandlers/codeforces_submit.py
+debuggers/LLDB.framework
+debuggers/DebugodPy3Ejector.py

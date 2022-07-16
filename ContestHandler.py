@@ -8,7 +8,7 @@ except ImportError:
 	pass
 from .test_manager import TestManagerCommand
 from sublime import Region
-from .settings import get_tests_file_path
+from .settings import get_tests_file_path, get_settings
 
 handlers = [codeforces]
 
@@ -105,9 +105,14 @@ class ContestHandlerCommand(sublime_plugin.TextCommand):
 			last = path.basename(self.view.file_name())
 			problemID = path.splitext(last)[0]
 			print('args', settings, problemID)
-			def reduce(settings=settings, problemID=problemID, code=code):
+			def reduce(
+					settings=settings,
+					problemID=problemID,
+					code=code,
+					username=get_settings().get('cf_username'),
+					password=get_settings().get('cf_password')):
 				perform_submission(settings['contestID'], problemID, code, {
-						'username': settings['cf_username'], 'password': settings['cf_password']
+						'username': username, 'password': password
 					}
 				)
 			sublime.set_timeout_async(reduce, 10)

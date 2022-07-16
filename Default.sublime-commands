@@ -48,11 +48,11 @@
 			"action": "setup_contest"
 		}
 	},
-	// {
-	// 	"caption": "FastOlympicCoding: Submit",
-	// 	"command": "contest_handler",
-	// 	"args": {
-	// 		"action": "submit"
-	// 	}
-	// },
+	{
+		"caption": "FastOlympicCoding: Submit",
+		"command": "contest_handler",
+		"args": {
+			"action": "submit"
+		}
+	},
 ]
