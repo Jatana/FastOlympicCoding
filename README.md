@@ -1,4 +1,4 @@
-Fast Olympic Coding plugin for Sublime Text 3
+Fast Olympic Coding plugin for Sublime Text 3 & 4
 ================
  * [Installation](#installation)
  * [Test Manager](#testmanager)
