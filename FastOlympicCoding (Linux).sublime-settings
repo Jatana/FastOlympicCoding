@@ -18,7 +18,7 @@
 		{
 			"name": "C++",
 			"extensions": ["cpp"],
-			"compile_cmd": "g++ '{source_file}' -std=gnu++11 -o {file_name}",
+			"compile_cmd": "g++ '{source_file}' -std=gnu++11 -o '{file_name}'",
 			"run_cmd": "./\"{file_name}\" {args} -debug",
 
 			"lint_compile_cmd": "g++ -std=gnu++11 '{source_file}' -I '{source_file_dir}'"
