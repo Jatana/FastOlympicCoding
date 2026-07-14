@@ -523,9 +523,9 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 		v = self.view
 		tester = self.tester
 		if event == 'click-accept':
-			tester.accept_out(i)
-		elif event == 'click-decline':
 			tester.decline_out(i)
+		elif event == 'click-decline':
+			tester.accept_out(i)
 		self.update_configs()
 		self.memorize_tests()
 
@@ -590,7 +590,10 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				pt += len(tester.tests[i].test_string) + len(tester.prog_out[i]) + 1
 
 			if not running and not tester.tests[i].fold and str(tester.tests[i].rtcode) == '0' and tester.prog_out[i]:
-				if tester.tests[i].is_correct_answer(tester.prog_out[i]):
+				result = tester.tests[i].is_correct_answer(tester.prog_out[i])
+				if result is True:
+					type = 'accept'
+				elif result is False:
 					type = 'decline'
 				else:
 					type = 'accept'
