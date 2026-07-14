@@ -590,10 +590,13 @@ class TestManagerCommand(sublime_plugin.TextCommand):
 				pt += len(tester.tests[i].test_string) + len(tester.prog_out[i]) + 1
 
 			if not running and not tester.tests[i].fold and str(tester.tests[i].rtcode) == '0' and tester.prog_out[i]:
-				if tester.tests[i].is_correct_answer(tester.prog_out[i]):
+				result = tester.tests[i].is_correct_answer(tester.prog_out[i])
+				if result is True:
 					type = 'accept'
-				else:
+				elif result is False:
 					type = 'decline'
+				else:
+					type = 'accept'
 				accdec = tester.tests[i].get_accdec(
 					i,
 					pt,
